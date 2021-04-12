@@ -1,0 +1,178 @@
+#include <sstream>
+#include <iomanip>
+
+#include "Image.h"
+#include "Grid2D.h"
+
+Image::Image(const Vec4& color) :
+  Image(1,1,4,{uint8_t(color.x()*255),
+               uint8_t(color.y()*255),
+               uint8_t(color.z()*255),
+               uint8_t(color.w()*255)})
+{
+}
+
+Image::Image(uint32_t width,
+             uint32_t height,
+             uint32_t componentCount) :
+  width{width},
+  height{height},
+  componentCount{componentCount},
+  data(size_t(width)*size_t(height)*size_t(componentCount))
+{
+}
+
+Image::Image(uint32_t width,
+      uint32_t height,
+      uint32_t componentCount,
+      std::vector<uint8_t> data) :
+  width{width},
+  height{height},
+  componentCount{componentCount},
+  data(data)
+{
+}
+
+void Image::multiply(const Vec4& color) {
+  if (componentCount == 4) {
+    for (size_t i = 0; i<data.size()/4;i++) {
+      data[i*4+0] = uint8_t(data[i*4+0] * color.x());
+      data[i*4+1] = uint8_t(data[i*4+1] * color.y());
+      data[i*4+2] = uint8_t(data[i*4+2] * color.z());
+      data[i*4+3] = uint8_t(data[i*4+3] * color.w());
+    }
+  } else if (componentCount == 3) {
+    std::vector<uint8_t> newData((data.size() / 3) * 4);
+    
+    for (size_t i = 0; i<data.size()/3;i++) {
+      newData[i*4+0] = uint8_t(data[i*3+0] * color.x());
+      newData[i*4+1] = uint8_t(data[i*3+1] * color.y());
+      newData[i*4+2] = uint8_t(data[i*3+2] * color.z());
+      newData[i*4+3] = uint8_t(255 * color.w());
+    }
+    
+    data = newData;
+    componentCount = 4;
+  }
+
+}
+
+void Image::generateAlphaFromLuminance() {
+  if (componentCount == 4) {
+    for (size_t i = 0; i<data.size()/4;i++) {
+      data[i*4+3] = uint8_t(0.299 * data[i*4+0] + 0.587 * data[i*4+1] + 0.114 * data[i*4+2]);
+    }
+  } else if (componentCount == 3) {
+    std::vector<uint8_t> newData((data.size() / 3) * 4);
+    
+    for (size_t i = 0; i<data.size()/3;i++) {
+      newData[i*4+0] = data[i*3+0];
+      newData[i*4+1] = data[i*3+1];
+      newData[i*4+2] = data[i*3+2];
+      newData[i*4+3] = uint8_t(0.299 * data[i*3+0] + 0.587 * data[i*3+1] + 0.114 * data[i*3+2]);
+    }
+    
+    data = newData;
+    componentCount = 4;
+  }
+}
+
+size_t Image::computeIndex(uint32_t x, uint32_t y, uint32_t component) const {
+  return size_t(component)+(size_t(x)+size_t(y)* size_t(width))* size_t(componentCount);
+}
+
+uint8_t Image::getValue(uint32_t x, uint32_t y, uint32_t component) const {
+  return data[computeIndex(x, y, component)];
+}
+
+void Image::setValue(uint32_t x, uint32_t y, uint32_t component, uint8_t value) {
+  data[computeIndex(x, y, component)] = value;
+}
+
+void Image::setNormalizedValue(uint32_t x, uint32_t y, uint32_t component, float value) {
+  const uint8_t iValue{uint8_t(std::max(0.0f, std::min(1.0f, value))*255)};
+  data[computeIndex(x, y, component)] = iValue;
+}
+
+std::string Image::toCode(const std::string& varName, bool padding) const {
+  std::stringstream ss;
+
+  ss << "Image " << varName << " {"<< width << "," << height << ","<< componentCount << ",\n";
+  ss << "              {";
+
+  for (size_t i = 0;i<data.size();++i) {
+    if (i % 30 == 0) ss << "\n              ";
+    if (padding) {
+      ss << std::setfill (' ') << std::setw (3) << int(data[i]);
+    } else {
+      ss << int(data[i]);
+    }
+    if (i < data.size()-1)
+      ss << ",";
+    else
+      ss << "\n";
+  }
+  
+  ss << "          }};\n";
+  
+  return ss.str();
+}
+
+std::string Image::toACIIArt(bool bSmallTable) const {
+  const std::string lut1{"$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "};
+  const std::string lut2{"@%#*+=-:. "};
+  const std::string& lut = bSmallTable ? lut2 : lut1;
+
+  std::stringstream ss;
+  for (uint32_t y = 0;y<height;y+=4) {
+    for (uint32_t x = 0;x<width;x+=4) {
+      const uint8_t v = getLumiValue(x,height-y);
+      ss << lut[(v*lut.length())/255] << lut[(v*lut.length())/255];
+    }
+    ss << "\n";
+  }
+  return ss.str();
+}
+
+uint8_t Image::getLumiValue(uint32_t x, uint32_t y) const {
+  switch (componentCount) {
+    case 1 : return getValue(x,y,0);
+    case 2 : return uint8_t(getValue(x,y,0)*0.5f + getValue(x,y,1)*0.5f);
+    case 3 :
+    case 4 : return uint8_t(getValue(x,y,0)*0.299f + getValue(x,y,1)*0.587f + getValue(x,y,2)*0.114f);
+    default : return 0;
+  }
+}
+
+Image Image::filter(const Grid2D& filter) const {
+  Image filteredImage{width, height, componentCount};
+  
+  const uint32_t hw = uint32_t(filter.getWidth()/2);
+  const uint32_t hh = uint32_t(filter.getHeight()/2);
+  
+  for (uint32_t y = hh;y<height-hh;y+=1) {
+    for (uint32_t x = hw;x<width-hw;x+=1) {
+      for (uint32_t c = 0;c<componentCount;c+=1) {
+        float conv = 0.0f;
+        for (uint32_t u = 0;u<filter.getHeight();u+=1) {
+          for (uint32_t v = 0;v<filter.getWidth();v+=1) {
+            conv += float(getValue((x+u-hw),(y+v-hh),c)) * filter.getValue(u, v);
+          }
+        }
+        filteredImage.setValue(x,y,c,uint8_t(fabs(conv)));
+      }
+    }
+  }
+  
+  return filteredImage;
+}
+
+Image Image::toGrayscale() const {
+  Image grayScaleImage{width,height,1};
+  for (uint32_t y = 0;y<height;++y) {
+    for (uint32_t x = 0;x<width;++x) {
+      grayScaleImage.setValue(x,y,0,getLumiValue(x,y));
+    }
+  }
+  return grayScaleImage;
+}
