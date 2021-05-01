@@ -1,4 +1,5 @@
 #include <iomanip>
+#include <fstream>
 
 #include <GLApp.h>
 #include <bmp.h>
@@ -90,9 +91,11 @@ public:
         case GLFW_KEY_R :
           loadImage();
           break;
-        case GLFW_KEY_T :
-          std::cout << toString() << std::endl;
+        case GLFW_KEY_T : {
+          std::ofstream file{ "ascii.txt" };
+          file << toString() << std::endl;
           break;
+        }
       }
     }
   }
