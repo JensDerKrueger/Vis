@@ -37,13 +37,13 @@ public:
 
   void particlePosToRenderData() {
     for (size_t i = 0;i<particlePos.size();++i) {
-      data[i*7+0] = particlePos[i].x()*2-1;
-      data[i*7+1] = particlePos[i].y()*2-1;
-      data[i*7+2] = particlePos[i].z()*2-1;
+      data[i*7+0] = particlePos[i].x*2-1;
+      data[i*7+1] = particlePos[i].y*2-1;
+      data[i*7+2] = particlePos[i].z*2-1;
       
-      data[i*7+3] = particlePos[i].x();
-      data[i*7+4] = particlePos[i].y();
-      data[i*7+5] = particlePos[i].z();
+      data[i*7+3] = particlePos[i].x;
+      data[i*7+4] = particlePos[i].y;
+      data[i*7+5] = particlePos[i].z;
       data[i*7+6] = 1.0f;
     }
   }
