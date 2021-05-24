@@ -75,11 +75,19 @@ public:
   }
 
   Vec3t operator*(const T& val) const {
-    return Vec3t{e[0]*val,e[1]*val,e[2]*val};
+    return {e[0]*val,e[1]*val,e[2]*val};
   }
   
   Vec3t operator/(const T& val) const{
-    return Vec3t{e[0]/val,e[1]/val,e[2]/val};
+    return {e[0]/val,e[1]/val,e[2]/val};
+  }
+
+  Vec3t operator+(const T& val) const {
+    return {e[0]+val,e[1]+val,e[2]+val};
+  }
+  
+  Vec3t operator-(const T& val) const{
+    return {e[0]-val,e[1]-val,e[2]-val};
   }
   
   bool operator == (const Vec3t& other) const {
@@ -174,6 +182,7 @@ public:
     const float r = sqrt(1.0f - z*z);
     return {r*cosf(a), r*sinf(a), z};
   }
+  
   		
 };
 
