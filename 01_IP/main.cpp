@@ -24,10 +24,9 @@ public:
       image = Image(512,512);
       for (uint32_t y = 0;y<image.height;++y) {
         for (uint32_t x = 0;x<image.width;++x) {
-          const Vec3 rgb = Vec3::hsvToRgb({360*float(x)/image.width,float(y)/image.height,1.0f});
-          image.setNormalizedValue(x,y,0,rgb.x);
-          image.setNormalizedValue(x,y,1,rgb.y);
-          image.setNormalizedValue(x,y,2,rgb.z);
+          image.setNormalizedValue(x,y,0,float(x)/image.width);
+          image.setNormalizedValue(x,y,1,float(y)/image.height);
+          image.setNormalizedValue(x,y,2,0.5f);
           image.setValue(x,y,3,255);
         }
       }
