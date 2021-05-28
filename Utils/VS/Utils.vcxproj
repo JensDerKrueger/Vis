@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="..\Image.cpp" />
     <ClCompile Include="..\Mat3.cpp" />
-    <ClCompile Include="..\AbstractParticleSystem.cpp" />
     <ClCompile Include="..\ArcBall.cpp" />
     <ClCompile Include="..\bmp.cpp" />
     <ClCompile Include="..\FontRenderer.cpp" />
@@ -40,16 +39,13 @@
     <ClCompile Include="..\Grid2D.cpp" />
     <ClCompile Include="..\Mat4.cpp" />
     <ClCompile Include="..\OBJFile.cpp" />
-    <ClCompile Include="..\ParticleSystem.cpp" />
     <ClCompile Include="..\PlanarMirror.cpp" />
-    <ClCompile Include="..\PrecomputedParticleSystem.cpp" />
     <ClCompile Include="..\Rand.cpp" />
     <ClCompile Include="..\Tesselation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Image.h" />
     <ClInclude Include="..\Mat3.h" />
-    <ClInclude Include="..\AbstractParticleSystem.h" />
     <ClInclude Include="..\ArcBall.h" />
     <ClInclude Include="..\bmp.h" />
     <ClInclude Include="..\Camera.h" />
@@ -69,9 +65,7 @@
     <ClInclude Include="..\Grid2D.h" />
     <ClInclude Include="..\Mat4.h" />
     <ClInclude Include="..\OBJFile.h" />
-    <ClInclude Include="..\ParticleSystem.h" />
     <ClInclude Include="..\PlanarMirror.h" />
-    <ClInclude Include="..\PrecomputedParticleSystem.h" />
     <ClInclude Include="..\Quaternion.h" />
     <ClInclude Include="..\Rand.h" />
     <ClInclude Include="..\Tesselation.h" />

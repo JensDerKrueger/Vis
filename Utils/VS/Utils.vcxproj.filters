@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\AbstractParticleSystem.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\ArcBall.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -72,13 +69,7 @@
     <ClCompile Include="..\OBJFile.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\ParticleSystem.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\PlanarMirror.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PrecomputedParticleSystem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\Rand.cpp">
@@ -95,9 +86,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\AbstractParticleSystem.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="..\ArcBall.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -155,13 +143,7 @@
     <ClInclude Include="..\OBJFile.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\ParticleSystem.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="..\PlanarMirror.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\PrecomputedParticleSystem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\Quaternion.h">
