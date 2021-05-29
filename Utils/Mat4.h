@@ -32,7 +32,6 @@ public:
   operator float*(void);
   operator const float*(void) const;
 
-
   Mat4 operator * ( float scalar ) const;
   Mat4 operator + ( float scalar ) const;
   Mat4 operator - ( float scalar ) const;
@@ -71,7 +70,6 @@ private:
   std::array<float, 16> e;
   
   static float deg2Rad(const float d);
-  
 };
 
 struct StereoMatrices {

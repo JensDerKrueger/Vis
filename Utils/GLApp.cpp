@@ -196,7 +196,7 @@ void GLApp::triangulate(const Vec3& p0,
   const Vec3 cDir = Vec3::normalize(p2-p1);
   const Vec3 nDir = Vec3::normalize(p3-p2);
   
-  const Vec3 viewDir = Vec3::normalize((mvi * Vec4{0,0,1,0}).xyz());
+  const Vec3 viewDir = Vec3::normalize((mvi * Vec4{0,0,1,0}).xyz);
   
   const Vec3 pPerp = Vec3::cross(pDir, viewDir);
   const Vec3 cPerp = Vec3::cross(cDir, viewDir);
@@ -421,19 +421,19 @@ void GLApp::setDrawTransform(const Mat4& mat) {
 
 void GLApp::shaderUpdate() {
   simpleProg.enable();
-  simpleProg.setUniform("MVP", mv*p);
+  simpleProg.setUniform("MVP", p*mv);
 
   simpleSpriteProg.enable();
-  simpleSpriteProg.setUniform("MVP", mv*p);
+  simpleSpriteProg.setUniform("MVP", p*mv);
 
   simpleHLSpriteProg.enable();
-  simpleHLSpriteProg.setUniform("MVP", mv*p);
+  simpleHLSpriteProg.setUniform("MVP", p*mv);
   
   simpleTexProg.enable();
-  simpleTexProg.setUniform("MVP", mv*p);
+  simpleTexProg.setUniform("MVP", p*mv);
 
   simpleLightProg.enable();
-  simpleLightProg.setUniform("MVP", mv*p);
+  simpleLightProg.setUniform("MVP", p*mv);
   simpleLightProg.setUniform("MV", mv);
   simpleLightProg.setUniform("MVit", mvi, true);
 }
@@ -521,8 +521,7 @@ Mat4 GLApp::computeImageTransformFixedHeight(const Vec2ui& imageSize,
   const Dimensions s = glEnv.getWindowSize();
   const float ax = imageSize.x/float(s.width);
   const float ay = imageSize.y/float(s.height);
-  return Mat4::scaling({height*ax/ay, height, 1.0f}) *
-         Mat4::translation(center);
+  return Mat4::translation(center) * Mat4::scaling({height*ax/ay, height, 1.0f});
 }
 
 Mat4 GLApp::computeImageTransformFixedWidth(const Vec2ui& imageSize,
@@ -531,6 +530,5 @@ Mat4 GLApp::computeImageTransformFixedWidth(const Vec2ui& imageSize,
   const Dimensions s = glEnv.getWindowSize();
   const float ax = imageSize.x/float(s.width);
   const float ay = imageSize.y/float(s.height);
-  return Mat4::scaling({width, width*ay/ax, 1.0f}) *
-         Mat4::translation(center);
+  return Mat4::translation(center) * Mat4::scaling({width, width*ay/ax, 1.0f});
 }
