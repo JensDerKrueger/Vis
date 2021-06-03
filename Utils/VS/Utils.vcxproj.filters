@@ -63,9 +63,6 @@
     <ClCompile Include="..\Grid2D.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\Mat4.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="..\OBJFile.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -76,9 +73,6 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\Tesselation.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Mat3.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\Image.cpp">
