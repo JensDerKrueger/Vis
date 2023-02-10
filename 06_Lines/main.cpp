@@ -27,35 +27,12 @@ public:
   void initLines() {
     std::vector<Vec3> linePoints;
     linePoints.resize(lineCount*linelength);
-    for (size_t l = 0;l<lineCount;++l) {
-      linePoints[l*linelength] = Vec3::random();
-    }
-    
-    data.resize(lineCount*(linelength-1)*2*7);
-    
-    advect(linePoints, 0.1f);
+
+    // TODO compute integral curves here
+
     linePointsToRenderData(linePoints);
   }
   
-  void advect(std::vector<Vec3>& linePoints, double deltaT) {
-    for (size_t l = 0;l<lineCount;++l) {
-      for (size_t s = 1;s<linelength;++s) {
-        const size_t i = l*linelength + s;
-        linePoints[i] = advect(linePoints[i-1], deltaT);
-        
-        if (linePoints[i] == linePoints[i-1]) break;
-      }
-    }
-  }
-
-  Vec3 advect(const Vec3& particle, double deltaT) {
-    if (particle.x < 0.0 || particle.x > 1.0 ||
-        particle.y < 0.0 || particle.y > 1.0 ||
-        particle.z < 0.0 || particle.z > 1.0) {
-      return particle;
-    }
-    return particle + flow.interpolate(particle) * float(deltaT);
-  }
 
   void linePointsToRenderData(const std::vector<Vec3>& linePoints) {
     size_t i = 0;
