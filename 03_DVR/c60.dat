@@ -1,7 +1,7 @@
-ObjectFileName: bonsai.raw
+ObjectFileName: c60.raw
 TaggedFileName: ---
-Resolution:     128 128 128
-SliceThickness: 2 2 2
+Resolution:     64 64 64
+SliceThickness: 1 1 1
 Format:         UCHAR
 ObjectType:     TEXTURE_VOLUME_OBJECT
 ObjectModel:    RGBA
