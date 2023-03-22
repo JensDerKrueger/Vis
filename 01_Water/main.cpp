@@ -9,7 +9,7 @@ public:
   Image image{512,512,3};
   
   const float c = 2.0f;
-  const float dx = 0.5f;
+  const float dx = 1.0f;
   const float dt = 0.05f;
   const float alpha = (c*c*dt*dt) / (dx*dx);
   const float beta  = 2.0f - 4.0f*alpha;
@@ -53,13 +53,14 @@ public:
   }
   
   virtual void mouseButton(int button, int state, int mods, double xPosition, double yPosition) override {
+    static float value = 1.0f;
     Dimensions s = glEnv.getWindowSize();
     if (xPosition < 0 || xPosition > s.width || yPosition < 0 || yPosition > s.height) return;
     if (button == GLFW_MOUSE_BUTTON_LEFT && state == GLFW_PRESS) {
       current->setValue(uint32_t(current->getWidth()*float(xPosition/s.width)),
-                        uint32_t(current->getHeight()*float(1.0-yPosition/s.height)), 1.0f);
+                        uint32_t(current->getHeight()*float(1.0-yPosition/s.height)), value);
+      value = -1.0f * value;
     }
-
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
