@@ -8,7 +8,7 @@ UTILSDIR := Utils/.
 FIRSTDIR := 
 
 SUBDIRS := $(wildcard */.)
-SUBDIRS := $(filter-out VS/. $(UTILSDIR) $(FIRSTDIR),$(SUBDIRS))
+SUBDIRS := $(filter-out LatexUtils/. VS/. $(UTILSDIR) $(FIRSTDIR),$(SUBDIRS))
 
 $(TOPTARGETS): $(SUBDIRS)
 
