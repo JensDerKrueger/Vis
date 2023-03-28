@@ -319,14 +319,12 @@
 				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					../Utils,
-					/usr/local/Cellar/glew/2.1.0_1/include,
-					/usr/local/Cellar/glfw/3.3.2/include,
+					/opt/homebrew/include,
 					/usr/local/include/,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					../Utils,
-					/usr/local/Cellar/glfw/3.3.2/lib/,
-					/usr/local/Cellar/glew/2.1.0_1/lib/,
+					/opt/homebrew/lib,
 					/usr/local/lib/,
 				);
 				OTHER_LDFLAGS = (
@@ -348,14 +346,12 @@
 				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					../Utils,
-					/usr/local/Cellar/glew/2.1.0_1/include,
-					/usr/local/Cellar/glfw/3.3.2/include,
+					/opt/homebrew/include,
 					/usr/local/include/,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					../Utils,
-					/usr/local/Cellar/glfw/3.3.2/lib/,
-					/usr/local/Cellar/glew/2.1.0_1/lib/,
+					/opt/homebrew/lib,
 					/usr/local/lib/,
 				);
 				OTHER_LDFLAGS = (

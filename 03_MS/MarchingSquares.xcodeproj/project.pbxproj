@@ -325,6 +325,16 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/opt/homebrew/include,
+					../Utils,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/homebrew/lib,
+					../Utils,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -334,6 +344,16 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					/opt/homebrew/include,
+					../Utils,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/opt/homebrew/lib,
+					../Utils,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
