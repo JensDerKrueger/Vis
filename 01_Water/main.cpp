@@ -19,7 +19,6 @@ public:
   }
      
   virtual void animate(double animationTime) override {
-
     const size_t w   = current->getWidth();
     const size_t h   = current->getHeight();
     
