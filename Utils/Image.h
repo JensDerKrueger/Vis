@@ -33,6 +33,8 @@ public:
   uint8_t sample(float x, float y, uint32_t component) const;
   uint8_t getLumiValue(uint32_t x, uint32_t y) const;
   void setValue(uint32_t x, uint32_t y, uint32_t component, uint8_t value);
+  void setValue(uint32_t x, uint32_t y, uint8_t value);
+  void setNormalizedValue(uint32_t x, uint32_t y, float value);
   void setNormalizedValue(uint32_t x, uint32_t y, uint32_t component, float value);
   std::string toCode(const std::string& varName="myImage", bool padding=false) const;
   std::string toACIIArt(bool bSmallTable=true) const;

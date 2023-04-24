@@ -88,6 +88,21 @@ void Image::setValue(uint32_t x, uint32_t y, uint32_t component, uint8_t value) 
   data[computeIndex(x, y, component)] = value;
 }
 
+void Image::setValue(uint32_t x, uint32_t y, uint8_t value) {
+  const size_t index = computeIndex(x, y, 0);
+  data[index+0] = value;
+  data[index+1] = value;
+  data[index+2] = value;
+}
+
+void Image::setNormalizedValue(uint32_t x, uint32_t y, float value) {
+  const size_t index = computeIndex(x, y, 0);
+  const uint8_t iValue{uint8_t(std::max(0.0f, std::min(1.0f, value))*255)};
+  data[index+0] = iValue;
+  data[index+1] = iValue;
+  data[index+2] = iValue;
+}
+
 void Image::setNormalizedValue(uint32_t x, uint32_t y, uint32_t component, float value) {
   const uint8_t iValue{uint8_t(std::max(0.0f, std::min(1.0f, value))*255)};
   data[computeIndex(x, y, component)] = iValue;
