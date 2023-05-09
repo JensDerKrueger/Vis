@@ -44,6 +44,12 @@ public:
     return animationActive;
   }
 
+  void resetAnimation() {
+    resumeTime = 0;
+    glfwSetTime(0);
+    animate(0);
+  }
+
   float getAspect() const {
     const Dimensions d = glEnv.getWindowSize();
     return float(d.width)/float(d.height);
@@ -51,14 +57,12 @@ public:
   
   void setImageFilter(GLint magFilter, GLint minFilter);
 
-  void drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr,
-                bool noBoundary=false);
+  void drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr);
   void drawRect(const Vec4& color,
                 const Vec3& bl=Vec3{-1.0f,-1.0f,0.0f},
                 const Vec3& br=Vec3{1.0f,-1.0f,0.0f},
                 const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
-                const Vec3& tr=Vec3{1.0f,1.0f,0.0f},
-                bool noBoundary=false);
+                const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
 
   void drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr,
                  bool noBoundary=false);
@@ -91,6 +95,10 @@ public:
   void drawPoints(const std::vector<float>& data, float pointSize=1.0f, bool useTex=false);
   void setDrawProjection(const Mat4& mat);
   void setDrawTransform(const Mat4& mat);
+
+  Mat4 getDrawProjection() const;
+  Mat4 getDrawTransform() const;
+
   void resetPointTexture(uint32_t resolution=64);
   void setPointTexture(const std::vector<uint8_t>& shape, uint32_t x, uint32_t y, uint32_t components);
   void setPointTexture(const Image& shape);
@@ -121,11 +129,12 @@ protected:
   GLArray simpleArray;
   GLBuffer simpleVb;
   GLTexture2D raster;
-  GLTexture2D rasterPoint;
   GLTexture2D pointSprite;
   GLTexture2D pointSpriteHighlight;
   double resumeTime;
-  
+
+  void shaderUpdate();
+
   void closeWindow() {
     glEnv.setClose();
   }
@@ -165,8 +174,6 @@ private:
       staticAppPtr->mouseWheel(x_offset, y_offset, xpos, ypos);
     }
   }
-  
-  void shaderUpdate();
   
   void triangulate(const Vec3& p0,
                    const Vec3& p1, const Vec4& c1,

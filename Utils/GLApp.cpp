@@ -419,6 +419,14 @@ void GLApp::setDrawTransform(const Mat4& mat) {
   mvi = Mat4::inverse(mv);
 }
 
+Mat4 GLApp::getDrawProjection() const {
+  return p;
+}
+
+Mat4 GLApp::getDrawTransform() const {
+  return mv;
+}
+
 void GLApp::shaderUpdate() {
   simpleProg.enable();
   simpleProg.setUniform("MVP", p*mv);
@@ -504,19 +512,17 @@ void GLApp::drawImage(const Image& image, const Vec3& bl,
   drawImage(raster, bl, br, tl, tr, noBoundary);
 }
 
-void GLApp::drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr,
-                     bool noBoundary) {
+void GLApp::drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr) {
   drawRect(color,
             {bl.x,bl.y,0.0f},
             {tr.x,bl.y,0.0f},
             {bl.x,tr.y,0.0f},
-            {tr.x,tr.y,0.0f},
-           noBoundary);
+            {tr.x,tr.y,0.0f});
 }
 
 void GLApp::drawRect(const Vec4& color, const Vec3& bl, const Vec3& br,
-                     const Vec3& tl, const Vec3& tr, bool noBoundary) {
-  drawImage(Image{color}, bl, br, tl, tr, noBoundary);
+                     const Vec3& tl, const Vec3& tr) {
+  drawImage(Image{color}, bl, br, tl, tr);
 }
 
 Mat4 GLApp::computeImageTransform(const Vec2ui& imageSize) const {
