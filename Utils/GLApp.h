@@ -51,25 +51,31 @@ public:
   
   void setImageFilter(GLint magFilter, GLint minFilter);
 
-  void drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr);
+  void drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr,
+                bool noBoundary=false);
   void drawRect(const Vec4& color,
                 const Vec3& bl=Vec3{-1.0f,-1.0f,0.0f},
                 const Vec3& br=Vec3{1.0f,-1.0f,0.0f},
                 const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
-                const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
+                const Vec3& tr=Vec3{1.0f,1.0f,0.0f},
+                bool noBoundary=false);
 
-  void drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr);
-  void drawImage(const Image& image, const Vec2& bl, const Vec2& tr);
+  void drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr,
+                 bool noBoundary=false);
+  void drawImage(const Image& image, const Vec2& bl, const Vec2& tr,
+                 bool noBoundary=false);
   void drawImage(const GLTexture2D& image,
                  const Vec3& bl=Vec3{-1.0f,-1.0f,0.0f},
                  const Vec3& br=Vec3{1.0f,-1.0f,0.0f},
                  const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
-                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
+                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f},
+                 bool noBoundary=false);
   void drawImage(const Image& image,
                  const Vec3& bl=Vec3{-1.0f,-1.0f,0.0f},
                  const Vec3& br=Vec3{1.0f,-1.0f,0.0f},
                  const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
-                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
+                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f},
+                 bool noBoundary=false);
   void drawTriangles(const std::vector<float>& data, TrisDrawType t, bool wireframe, bool lighting);
   void redrawTriangles(bool wireframe);
 
@@ -115,6 +121,7 @@ protected:
   GLArray simpleArray;
   GLBuffer simpleVb;
   GLTexture2D raster;
+  GLTexture2D rasterPoint;
   GLTexture2D pointSprite;
   GLTexture2D pointSpriteHighlight;
   double resumeTime;
