@@ -8,6 +8,7 @@ public:
   Image image = BMP::load("image.bmp");
   std::vector<uint8_t> isovalues{128};
   bool useAsymptoticDecider{true};
+  bool doLinearSampling{true};
   
   virtual void init() override {
     glEnv.setTitle("Marching Squares demo");
@@ -36,8 +37,8 @@ public:
   
   virtual void draw() override {
     GL(glClear(GL_COLOR_BUFFER_BIT));
-    drawImage(image);
-    drawLines(data, LineDrawType::LIST, 1);
+    drawImage(image,{-1,-1},{1,1},true);
+    drawLines(data, LineDrawType::LIST, 2);
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
@@ -50,6 +51,11 @@ public:
           useAsymptoticDecider = ! useAsymptoticDecider;
           std::cout << "Asymptotic Decider is " << (useAsymptoticDecider ? "enabled" : "disabled") << std::endl;
           extractIsoline();
+          break;
+        case GLFW_KEY_F:
+          doLinearSampling = ! doLinearSampling;
+          setImageFilter(doLinearSampling ? GL_LINEAR : GL_NEAREST,
+                         doLinearSampling ? GL_LINEAR : GL_NEAREST);
           break;
         case GLFW_KEY_ENTER:
           isovalues.push_back(isovalues.back());
