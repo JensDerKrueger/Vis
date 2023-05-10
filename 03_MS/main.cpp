@@ -26,28 +26,22 @@ public:
 
   void generateGridLines() {
     for (size_t y = 0;y<image.height-1;++y) {
-      grid.push_back(-1); grid.push_back(y/float(image.height-1)*2-1);
-      grid.push_back(0);
-
+      const float fy = y/float(image.height-1)*2-1;
+      grid.push_back(-1); grid.push_back(fy); grid.push_back(0);
       grid.push_back(1.0f); grid.push_back(1.0f);
       grid.push_back(0.0f); grid.push_back(0.2f);
 
-      grid.push_back(1); grid.push_back(y/float(image.height-1)*2-1);
-      grid.push_back(0);
-
+      grid.push_back(1); grid.push_back(fy); grid.push_back(0);
       grid.push_back(1.0f); grid.push_back(1.0f);
       grid.push_back(0.0f); grid.push_back(0.2f);
     }
     for (size_t x = 0;x<image.width-1;++x) {
-      grid.push_back(x/float(image.width-1)*2-1); grid.push_back(-1);
-      grid.push_back(0);
-
+      const float fx = x/float(image.width-1)*2-1;
+      grid.push_back(fx); grid.push_back(-1); grid.push_back(0);
       grid.push_back(1.0f); grid.push_back(1.0f);
       grid.push_back(0.0f); grid.push_back(0.2f);
 
-      grid.push_back(x/float(image.width-1)*2-1); grid.push_back(1);
-      grid.push_back(0);
-
+      grid.push_back(fx); grid.push_back(1);grid.push_back(0);
       grid.push_back(1.0f); grid.push_back(1.0f);
       grid.push_back(0.0f); grid.push_back(0.2f);
     }
