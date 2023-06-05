@@ -19,6 +19,7 @@ void main() {
   // TODO: implement raycaster here, write result into "fc"
   //       the following line is just some dummy code that uses
   //       all variables to avoid this empty start project from
-  //       throwing an exception
+  //       throwing an exception, it has to be replaced by the
+  //       raycasting loop
   fc = sampleCount*smoothStepStart*smoothStepWidth*texture(volume,direction);
 }
