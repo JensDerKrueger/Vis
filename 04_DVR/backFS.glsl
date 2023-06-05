@@ -17,4 +17,8 @@ void main() {
   vec3 direction = normalize(exitPoint-currentPoint)/sampleCount;
 
   // TODO: implement raycaster here, write result into "fc"
+  //       the following line is just some dummy code that uses
+  //       all variables to avoid this empty start project from
+  //       throwing an exception
+  fc = sampleCount*smoothStepStart*smoothStepWidth*texture(volume,direction);
 }
