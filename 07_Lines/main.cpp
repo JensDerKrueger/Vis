@@ -35,6 +35,10 @@ public:
   
 
   void linePointsToRenderData(const std::vector<Vec3>& linePoints) {
+    // 2 -> line start and line end point
+    // 7 -> x,y,z coord plus r,g,b,a color components
+    data.resize(lineCount*(linelength-1)*2*7);
+
     size_t i = 0;
     for (size_t l = 0;l<lineCount;++l) {
       for (size_t s = 0;s<linelength-1;++s) {
