@@ -11,7 +11,7 @@ public:
   bool leftMouseDown{false};
 
   size_t lineCount{200};
-  size_t linelength{300};
+  size_t lineLength{300};
   double angle{0};
   std::vector<float> data;
   Flowfield flow = Flowfield::genDemo(128, DemoType::SATTLE);
@@ -26,7 +26,7 @@ public:
 
   void initLines() {
     std::vector<Vec3> linePoints;
-    linePoints.resize(lineCount*linelength);
+    linePoints.resize(lineCount*lineLength);
 
     // TODO compute integral curves here
 
@@ -37,12 +37,12 @@ public:
   void linePointsToRenderData(const std::vector<Vec3>& linePoints) {
     // 2 -> line start and line end point
     // 7 -> x,y,z coord plus r,g,b,a color components
-    data.resize(lineCount*(linelength-1)*2*7);
+    data.resize(lineCount*(lineLength-1)*2*7);
 
     size_t i = 0;
     for (size_t l = 0;l<lineCount;++l) {
-      for (size_t s = 0;s<linelength-1;++s) {
-        size_t j = l*linelength + s;
+      for (size_t s = 0;s<lineLength-1;++s) {
+        size_t j = l*lineLength + s;
         
         if (linePoints[j] == linePoints[j+1]) break;
         
