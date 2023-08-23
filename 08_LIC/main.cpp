@@ -6,7 +6,7 @@
 class MyGLApp : public GLApp {
 public:
   Flowfield flow = Flowfield::genDemo(256, DemoType::SATTLE);
-  // this field my be a better start for debugging
+  // this field may be a better start for debugging
   //Flowfield flow = Flowfield::fromFile("four_sector_128.txt");
   Image inputImage = BMP::load("noise.bmp");
   Image licImage{uint32_t(flow.getSizeX()),uint32_t(flow.getSizeY()),3};
