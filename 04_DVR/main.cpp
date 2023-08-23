@@ -1,5 +1,4 @@
 #include <GLApp.h>
-#include <GLFramebuffer.h>
 #include <Tesselation.h>
 #include <ArcBall.h>
 
@@ -13,11 +12,13 @@ public:
   virtual void animate(double animationTime) override {
     const Mat4 m{ rotation * Mat4::scaling(volumeExtend)};
     mvp = p * v * m;
+    v2t = Mat4::translation({0.5f,0.5f,0.5f}) * Mat4::inverse(v * m);
   }
 
   void loadVolume() {
     volume = QVis{filenames[currentFile]}.volume;
-    volumeExtend = volume.scale*Vec3{float(volume.width),float(volume.height),float(volume.depth)}/volume.maxSize;
+    voxelCount = Vec3{float(volume.width),float(volume.height),float(volume.depth)};
+    volumeExtend = volume.scale*voxelCount/volume.maxSize;
 
     volumeTex.setData(volume.data,
                       uint32_t(volume.width),
@@ -31,7 +32,7 @@ public:
     cubeArray.bind();
     vbCube.setData(cube.getVertices(), 3);
     ibCube.setData(cube.getIndices());
-    cubeArray.connectVertexAttrib(vbCube, progCubeFront, "vPos", 3);
+    cubeArray.connectVertexAttrib(vbCube, cubeProgram, "vPos", 3);
     cubeArray.connectIndexBuffer(ibCube);
               
     Tesselation fullScreenQuad{Tesselation::genRectangle({0,0,0},2,2)};
@@ -44,28 +45,13 @@ public:
   }
       
   virtual void resize(int width, int height) override {
-    frontFaceTexture.setEmpty( uint32_t(width), uint32_t(height), 3, GLDataType::HALF);
     p = Mat4{ Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), 0.1f, 100) };
     
     const Dimensions dim = glEnv.getWindowSize();
     arcball.setWindowSize({dim.width,dim.height});
   }
-  
-  void renderRayEntryTex() {
-    GL(glCullFace(GL_BACK));
-    framebuffer.bind( frontFaceTexture );
-    GL(glClearColor(2,2,2,2));
-    GL(glClear(GL_COLOR_BUFFER_BIT));
 
-    progCubeFront.enable();
-    progCubeFront.setUniform("mvp", mvp);
-    cubeArray.bind();
-    const GLsizei indexCount = GLsizei(cube.getIndices().size());
-    GL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (void*)0));
-    framebuffer.unbind2D();
-  }
-
-  void raycast() {
+  virtual void draw() override {
     GL(glCullFace(GL_FRONT));
     GL(glEnable(GL_BLEND));
 
@@ -74,27 +60,20 @@ public:
     GL(glClearColor(0,0,0.5,0));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-    progCubeBack.enable();
-    progCubeBack.setTexture("volume",volumeTex,2);
-    progCubeBack.setTexture("frontFaces",frontFaceTexture,0);
-    progCubeBack.setUniform("mvp", mvp);
-    progCubeBack.setUniform("smoothStepStart", stepStart);
-    progCubeBack.setUniform("smoothStepWidth", stepWidth);
-    progCubeBack.setUniform("sampleCount", float(volume.maxSize*3));
+    cubeProgram.enable();
+    cubeProgram.setTexture("volume",volumeTex,0);
+    cubeProgram.setUniform("mvp", mvp);
+    cubeProgram.setUniform("v2t", v2t);
+    cubeProgram.setUniform("voxelCount", voxelCount);
+    cubeProgram.setUniform("oversampling", oversampling);
+    cubeProgram.setUniform("smoothStepStart", stepStart);
+    cubeProgram.setUniform("smoothStepWidth", stepWidth);
 
     const GLsizei indexCount = GLsizei(cube.getIndices().size());
     GL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (void*)0));
-    progCubeBack.unsetTexture2D(0);
-    progCubeBack.unsetTexture2D(1);
-    progCubeBack.unsetTexture3D(2);
-    progCubeBack.unsetTexture3D(3);
+    cubeProgram.unsetTexture3D(0);
 
     GL(glDisable(GL_BLEND));
-  }
-
-  virtual void draw() override {
-    renderRayEntryTex();
-    raycast();
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
@@ -149,23 +128,24 @@ public:
   }
 
 private:
-  GLFramebuffer framebuffer;
-  GLTexture2D frontFaceTexture{GL_NEAREST, GL_NEAREST};
   Tesselation cube{Tesselation::genBrick({0, 0, 0}, {1, 1, 1})};
   GLBuffer vbCube{GL_ARRAY_BUFFER};
   GLBuffer ibCube{GL_ELEMENT_ARRAY_BUFFER};
   GLArray cubeArray;
-  GLProgram progCubeFront{GLProgram::createFromFile("cubeVS.glsl", "frontFS.glsl")};
-  GLProgram progCubeBack{GLProgram::createFromFile("cubeVS.glsl", "backFS.glsl")};
+  GLProgram cubeProgram{GLProgram::createFromFile("cubeVS.glsl", "cubeFS.glsl")};
   Volume volume;
+  Vec3 voxelCount;
   Vec3 volumeExtend;
   GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_BORDER,GL_CLAMP_TO_BORDER,GL_CLAMP_TO_BORDER};
   
   ArcBall arcball{{512, 512}};
   Mat4 rotation;
   Mat4 mvp;
+  Mat4 v2t;
   Mat4 p;
   Mat4 v{Mat4::lookAt({ 0, 0, 2 }, { 0, 0, 0 }, { 0, 1, 0 })};
+
+  float oversampling{10};
 
   std::vector<std::string> filenames{"c60.dat","bonsai.dat","Engine.dat"};
   size_t currentFile{0};
