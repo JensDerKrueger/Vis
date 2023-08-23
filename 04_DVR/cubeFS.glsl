@@ -1,7 +1,7 @@
 #version 410
 
 in vec3 tc;
-out vec4 fc;
+out vec4 result;
 
 uniform sampler3D volume;
 
@@ -59,18 +59,15 @@ void main() {
   float opacityCorrection = 100/(samples*oversampling);
   vec3 direction = normalize(exitPoint-currentPoint)/(samples*oversampling);
 
-  fc = vec4(0.0);
+  result = vec4(0.0);
   do {
-
-    // TODO: implement raycaster here, write result into "fc"
+    // TODO: implement raycaster here, write result into "result"
     //       the following two liens are just dummy code that uses
     //       all variables to avoid this empty start project from
     //       throwing an exception, it has to be replaced by the
     //       raycasting loop
     fc = 1+transferFunction(texture(volume,direction).r);
     break;
-
-
   } while (inBounds(currentPoint));
 
 
