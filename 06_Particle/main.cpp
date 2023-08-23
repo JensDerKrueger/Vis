@@ -8,7 +8,7 @@ class MyGLApp : public GLApp {
 public:
   size_t particleCount{1000};
   double lastAnimationTime{0};
-  std::vector<Vec3> particlePos;
+  std::vector<Vec3> particlePositions;
   std::vector<float> data;
   Flowfield flow = Flowfield::genDemo(64, DemoType::SATTLE);
   ArcBall arcball{{512, 512}};
@@ -24,33 +24,35 @@ public:
   }
 
   void initParticles() {
-    particlePos.resize(particleCount);
-    for (size_t i = 0;i<particlePos.size();++i) {
-      particlePos[i] = Vec3::random();
+    particlePositions.resize(particleCount);
+    for (size_t i = 0;i<particlePositions.size();++i) {
+      particlePositions[i] = Vec3::random();
     }
-    data.resize(particlePos.size()*7);
+    data.resize(particlePositions.size()*7);
   }
   
-  void advect(double animationTime) {
+  void advect(double deltaT) {
     // TODO: advect the particles
   }
 
-  void particlePosToRenderData() {
-    for (size_t i = 0;i<particlePos.size();++i) {
-      data[i*7+0] = particlePos[i].x*2-1;
-      data[i*7+1] = particlePos[i].y*2-1;
-      data[i*7+2] = particlePos[i].z*2-1;
+  void particlePositionsToRenderData() {
+    for (size_t i = 0;i<particlePositions.size();++i) {
+      data[i*7+0] = particlePositions[i].x*2-1;
+      data[i*7+1] = particlePositions[i].y*2-1;
+      data[i*7+2] = particlePositions[i].z*2-1;
       
-      data[i*7+3] = particlePos[i].x;
-      data[i*7+4] = particlePos[i].y;
-      data[i*7+5] = particlePos[i].z;
+      data[i*7+3] = particlePositions[i].x;
+      data[i*7+4] = particlePositions[i].y;
+      data[i*7+5] = particlePositions[i].z;
       data[i*7+6] = 1.0f;
     }
   }
   
   virtual void animate(double animationTime) override {
-    advect(animationTime*10);
-    particlePosToRenderData();
+    const double deltaT = animationTime - lastAnimationTime;
+    lastAnimationTime = animationTime;
+    advect(deltaT*10);
+    particlePositionsToRenderData();
   }
   
   virtual void draw() override {
