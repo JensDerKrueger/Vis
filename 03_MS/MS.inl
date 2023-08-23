@@ -20,8 +20,8 @@ static std::array<uint16_t,16> edgeTable = {
 static std::array<std::array<uint8_t,2>,4> edgeToVertexTable = {{
   {0,1},
   {1,2},
-  {2,3},
-  {3,0}
+  {3,2},
+  {0,3}
 }};
 
 static std::array<Vec2,4> vertexPosTable = {
