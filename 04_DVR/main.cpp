@@ -77,6 +77,7 @@ public:
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
+    std::stringstream ss;
     if (action == GLFW_PRESS) {
       switch (key) {
         case GLFW_KEY_ESCAPE :
@@ -85,6 +86,16 @@ public:
         case GLFW_KEY_V:
           currentFile = (currentFile + 1) % filenames.size();
           loadVolume();
+          break;
+        case GLFW_KEY_RIGHT_BRACKET:
+          oversampling *= 2;
+          ss << "Raycaster (" << oversampling << " x oversampling)";
+          glEnv.setTitle(ss.str());
+          break;
+        case GLFW_KEY_SLASH:
+          oversampling /= 2;
+          ss << "Raycaster (" << oversampling << " x oversampling)";
+          glEnv.setTitle(ss.str());
           break;
         case GLFW_KEY_R:
           rotation = Mat4{};
@@ -145,7 +156,7 @@ private:
   Mat4 p;
   Mat4 v{Mat4::lookAt({ 0, 0, 2 }, { 0, 0, 0 }, { 0, 1, 0 })};
 
-  float oversampling{10};
+  float oversampling{2};
 
   std::vector<std::string> filenames{"c60.dat","bonsai.dat","Engine.dat"};
   size_t currentFile{0};
