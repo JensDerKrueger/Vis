@@ -66,7 +66,7 @@ void main() {
     //       all variables to avoid this empty start project from
     //       throwing an exception, it has to be replaced by the
     //       raycasting loop
-    fc = 1+transferFunction(texture(volume,direction).r);
+    result = 1+transferFunction(texture(volume,direction).r);
     break;
   } while (inBounds(currentPoint));
 
