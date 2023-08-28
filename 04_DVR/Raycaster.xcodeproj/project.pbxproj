@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		5677395325FB7BF000AB2341 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5677394C25FB7BF000AB2341 /* main.cpp */; };
 		56A20E0B26260259003E2458 /* Engine.dat in CopyFiles */ = {isa = PBXBuildFile; fileRef = 56A20E0926260259003E2458 /* Engine.dat */; };
 		56A20E0C26260259003E2458 /* Engine.raw in CopyFiles */ = {isa = PBXBuildFile; fileRef = 56A20E0A26260259003E2458 /* Engine.raw */; };
+		56BEDAC22A9CC5B7001A04D4 /* Clipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56BEDAC02A9CC5B7001A04D4 /* Clipper.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +53,8 @@
 		5677394C25FB7BF000AB2341 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		56A20E0926260259003E2458 /* Engine.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = Engine.dat; sourceTree = "<group>"; };
 		56A20E0A26260259003E2458 /* Engine.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = Engine.raw; sourceTree = "<group>"; };
+		56BEDAC02A9CC5B7001A04D4 /* Clipper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Clipper.cpp; sourceTree = "<group>"; };
+		56BEDAC12A9CC5B7001A04D4 /* Clipper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Clipper.h; sourceTree = "<group>"; };
 		A231F0FF25EAF61A00CBFC23 /* Raycaster */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raycaster; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,6 +84,8 @@
 				56339BCB26250ABA00AA3B11 /* Volume.h */,
 				563D850B2993B6DF002CEE35 /* c60.dat */,
 				563D850C2993B6DF002CEE35 /* c60.raw */,
+				56BEDAC02A9CC5B7001A04D4 /* Clipper.cpp */,
+				56BEDAC12A9CC5B7001A04D4 /* Clipper.h */,
 				A231F10025EAF61A00CBFC23 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -119,7 +124,8 @@
 		A231F0F725EAF61A00CBFC23 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1420;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					A231F0FE25EAF61A00CBFC23 = {
 						CreatedOnToolsVersion = 12.4;
@@ -149,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56BEDAC22A9CC5B7001A04D4 /* Clipper.cpp in Sources */,
 				56339BCD26250ABA00AA3B11 /* QVis.cpp in Sources */,
 				5677395325FB7BF000AB2341 /* main.cpp in Sources */,
 			);
