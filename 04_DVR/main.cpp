@@ -1,6 +1,7 @@
 #include <GLApp.h>
 #include <Tesselation.h>
 #include <ArcBall.h>
+#include "Clipper.h"
 
 #include "QVis.h"
 
@@ -10,9 +11,26 @@ public:
   GLIPApp() : GLApp(512, 512, 1, "Raycaster") {}
 
   virtual void animate(double animationTime) override {
-    const Mat4 m{ rotation * Mat4::scaling(volumeExtend)};
+  }
+
+  void updateMatrices() {
+    m = Mat4::translation(0,0,zoom) * rotation * Mat4::scaling(volumeExtend);
     mvp = p * v * m;
     v2t = Mat4::translation({0.5f,0.5f,0.5f}) * Mat4::inverse(v * m);
+    meshNeedsUpdte = true;
+  }
+
+  void clipCubeToNearplane() {
+    if (!meshNeedsUpdte) return;
+
+    meshNeedsUpdte = false;
+    const Vec4 objectSpaceNearPlane{Mat4::transpose(v*m)*Vec4{0,0,1.0f,near+0.01f}};
+    std::vector<float> verts = Clipper::boxPlane(cube.getVertices(),
+                                                       objectSpaceNearPlane.xyz,
+                              objectSpaceNearPlane.w);
+
+    vertCount = verts.size()/3;
+    vbCube.setData(verts, 3);
   }
 
   void loadVolume() {
@@ -24,56 +42,52 @@ public:
                       uint32_t(volume.width),
                       uint32_t(volume.height),
                       uint32_t(volume.depth), 1);
+
   }
 
   virtual void init() override {
     loadVolume();
 
+    vertCount = cube.getVertices().size();
     cubeArray.bind();
     vbCube.setData(cube.getVertices(), 3);
-    ibCube.setData(cube.getIndices());
     cubeArray.connectVertexAttrib(vbCube, cubeProgram, "vPos", 3);
-    cubeArray.connectIndexBuffer(ibCube);
-              
-    Tesselation fullScreenQuad{Tesselation::genRectangle({0,0,0},2,2)};
 
+    GL(glClearColor(0,0,0.5,0));
     GL(glClearDepth(1.0f));
     GL(glEnable(GL_DEPTH_TEST));
     GL(glEnable(GL_CULL_FACE));
+    GL(glCullFace(GL_BACK));
+    GL(glEnable(GL_BLEND));
     GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     GL(glBlendEquation(GL_FUNC_ADD));
   }
       
   virtual void resize(int width, int height) override {
-    p = Mat4{ Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), 0.1f, 100) };
-    
+    p = Mat4{ Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), near, 100) };
     const Dimensions dim = glEnv.getWindowSize();
     arcball.setWindowSize({dim.width,dim.height});
+
+    GL(glViewport(0, 0, GLsizei(width), GLsizei(height)));
+    updateMatrices();
   }
 
   virtual void draw() override {
-    GL(glCullFace(GL_FRONT));
-    GL(glEnable(GL_BLEND));
+    clipCubeToNearplane();
 
-    const Dimensions dim = glEnv.getFramebufferSize();
-    GL(glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height)));
-    GL(glClearColor(0,0,0.5,0));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
     cubeProgram.enable();
     cubeProgram.setTexture("volume",volumeTex,0);
     cubeProgram.setUniform("mvp", mvp);
-    cubeProgram.setUniform("v2t", v2t);
+    cubeProgram.setUniform("cameraPosInTextureSpace", (v2t * Vec4{0,0,0,1}).xyz);
+
     cubeProgram.setUniform("voxelCount", voxelCount);
     cubeProgram.setUniform("oversampling", oversampling);
     cubeProgram.setUniform("smoothStepStart", stepStart);
     cubeProgram.setUniform("smoothStepWidth", stepWidth);
 
-    const GLsizei indexCount = GLsizei(cube.getIndices().size());
-    GL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, (void*)0));
-    cubeProgram.unsetTexture3D(0);
-
-    GL(glDisable(GL_BLEND));
+    GL(glDrawArrays(GL_TRIANGLES, 0, GLsizei(vertCount)));
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
@@ -101,6 +115,17 @@ public:
           rotation = Mat4{};
           stepStart = 0.12f;
           stepWidth = 0.1f;
+          zoom = 0.0f;
+          oversampling = 2.0f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_UP:
+          zoom += 0.1f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_DOWN:
+          zoom -= 0.1f;
+          updateMatrices();
           break;
       }
     }
@@ -122,6 +147,7 @@ public:
       const Quaternion q = arcball.drag({uint32_t(xPosition),uint32_t(yPosition)});
       arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
       rotation = q.computeRotation() * rotation;
+      updateMatrices();
     }
   }
   
@@ -139,24 +165,30 @@ public:
   }
 
 private:
-  Tesselation cube{Tesselation::genBrick({0, 0, 0}, {1, 1, 1})};
+  Tesselation cube{Tesselation::genBrick({0, 0, 0}, {1, 1, 1}).unpack()};
   GLBuffer vbCube{GL_ARRAY_BUFFER};
-  GLBuffer ibCube{GL_ELEMENT_ARRAY_BUFFER};
   GLArray cubeArray;
   GLProgram cubeProgram{GLProgram::createFromFile("cubeVS.glsl", "cubeFS.glsl")};
+  size_t vertCount;
   Volume volume;
   Vec3 voxelCount;
   Vec3 volumeExtend;
-  GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_BORDER,GL_CLAMP_TO_BORDER,GL_CLAMP_TO_BORDER};
+  GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_BORDER,
+                        GL_CLAMP_TO_BORDER,GL_CLAMP_TO_BORDER};
   
   ArcBall arcball{{512, 512}};
   Mat4 rotation;
   Mat4 mvp;
   Mat4 v2t;
-  Mat4 p;
+  Mat4 m;
   Mat4 v{Mat4::lookAt({ 0, 0, 2 }, { 0, 0, 0 }, { 0, 1, 0 })};
+  Mat4 p;
 
-  float oversampling{2};
+  float oversampling{2.0f};
+  float near{0.1f};
+  float zoom{0.0f};
+
+  bool meshNeedsUpdte{true};
 
   std::vector<std::string> filenames{"c60.dat","bonsai.dat","Engine.dat"};
   size_t currentFile{0};

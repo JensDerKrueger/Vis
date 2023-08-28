@@ -1,6 +1,6 @@
 #version 410
 
-in vec3 tc;
+in vec3 entryPoint;
 out vec4 result;
 
 uniform sampler3D volume;
@@ -9,22 +9,7 @@ uniform float smoothStepStart;
 uniform float smoothStepWidth;
 uniform float oversampling;
 uniform vec3 voxelCount;
-uniform mat4 v2t;
-
-float maxValue(vec3 v) {
-  return max(v.x, max(v.y, v.z));
-}
-
-float minPositive(float a, float b) {
-  if (a < 0.005) return b;
-  if (b < 0.005) return a;
-  return min(a,b);
-}
-
-float minPositive(vec3 a, vec3 b) {
-  vec3 c = vec3(minPositive(a.x, b.x),minPositive(a.y, b.y),minPositive(a.z, b.z));
-  return minPositive(c.x, minPositive(c.y, c.z));
-}
+uniform vec3 cameraPosInTextureSpace;
 
 vec4 transferFunction(float v) {
   v = clamp((v - smoothStepStart) / (smoothStepWidth), 0.0, 1.0);
@@ -43,30 +28,23 @@ bool inBounds(vec3 pos) {
 }
 
 void main() {
-  // exit point is given by the backface geometry
-  vec3 exitPoint = tc;
-
   // compute vector to camera in texture space
-  vec3 cameraPosInTextureSpace = (v2t * vec4(0,0,0,1)).xyz;
-  vec3 rayDirectionInTextureSpace = normalize(cameraPosInTextureSpace-exitPoint);
+  vec3 rayDirectionInTextureSpace = normalize(entryPoint-cameraPosInTextureSpace);
 
-  // compute entry point and direction
-  vec3 a = (0-exitPoint)/rayDirectionInTextureSpace;
-  vec3 b = (1-exitPoint)/rayDirectionInTextureSpace;
-  float t = minPositive(a,b);
-  vec3 currentPoint = exitPoint + rayDirectionInTextureSpace * t;
-  float samples = maxValue(abs(rayDirectionInTextureSpace)*t*voxelCount);
+  // compute delta
+  float samples = dot(abs(rayDirectionInTextureSpace),voxelCount);
   float opacityCorrection = 100/(samples*oversampling);
-  vec3 direction = normalize(exitPoint-currentPoint)/(samples*oversampling);
+  vec3 delta = rayDirectionInTextureSpace/(samples*oversampling);
 
+  vec3 currentPoint = entryPoint;
   result = vec4(0.0);
   do {
-    // TODO: implement raycaster here, write result into "result"
-    //       the following two liens are just dummy code that uses
-    //       all variables to avoid this empty start project from
-    //       throwing an exception, it has to be replaced by the
-    //       raycasting loop
-    result = 1+transferFunction(texture(volume,direction).r);
+    // TODO: Implement raycaster and store the result in "result".
+    //       The next two lines are placeholder code ensuring all
+    //       variables are utilized. This prevents exceptions from
+    //       the initial shader. These placeholder lines should be
+    //       replaced by the raycasting code.
+    result = 1+transferFunction(texture(volume,delta).r);
     break;
   } while (inBounds(currentPoint));
 
