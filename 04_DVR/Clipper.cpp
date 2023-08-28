@@ -158,7 +158,7 @@ static std::vector<float> vec3toRaw(const std::vector<Vec3>& posData) {
 }
 
 
-void Clipper::boxPlane(std::vector<Vec3>& posData, const Vec3 &normal, const float D) {
+void Clipper::meshPlane(std::vector<Vec3>& posData, const Vec3 &normal, const float D) {
 
   std::vector<Vec3> newVertices = Clipper::triPlane(posData, normal, D);
 
@@ -189,9 +189,9 @@ void Clipper::boxPlane(std::vector<Vec3>& posData, const Vec3 &normal, const flo
 
 }
 
-std::vector<float> Clipper::boxPlane(std::vector<float> posData,
+std::vector<float> Clipper::meshPlane(std::vector<float> posData,
                                      const Vec3 &normal, const float D) {
   std::vector<Vec3> vecPos = rawToVec3(posData);
-  boxPlane(vecPos, normal, D);
+  meshPlane(vecPos, normal, D);
   return vec3toRaw(vecPos);
 }

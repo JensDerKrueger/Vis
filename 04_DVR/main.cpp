@@ -25,7 +25,7 @@ public:
 
     meshNeedsUpdte = false;
     const Vec4 objectSpaceNearPlane{Mat4::transpose(v*m)*Vec4{0,0,1.0f,near+0.01f}};
-    std::vector<float> verts = Clipper::boxPlane(cube.getVertices(),
+    std::vector<float> verts = Clipper::meshPlane(cube.getVertices(),
                                                        objectSpaceNearPlane.xyz,
                               objectSpaceNearPlane.w);
 

@@ -7,9 +7,9 @@ class Clipper {
 public:
   static std::vector<Vec3> triPlane(std::vector<Vec3>& posData,
                                     const Vec3 &normal, const float D);
-  static void boxPlane(std::vector<Vec3>& posData, const Vec3 &normal,
+  static void meshPlane(std::vector<Vec3>& posData, const Vec3 &normal,
                        const float D);
 
-  static std::vector<float> boxPlane(std::vector<float> posData, const Vec3 &normal,
+  static std::vector<float> meshPlane(std::vector<float> posData, const Vec3 &normal,
                        const float D);
 };
