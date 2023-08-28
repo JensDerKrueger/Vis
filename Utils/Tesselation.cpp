@@ -375,3 +375,23 @@ Tesselation Tesselation::genTorus(const Vec3 &center, float majorRadius, float m
 
 	return tess;
 }
+
+
+Tesselation Tesselation::unpack() const {
+  Tesselation t;
+
+  uint32_t i = 0;
+  for (uint32_t index : indices) {
+    t.indices.push_back(i++);
+    for (uint32_t component=0; component<3; component++) {
+      t.vertices.push_back(vertices[index*3+component]);
+      t.normals.push_back(normals[index*3+component]);
+      t.tangents.push_back(tangents[index*3+component]);
+    }
+    for (uint32_t component=0; component<2; component++) {
+      t.texCoords.push_back(texCoords[index*2+component]);
+    }
+  }
+
+  return t;
+}
