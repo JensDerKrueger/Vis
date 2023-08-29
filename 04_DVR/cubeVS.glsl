@@ -7,5 +7,5 @@ out vec3 entryPoint;
 
 void main() {
   gl_Position = modelViewProjection * vec4(vPos, 1.0);
-  entryPoint = (clip*vec4(vPos, 1.0)).xyz+vec3(0.5,0.5,0.5);
+  entryPoint = (clip*vec4(vPos, 1.0)).xyz+0.5;
 }
