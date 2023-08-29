@@ -1,10 +1,11 @@
 #version 410
 
-uniform mat4 mvp;
+uniform mat4 modelViewProjection;
+uniform mat4 clip;
 in vec3 vPos;
 out vec3 entryPoint;
 
 void main() {
-  gl_Position = mvp * vec4(vPos, 1.0);
-  entryPoint = vPos+0.5;
+  gl_Position = modelViewProjection * vec4(vPos, 1.0);
+  entryPoint = (clip*vec4(vPos, 1.0)).xyz+vec3(0.5,0.5,0.5);
 }

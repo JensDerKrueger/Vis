@@ -10,6 +10,8 @@ uniform float smoothStepWidth;
 uniform float oversampling;
 uniform vec3 voxelCount;
 uniform vec3 cameraPosInTextureSpace;
+uniform vec3 minBounds;
+uniform vec3 maxBounds;
 
 vec4 transferFunction(float v) {
   v = clamp((v - smoothStepStart) / (smoothStepWidth), 0.0, 1.0);
@@ -23,12 +25,12 @@ vec4 under(vec4 current, vec4 last) {
 }
 
 bool inBounds(vec3 pos) {
-  return pos.x >= 0.0 && pos.y >= 0.0 && pos.z >= 0.0 &&
-  pos.x <= 1.0 && pos.y <= 1.0 && pos.z <= 1.0;
+  return pos.x >= minBounds.x && pos.y >= minBounds.y && pos.z >= minBounds.z &&
+         pos.x <= maxBounds.x && pos.y <= maxBounds.y && pos.z <= maxBounds.z;
 }
 
 void main() {
-  // compute vector to camera in texture space
+  // compute vector to camera in texture space  
   vec3 rayDirectionInTextureSpace = normalize(entryPoint-cameraPosInTextureSpace);
 
   // compute delta
@@ -47,6 +49,4 @@ void main() {
     result = 1+transferFunction(texture(volume,delta).r);
     break;
   } while (inBounds(currentPoint));
-
-
 }

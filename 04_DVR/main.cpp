@@ -14,21 +14,25 @@ public:
   }
 
   void updateMatrices() {
-    m = Mat4::translation(0,0,zoom) * rotation * Mat4::scaling(volumeExtend);
-    mvp = p * v * m;
-    v2t = Mat4::translation({0.5f,0.5f,0.5f}) * Mat4::inverse(v * m);
+    clipBoxSize = Vec3::maxV({0,0,0},Vec3::minV({1,1,1}, clipBoxSize));
+    clipBoxShift = Vec3::maxV((Vec3{1,1,1}-clipBoxSize)*-0.5,Vec3::minV((Vec3{1,1,1}-clipBoxSize)*0.5, clipBoxShift));
+    clipBox = Mat4::translation(clipBoxShift) * Mat4::scaling(clipBoxSize);
+    minBounds = clipBox * Vec3{-0.5,-0.5,-0.5} + 0.5f;
+    maxBounds = clipBox * Vec3{ 0.5, 0.5, 0.5} + 0.5f;
+    model = Mat4::translation(0,0,zoom) * rotation * Mat4::scaling(volumeExtend);
+    modelViewProjection = projection * view * model * clipBox;
+    viewToTexture = Mat4::translation({0.5f,0.5f,0.5f}) * Mat4::inverse(view * model);
     meshNeedsUpdte = true;
   }
 
   void clipCubeToNearplane() {
     if (!meshNeedsUpdte) return;
-
     meshNeedsUpdte = false;
-    const Vec4 objectSpaceNearPlane{Mat4::transpose(v*m)*Vec4{0,0,1.0f,near+0.01f}};
+    // transpose( inverse( inverse(view*model) ) ) -> transpose(view*model)
+    const Vec4 objectSpaceNearPlane{Mat4::transpose(view*model)*Vec4{0,0,1.0f,near+0.01f}};
     std::vector<float> verts = Clipper::meshPlane(cube.getVertices(),
-                                                       objectSpaceNearPlane.xyz,
-                              objectSpaceNearPlane.w);
-
+                                                  objectSpaceNearPlane.xyz,
+                                                  objectSpaceNearPlane.w);
     vertCount = verts.size()/3;
     vbCube.setData(verts, 3);
   }
@@ -64,7 +68,7 @@ public:
   }
       
   virtual void resize(int width, int height) override {
-    p = Mat4{ Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), near, 100) };
+    projection = Mat4{ Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), near, 100) };
     const Dimensions dim = glEnv.getWindowSize();
     arcball.setWindowSize({dim.width,dim.height});
 
@@ -79,8 +83,11 @@ public:
 
     cubeProgram.enable();
     cubeProgram.setTexture("volume",volumeTex,0);
-    cubeProgram.setUniform("mvp", mvp);
-    cubeProgram.setUniform("cameraPosInTextureSpace", (v2t * Vec4{0,0,0,1}).xyz);
+    cubeProgram.setUniform("modelViewProjection", modelViewProjection);
+    cubeProgram.setUniform("clip", clipBox);
+    cubeProgram.setUniform("minBounds", minBounds);
+    cubeProgram.setUniform("maxBounds", maxBounds);
+    cubeProgram.setUniform("cameraPosInTextureSpace", (viewToTexture * Vec4{0,0,0,1}).xyz);
 
     cubeProgram.setUniform("voxelCount", voxelCount);
     cubeProgram.setUniform("oversampling", oversampling);
@@ -100,6 +107,7 @@ public:
         case GLFW_KEY_V:
           currentFile = (currentFile + 1) % filenames.size();
           loadVolume();
+          updateMatrices();
           break;
         case GLFW_KEY_RIGHT_BRACKET:
           oversampling *= 2;
@@ -117,6 +125,8 @@ public:
           stepWidth = 0.1f;
           zoom = 0.0f;
           oversampling = 2.0f;
+          clipBoxSize = Vec3{1,1,1};
+          clipBoxShift = Vec3{0,0,0};
           updateMatrices();
           break;
         case GLFW_KEY_UP:
@@ -125,6 +135,48 @@ public:
           break;
         case GLFW_KEY_DOWN:
           zoom -= 0.1f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_1:
+          if (mods & GLFW_MOD_SHIFT)
+            clipBoxSize.x += 0.01f;
+          else
+            clipBoxSize.x -= 0.01f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_2:
+          if (mods & GLFW_MOD_SHIFT)
+            clipBoxSize.y += 0.01f;
+          else
+            clipBoxSize.y -= 0.01f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_3:
+          if (mods & GLFW_MOD_SHIFT)
+            clipBoxSize.z += 0.01f;
+          else
+            clipBoxSize.z -= 0.01f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_4:
+          if (mods & GLFW_MOD_SHIFT)
+            clipBoxShift.x += 0.01f;
+          else
+            clipBoxShift.x -= 0.01f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_5:
+          if (mods & GLFW_MOD_SHIFT)
+            clipBoxShift.y += 0.01f;
+          else
+            clipBoxShift.y -= 0.01f;
+          updateMatrices();
+          break;
+        case GLFW_KEY_6:
+          if (mods & GLFW_MOD_SHIFT)
+            clipBoxShift.z += 0.01f;
+          else
+            clipBoxShift.z -= 0.01f;
           updateMatrices();
           break;
       }
@@ -178,11 +230,17 @@ private:
   
   ArcBall arcball{{512, 512}};
   Mat4 rotation;
-  Mat4 mvp;
-  Mat4 v2t;
-  Mat4 m;
-  Mat4 v{Mat4::lookAt({ 0, 0, 2 }, { 0, 0, 0 }, { 0, 1, 0 })};
-  Mat4 p;
+  Mat4 clipBox;
+  Mat4 modelViewProjection;
+  Mat4 viewToTexture;
+  Mat4 model;
+  Mat4 view{Mat4::lookAt({ 0, 0, 2 }, { 0, 0, 0 }, { 0, 1, 0 })};
+  Mat4 projection;
+
+  Vec3 minBounds;
+  Vec3 maxBounds;
+  Vec3 clipBoxSize{1,1,1};
+  Vec3 clipBoxShift{0,0,0};
 
   float oversampling{2.0f};
   float near{0.1f};
