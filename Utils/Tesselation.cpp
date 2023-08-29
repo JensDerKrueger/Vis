@@ -1,6 +1,4 @@
 #include <cmath>
-#include <iostream>
-
 #include "Vec2.h"
 
 constexpr float PI = 3.14159265358979323846f;
