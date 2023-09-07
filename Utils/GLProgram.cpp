@@ -144,21 +144,21 @@ void GLProgram::setUniform(GLint id, const Mat4& value, bool transpose) const {
 }
 
 void GLProgram::setTexture(GLint id, const GLTexture1D& texture, GLuint unit) const {
-  GL(glActiveTexture(GL_TEXTURE0 + unit));
+  GL(glActiveTexture(GLenum(GL_TEXTURE0 + unit)));
   GL(glBindTexture(GL_TEXTURE_1D, texture.getId()));
-  GL(glUniform1ui(id, unit));
+  GL(glUniform1i(id, GLint(unit)));
 }
 
 void GLProgram::setTexture(GLint id, const GLTexture2D& texture, GLuint unit) const {
-	GL(glActiveTexture(GL_TEXTURE0 + unit));
+	GL(glActiveTexture(GLenum(GL_TEXTURE0 + unit)));
 	GL(glBindTexture(GL_TEXTURE_2D, texture.getId()));
-	GL(glUniform1ui(id, unit));
+	GL(glUniform1i(id, GLint(unit)));
 }
 
 void GLProgram::setTexture(GLint id, const GLTexture3D& texture, GLuint unit) const {
-  GL(glActiveTexture(GL_TEXTURE0 + unit));
+  GL(glActiveTexture(GLenum(GL_TEXTURE0 + unit)));
   GL(glBindTexture(GL_TEXTURE_3D, texture.getId()));
-  GL(glUniform1ui(id, unit));
+  GL(glUniform1i(id, GLint(unit)));
 }
 
 void GLProgram::unsetTexture1D(GLuint unit) const {
