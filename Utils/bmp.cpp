@@ -35,9 +35,10 @@ namespace BMP {
     // write BMP-Header
     outStream.write((char*)"BM", 2); // all BMP-Files start with "BM"
     uint32_t header[3];
-    int rowPad= 4-((w*8*iComponentCount)%32)/8;
+    uint32_t rowPad= 4-((w*8*iComponentCount)%32)/8;
     if (rowPad == 4) rowPad = 0;
-    header[0] = 54+w*h*iComponentCount+rowPad*h;	// filesize = 54 (header) + sizeX * sizeY * numChannels
+    // filesize = 54 (header) + sizeX * sizeY * numChannels
+    header[0] = 54+w*h*iComponentCount+rowPad*h;
     header[1] = 0;						      // reserved = 0 (4 Bytes)
     header[2] = 54;						      // File offset to Raster Data
     outStream.write((char*)header, 4*3);
@@ -129,15 +130,15 @@ namespace BMP {
     if (biPlanes != 1)
       throw BMPException("Number of bitplanes was not equal to 1\n");
     // get the number of bits per pixel
-    int16_t biBitCount;
-    if (!file.read((char*)&biBitCount, sizeof(int16_t)))
+    uint16_t biBitCount;
+    if (!file.read((char*)&biBitCount, sizeof(uint16_t)))
       throw BMPException("Error Reading file\n");
       
     // calculate the size of the image in bytes
-    int32_t biSizeImage;
+    uint32_t biSizeImage;
     if (biBitCount == 8 || biBitCount == 16 || biBitCount == 24 || biBitCount == 32) {
       biSizeImage = texture.width * texture.height * biBitCount/8;
-      texture.componentCount = biBitCount/8;
+      texture.componentCount = uint8_t(biBitCount/8);
     } else {
       std::stringstream s;
       s << "File is " << biBitCount << " bpp, but this reader only supports 8, 16, 24, or 32 Bpp";
@@ -168,7 +169,7 @@ namespace BMP {
     
     // swap red and blue (bgr -> rgb)
     if (texture.componentCount > 2) {
-      for (int32_t i = 0; i < biSizeImage; i += texture.componentCount) {
+      for (uint32_t i = 0; i < biSizeImage; i += texture.componentCount) {
         const uint8_t temp = texture.data[i];
         texture.data[i] = texture.data[i + 2];
         texture.data[i + 2] = temp;
@@ -221,8 +222,10 @@ namespace BMP {
         
     for (uint32_t y = sourceStart.y;y < sourceEnd.y;++y) {
       for (uint32_t x = sourceStart.x;x < sourceEnd.x;++x) {
-        for (uint32_t c = 0;c<target.componentCount;++c) {
-            target.setValue(targetStart.x+x-sourceStart.x,targetStart.y+y-sourceStart.y,c,source.getValue(x,y,c));
+        for (uint8_t c = 0;c<target.componentCount;++c) {
+            target.setValue(targetStart.x+x-sourceStart.x,
+                            targetStart.y+y-sourceStart.y,
+                            c,source.getValue(x,y,c));
         }
       }
     }

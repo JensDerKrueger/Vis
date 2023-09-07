@@ -124,7 +124,7 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
   
   glfwSetTime(0);
   Dimensions dim{ glEnv.getFramebufferSize() };
-  glViewport(0, 0, dim.width, dim.height);
+  glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height));
 }
 
 GLApp::~GLApp() {
@@ -138,7 +138,8 @@ void GLApp::setPointHighlightTexture(const Image& shape) {
   pointSpriteHighlight.setData(shape.data, shape.width, shape.height, shape.componentCount);
 }
 
-void GLApp::setPointTexture(const std::vector<uint8_t>& shape, uint32_t x, uint32_t y, uint32_t components) {
+void GLApp::setPointTexture(const std::vector<uint8_t>& shape, uint32_t x,
+                            uint32_t y, uint8_t components) {
   pointSprite.setData(shape, x, y, components);
 }
 
@@ -166,7 +167,7 @@ void GLApp::resetPointHighlightTexture() {
 void GLApp::run() {
   init();
   const Dimensions dim{ glEnv.getFramebufferSize() };
-  resize(dim.width, dim.height);
+  resize(int(dim.width), int(dim.height));
   do {
     if (animationActive) {
       animate(glfwGetTime());
@@ -178,7 +179,7 @@ void GLApp::run() {
  
 void GLApp::resize(int width, int height) {
   const Dimensions dim{ glEnv.getFramebufferSize() };
-  GL(glViewport(0, 0, dim.width, dim.height));
+  GL(glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height)));
 }
 
 

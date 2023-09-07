@@ -146,19 +146,19 @@ void GLProgram::setUniform(GLint id, const Mat4& value, bool transpose) const {
 void GLProgram::setTexture(GLint id, const GLTexture1D& texture, GLuint unit) const {
   GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_1D, texture.getId()));
-  GL(glUniform1i(id, unit));
+  GL(glUniform1ui(id, unit));
 }
 
 void GLProgram::setTexture(GLint id, const GLTexture2D& texture, GLuint unit) const {
 	GL(glActiveTexture(GL_TEXTURE0 + unit));
 	GL(glBindTexture(GL_TEXTURE_2D, texture.getId()));
-	GL(glUniform1i(id, unit));
+	GL(glUniform1ui(id, unit));
 }
 
 void GLProgram::setTexture(GLint id, const GLTexture3D& texture, GLuint unit) const {
   GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_3D, texture.getId()));
-  GL(glUniform1i(id, unit));
+  GL(glUniform1ui(id, unit));
 }
 
 void GLProgram::unsetTexture1D(GLuint unit) const {
@@ -192,7 +192,7 @@ void GLProgram::checkAndThrowShader(GLuint shader) {
 		GLint log_length{0};
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &log_length);
 		log_length = std::min(static_cast<GLint>(4096), log_length);
-		std::vector<GLchar> log(log_length);
+		std::vector<GLchar> log((size_t)(log_length));
 		glGetShaderInfoLog(shader, static_cast<GLsizei>(log.size()), NULL, log.data());
 		std::string str{log.data()};
 		throw ProgramException{str};
@@ -206,7 +206,7 @@ void GLProgram::checkAndThrowProgram(GLuint program) {
 		GLint log_length{0};
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &log_length);
 		log_length = std::min(static_cast<GLint>(4096), log_length);
-		std::vector<GLchar> log(log_length);
+		std::vector<GLchar> log((size_t)log_length);
 		glGetProgramInfoLog(program, static_cast<GLsizei>(log.size()), NULL, log.data());
 		std::string str{log.data()};
 		throw ProgramException{str};

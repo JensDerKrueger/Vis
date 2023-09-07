@@ -13,7 +13,7 @@ public:
   GLTexture3D(const GLTexture3D& other);
   GLTexture3D& operator=(GLTexture3D other);
     
-	const GLint getId() const;
+	const GLuint getId() const;
   void clear();
   void setEmpty(uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount, bool isFloat=false);
 	void setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount=4);
@@ -33,7 +33,7 @@ public:
 
 private:
 	GLuint id;
-	GLenum internalformat;
+  GLint internalformat;
 	GLenum format;
 	GLenum type;
 

@@ -24,7 +24,7 @@ void GLBuffer::setData(const std::vector<float>& data, size_t valuesPerElement, 
 	stride = valuesPerElement*elemSize;
 	type = GL_FLOAT;
 	GL(glBindBuffer(target, bufferID));
-	GL(glBufferData(target, elemSize*data.size(), data.data(), usage));
+	GL(glBufferData(target, GLsizeiptr(elemSize*data.size()), data.data(), usage));
 }
 
 void GLBuffer::setData(const std::vector<GLuint>& data) {
@@ -32,10 +32,10 @@ void GLBuffer::setData(const std::vector<GLuint>& data) {
 	stride = 1*elemSize;
 	type = GL_UNSIGNED_INT;
 	GL(glBindBuffer(target, bufferID));
-	GL(glBufferData(target, elemSize*data.size(), data.data(), GL_STATIC_DRAW));
+	GL(glBufferData(target, GLsizeiptr(elemSize*data.size()), data.data(), GL_STATIC_DRAW));
 }
 
-void GLBuffer::connectVertexAttrib(GLint location, size_t elemCount, size_t offset) const {
+void GLBuffer::connectVertexAttrib(GLuint location, size_t elemCount, size_t offset) const {
     if (type == 0) {
         throw GLException{"Need to call setData before connectVertexAttrib"};
     }

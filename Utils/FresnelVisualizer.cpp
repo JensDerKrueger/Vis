@@ -89,7 +89,7 @@ void FresnelVisualizer::render(const Mat4& mv, const Mat4& p) const {
 	visProg.setUniform(mvitLoc, Mat4::inverse(mv), true);
 
 	// render geometry
-	GL(glDrawArrays(GL_POINTS, start, count));
+	GL(glDrawArrays(GL_POINTS, GLint(start), GLsizei(count)));
 
 	GL(glEnable(GL_DEPTH_TEST));
 }

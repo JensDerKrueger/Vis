@@ -13,7 +13,7 @@ public:
   GLFramebuffer();
   ~GLFramebuffer();
 
-  const GLint getId() const;
+  const GLuint getId() const;
 
   void bind(const GLTexture2D& t, const GLDepthBuffer& d);
   void bind(const GLTexture2D& t0, const GLTexture2D& t1, const GLDepthBuffer& d);

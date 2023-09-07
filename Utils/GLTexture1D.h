@@ -14,12 +14,12 @@ public:
   
 	~GLTexture1D();
 	
-	const GLint getId() const;	
+	const GLuint getId() const;	
 	void setData(const std::vector<GLubyte>& data, uint32_t size, uint32_t componentCount=4);
 		
 private:
 	GLuint id;
-	GLenum internalformat;
+	GLint internalformat;
 	GLenum format;
 	GLenum type;
 

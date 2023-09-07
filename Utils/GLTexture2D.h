@@ -17,15 +17,15 @@ public:
   GLTexture2D(const GLTexture2D& other);
   GLTexture2D& operator=(const GLTexture2D& other);
     
-	const GLint getId() const;
+	const GLuint getId() const;
   void clear();
-  void setEmpty(uint32_t width, uint32_t height, uint32_t componentCount, GLDataType dataType=GLDataType::BYTE);
+  void setEmpty(uint32_t width, uint32_t height, uint8_t componentCount, GLDataType dataType=GLDataType::BYTE);
   void setData(const Image& image);
-  void setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint32_t componentCount=4);
+  void setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint8_t componentCount=4);
   void setData(const std::vector<GLubyte>& data);
-  void setData(const std::vector<GLfloat>& data, uint32_t width, uint32_t height, uint32_t componentCount=4);
+  void setData(const std::vector<GLfloat>& data, uint32_t width, uint32_t height, uint8_t componentCount=4);
   void setData(const std::vector<GLfloat>& data);
-  void setData(const std::vector<GLhalf>& data, uint32_t width, uint32_t height, uint32_t componentCount=4);
+  void setData(const std::vector<GLhalf>& data, uint32_t width, uint32_t height, uint8_t componentCount=4);
   void setData(const std::vector<GLhalf>& data);
   void setFilter(GLint magFilter, GLint minFilter);
   
@@ -33,7 +33,7 @@ public:
   
   uint32_t getHeight() const {return height;}
   uint32_t getWidth() const {return width;}
-  uint32_t getComponentCount() const {return componentCount;}
+  uint8_t getComponentCount() const {return componentCount;}
   uint32_t getSize() const {return height*width*componentCount;}
   GLDataType getType() const {return dataType;}
   
@@ -57,8 +57,8 @@ private:
   std::vector<GLfloat> fdata;
   uint32_t width;
   uint32_t height;
-  uint32_t componentCount;
+  uint8_t componentCount;
   GLDataType dataType;
   
-  void setData(GLvoid* data, uint32_t width, uint32_t height, uint32_t componentCount, GLDataType dataType);
+  void setData(GLvoid* data, uint32_t width, uint32_t height, uint8_t componentCount, GLDataType dataType);
 };

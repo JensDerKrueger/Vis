@@ -9,7 +9,7 @@ public:
 	GLDepthBuffer(uint32_t width=0, uint32_t height=0);
 	~GLDepthBuffer();
 	
-	const GLint getId() const;
+	const GLuint getId() const;
 		
   uint32_t getWidth() const {return width;}
   uint32_t getHeight() const {return height;}
