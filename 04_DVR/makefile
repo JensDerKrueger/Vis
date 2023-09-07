@@ -13,7 +13,7 @@ else
 	INCLUDES=-I. -I../Utils -I /opt/homebrew/include
 endif
 
-SRC = main.cpp QVis.cpp
+SRC = main.cpp QVis.cpp Clipper.cpp
 OBJ = $(SRC:.cpp=.o)
 TARGET = Raycaster
 
