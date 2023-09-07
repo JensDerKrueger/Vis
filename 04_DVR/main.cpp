@@ -5,10 +5,10 @@
 
 #include "QVis.h"
 
-class GLIPApp : public GLApp {
+class Raycaster : public GLApp {
 public:
     
-  GLIPApp() : GLApp(512, 512, 1, "Raycaster") {}
+  Raycaster() : GLApp(512, 512, 1, "Raycaster") {}
 
   virtual void animate(double animationTime) override {
   }
@@ -267,8 +267,8 @@ INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nC
 int main(int argc, char** argv) {
 #endif
   try {
-    GLIPApp imageProcessing;
-    imageProcessing.run();
+    Raycaster raycaster;
+    raycaster.run();
   }
   catch (const GLException& e) {
     std::stringstream ss;
