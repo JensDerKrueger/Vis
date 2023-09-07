@@ -3,14 +3,73 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		560A43B52AA9A4D000DB0F92 /* Vec4.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43832AA9A4D000DB0F92 /* Vec4.h */; };
+		560A43B62AA9A4D000DB0F92 /* GLEnv.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43842AA9A4D000DB0F92 /* GLEnv.h */; };
+		560A43B72AA9A4D000DB0F92 /* ArcBall.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43852AA9A4D000DB0F92 /* ArcBall.h */; };
+		560A43B82AA9A4D000DB0F92 /* OBJFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43862AA9A4D000DB0F92 /* OBJFile.cpp */; };
+		560A43B92AA9A4D000DB0F92 /* GLApp.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43872AA9A4D000DB0F92 /* GLApp.h */; };
+		560A43BA2AA9A4D000DB0F92 /* GLArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43882AA9A4D000DB0F92 /* GLArray.cpp */; };
+		560A43BB2AA9A4D000DB0F92 /* GLDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43892AA9A4D000DB0F92 /* GLDebug.cpp */; };
+		560A43BC2AA9A4D000DB0F92 /* PlanarMirror.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A438A2AA9A4D000DB0F92 /* PlanarMirror.h */; };
+		560A43BD2AA9A4D000DB0F92 /* Vec3.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A438B2AA9A4D000DB0F92 /* Vec3.h */; };
+		560A43BE2AA9A4D000DB0F92 /* GLTexture3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A438C2AA9A4D000DB0F92 /* GLTexture3D.cpp */; };
+		560A43BF2AA9A4D000DB0F92 /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A438D2AA9A4D000DB0F92 /* Image.cpp */; };
+		560A43C02AA9A4D000DB0F92 /* GLDepthBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A438E2AA9A4D000DB0F92 /* GLDepthBuffer.h */; };
+		560A43C12AA9A4D000DB0F92 /* Tesselation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A438F2AA9A4D000DB0F92 /* Tesselation.cpp */; };
+		560A43C22AA9A4D000DB0F92 /* bmp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43902AA9A4D000DB0F92 /* bmp.cpp */; };
+		560A43C32AA9A4D000DB0F92 /* ArcBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43912AA9A4D000DB0F92 /* ArcBall.cpp */; };
+		560A43C42AA9A4D000DB0F92 /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43922AA9A4D000DB0F92 /* GLProgram.cpp */; };
+		560A43C52AA9A4D000DB0F92 /* GLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43932AA9A4D000DB0F92 /* GLFramebuffer.cpp */; };
+		560A43C62AA9A4D000DB0F92 /* Grid2D.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43942AA9A4D000DB0F92 /* Grid2D.h */; };
+		560A43C72AA9A4D000DB0F92 /* Rand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43952AA9A4D000DB0F92 /* Rand.cpp */; };
+		560A43C82AA9A4D000DB0F92 /* GLBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43962AA9A4D000DB0F92 /* GLBuffer.h */; };
+		560A43C92AA9A4D000DB0F92 /* GLTexture1D.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43972AA9A4D000DB0F92 /* GLTexture1D.h */; };
+		560A43CA2AA9A4D000DB0F92 /* Mat4.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43982AA9A4D000DB0F92 /* Mat4.h */; };
+		560A43CB2AA9A4D000DB0F92 /* GLTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43992AA9A4D000DB0F92 /* GLTexture2D.cpp */; };
+		560A43CD2AA9A4D000DB0F92 /* FontRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A439B2AA9A4D000DB0F92 /* FontRenderer.h */; };
+		560A43CE2AA9A4D000DB0F92 /* Mat3.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A439C2AA9A4D000DB0F92 /* Mat3.h */; };
+		560A43CF2AA9A4D000DB0F92 /* Grid2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A439D2AA9A4D000DB0F92 /* Grid2D.cpp */; };
+		560A43D02AA9A4D000DB0F92 /* OBJFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A439E2AA9A4D000DB0F92 /* OBJFile.h */; };
+		560A43D12AA9A4D000DB0F92 /* GLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A439F2AA9A4D000DB0F92 /* GLApp.cpp */; };
+		560A43D22AA9A4D000DB0F92 /* GLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43A02AA9A4D000DB0F92 /* GLBuffer.cpp */; };
+		560A43D32AA9A4D000DB0F92 /* FontRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43A12AA9A4D000DB0F92 /* FontRenderer.cpp */; };
+		560A43D42AA9A4D000DB0F92 /* GLTexture1D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43A22AA9A4D000DB0F92 /* GLTexture1D.cpp */; };
+		560A43D52AA9A4D000DB0F92 /* PlanarMirror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43A32AA9A4D000DB0F92 /* PlanarMirror.cpp */; };
+		560A43D62AA9A4D000DB0F92 /* Vec2.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43A42AA9A4D000DB0F92 /* Vec2.h */; };
+		560A43D72AA9A4D000DB0F92 /* GLProgram.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43A52AA9A4D000DB0F92 /* GLProgram.h */; };
+		560A43D82AA9A4D000DB0F92 /* GLArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43A62AA9A4D000DB0F92 /* GLArray.h */; };
+		560A43D92AA9A4D000DB0F92 /* FresnelVisualizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43A72AA9A4D000DB0F92 /* FresnelVisualizer.h */; };
+		560A43DA2AA9A4D000DB0F92 /* GLEnv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43A82AA9A4D000DB0F92 /* GLEnv.cpp */; };
+		560A43DB2AA9A4D000DB0F92 /* Quaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43A92AA9A4D000DB0F92 /* Quaternion.h */; };
+		560A43DC2AA9A4D000DB0F92 /* bmp.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43AA2AA9A4D000DB0F92 /* bmp.h */; };
+		560A43DD2AA9A4D000DB0F92 /* Rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43AB2AA9A4D000DB0F92 /* Rand.h */; };
+		560A43DE2AA9A4D000DB0F92 /* GLDepthBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43AC2AA9A4D000DB0F92 /* GLDepthBuffer.cpp */; };
+		560A43DF2AA9A4D000DB0F92 /* GLFramebuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43AD2AA9A4D000DB0F92 /* GLFramebuffer.h */; };
+		560A43E02AA9A4D000DB0F92 /* GLDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43AE2AA9A4D000DB0F92 /* GLDebug.h */; };
+		560A43E12AA9A4D000DB0F92 /* GLTexture2D.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43AF2AA9A4D000DB0F92 /* GLTexture2D.h */; };
+		560A43E22AA9A4D000DB0F92 /* FresnelVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 560A43B02AA9A4D000DB0F92 /* FresnelVisualizer.cpp */; };
+		560A43E32AA9A4D000DB0F92 /* Image.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43B12AA9A4D000DB0F92 /* Image.h */; };
+		560A43E42AA9A4D000DB0F92 /* Camera.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43B22AA9A4D000DB0F92 /* Camera.h */; };
+		560A43E52AA9A4D000DB0F92 /* Tesselation.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43B32AA9A4D000DB0F92 /* Tesselation.h */; };
+		560A43E62AA9A4D000DB0F92 /* GLTexture3D.h in Headers */ = {isa = PBXBuildFile; fileRef = 560A43B42AA9A4D000DB0F92 /* GLTexture3D.h */; };
 		564FB14C262839C2004F5F08 /* helvetica_neue.pos in CopyFiles */ = {isa = PBXBuildFile; fileRef = 564FB14A262839C2004F5F08 /* helvetica_neue.pos */; };
 		564FB14D262839C2004F5F08 /* helvetica_neue.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 564FB14B262839C2004F5F08 /* helvetica_neue.bmp */; };
 		5677395325FB7BF000AB2341 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5677394C25FB7BF000AB2341 /* main.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		560A43E72AA9A53100DB0F92 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A231F0F725EAF61A00CBFC23 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 560A43772AA9A43B00DB0F92;
+			remoteInfo = Utils;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		A231F0FD25EAF61A00CBFC23 /* CopyFiles */ = {
@@ -27,6 +86,56 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		560A43782AA9A43B00DB0F92 /* libUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		560A43832AA9A4D000DB0F92 /* Vec4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vec4.h; path = ../../Utils/Vec4.h; sourceTree = "<group>"; };
+		560A43842AA9A4D000DB0F92 /* GLEnv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLEnv.h; path = ../../Utils/GLEnv.h; sourceTree = "<group>"; };
+		560A43852AA9A4D000DB0F92 /* ArcBall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ArcBall.h; path = ../../Utils/ArcBall.h; sourceTree = "<group>"; };
+		560A43862AA9A4D000DB0F92 /* OBJFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OBJFile.cpp; path = ../../Utils/OBJFile.cpp; sourceTree = "<group>"; };
+		560A43872AA9A4D000DB0F92 /* GLApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLApp.h; path = ../../Utils/GLApp.h; sourceTree = "<group>"; };
+		560A43882AA9A4D000DB0F92 /* GLArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLArray.cpp; path = ../../Utils/GLArray.cpp; sourceTree = "<group>"; };
+		560A43892AA9A4D000DB0F92 /* GLDebug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLDebug.cpp; path = ../../Utils/GLDebug.cpp; sourceTree = "<group>"; };
+		560A438A2AA9A4D000DB0F92 /* PlanarMirror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlanarMirror.h; path = ../../Utils/PlanarMirror.h; sourceTree = "<group>"; };
+		560A438B2AA9A4D000DB0F92 /* Vec3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vec3.h; path = ../../Utils/Vec3.h; sourceTree = "<group>"; };
+		560A438C2AA9A4D000DB0F92 /* GLTexture3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLTexture3D.cpp; path = ../../Utils/GLTexture3D.cpp; sourceTree = "<group>"; };
+		560A438D2AA9A4D000DB0F92 /* Image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Image.cpp; path = ../../Utils/Image.cpp; sourceTree = "<group>"; };
+		560A438E2AA9A4D000DB0F92 /* GLDepthBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLDepthBuffer.h; path = ../../Utils/GLDepthBuffer.h; sourceTree = "<group>"; };
+		560A438F2AA9A4D000DB0F92 /* Tesselation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tesselation.cpp; path = ../../Utils/Tesselation.cpp; sourceTree = "<group>"; };
+		560A43902AA9A4D000DB0F92 /* bmp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bmp.cpp; path = ../../Utils/bmp.cpp; sourceTree = "<group>"; };
+		560A43912AA9A4D000DB0F92 /* ArcBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArcBall.cpp; path = ../../Utils/ArcBall.cpp; sourceTree = "<group>"; };
+		560A43922AA9A4D000DB0F92 /* GLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLProgram.cpp; path = ../../Utils/GLProgram.cpp; sourceTree = "<group>"; };
+		560A43932AA9A4D000DB0F92 /* GLFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLFramebuffer.cpp; path = ../../Utils/GLFramebuffer.cpp; sourceTree = "<group>"; };
+		560A43942AA9A4D000DB0F92 /* Grid2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Grid2D.h; path = ../../Utils/Grid2D.h; sourceTree = "<group>"; };
+		560A43952AA9A4D000DB0F92 /* Rand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Rand.cpp; path = ../../Utils/Rand.cpp; sourceTree = "<group>"; };
+		560A43962AA9A4D000DB0F92 /* GLBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLBuffer.h; path = ../../Utils/GLBuffer.h; sourceTree = "<group>"; };
+		560A43972AA9A4D000DB0F92 /* GLTexture1D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture1D.h; path = ../../Utils/GLTexture1D.h; sourceTree = "<group>"; };
+		560A43982AA9A4D000DB0F92 /* Mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mat4.h; path = ../../Utils/Mat4.h; sourceTree = "<group>"; };
+		560A43992AA9A4D000DB0F92 /* GLTexture2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLTexture2D.cpp; path = ../../Utils/GLTexture2D.cpp; sourceTree = "<group>"; };
+		560A439B2AA9A4D000DB0F92 /* FontRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FontRenderer.h; path = ../../Utils/FontRenderer.h; sourceTree = "<group>"; };
+		560A439C2AA9A4D000DB0F92 /* Mat3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mat3.h; path = ../../Utils/Mat3.h; sourceTree = "<group>"; };
+		560A439D2AA9A4D000DB0F92 /* Grid2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Grid2D.cpp; path = ../../Utils/Grid2D.cpp; sourceTree = "<group>"; };
+		560A439E2AA9A4D000DB0F92 /* OBJFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OBJFile.h; path = ../../Utils/OBJFile.h; sourceTree = "<group>"; };
+		560A439F2AA9A4D000DB0F92 /* GLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLApp.cpp; path = ../../Utils/GLApp.cpp; sourceTree = "<group>"; };
+		560A43A02AA9A4D000DB0F92 /* GLBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLBuffer.cpp; path = ../../Utils/GLBuffer.cpp; sourceTree = "<group>"; };
+		560A43A12AA9A4D000DB0F92 /* FontRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FontRenderer.cpp; path = ../../Utils/FontRenderer.cpp; sourceTree = "<group>"; };
+		560A43A22AA9A4D000DB0F92 /* GLTexture1D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLTexture1D.cpp; path = ../../Utils/GLTexture1D.cpp; sourceTree = "<group>"; };
+		560A43A32AA9A4D000DB0F92 /* PlanarMirror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlanarMirror.cpp; path = ../../Utils/PlanarMirror.cpp; sourceTree = "<group>"; };
+		560A43A42AA9A4D000DB0F92 /* Vec2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vec2.h; path = ../../Utils/Vec2.h; sourceTree = "<group>"; };
+		560A43A52AA9A4D000DB0F92 /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLProgram.h; path = ../../Utils/GLProgram.h; sourceTree = "<group>"; };
+		560A43A62AA9A4D000DB0F92 /* GLArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLArray.h; path = ../../Utils/GLArray.h; sourceTree = "<group>"; };
+		560A43A72AA9A4D000DB0F92 /* FresnelVisualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FresnelVisualizer.h; path = ../../Utils/FresnelVisualizer.h; sourceTree = "<group>"; };
+		560A43A82AA9A4D000DB0F92 /* GLEnv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLEnv.cpp; path = ../../Utils/GLEnv.cpp; sourceTree = "<group>"; };
+		560A43A92AA9A4D000DB0F92 /* Quaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Quaternion.h; path = ../../Utils/Quaternion.h; sourceTree = "<group>"; };
+		560A43AA2AA9A4D000DB0F92 /* bmp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bmp.h; path = ../../Utils/bmp.h; sourceTree = "<group>"; };
+		560A43AB2AA9A4D000DB0F92 /* Rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rand.h; path = ../../Utils/Rand.h; sourceTree = "<group>"; };
+		560A43AC2AA9A4D000DB0F92 /* GLDepthBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLDepthBuffer.cpp; path = ../../Utils/GLDepthBuffer.cpp; sourceTree = "<group>"; };
+		560A43AD2AA9A4D000DB0F92 /* GLFramebuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLFramebuffer.h; path = ../../Utils/GLFramebuffer.h; sourceTree = "<group>"; };
+		560A43AE2AA9A4D000DB0F92 /* GLDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLDebug.h; path = ../../Utils/GLDebug.h; sourceTree = "<group>"; };
+		560A43AF2AA9A4D000DB0F92 /* GLTexture2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture2D.h; path = ../../Utils/GLTexture2D.h; sourceTree = "<group>"; };
+		560A43B02AA9A4D000DB0F92 /* FresnelVisualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FresnelVisualizer.cpp; path = ../../Utils/FresnelVisualizer.cpp; sourceTree = "<group>"; };
+		560A43B12AA9A4D000DB0F92 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../Utils/Image.h; sourceTree = "<group>"; };
+		560A43B22AA9A4D000DB0F92 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Camera.h; path = ../../Utils/Camera.h; sourceTree = "<group>"; };
+		560A43B32AA9A4D000DB0F92 /* Tesselation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tesselation.h; path = ../../Utils/Tesselation.h; sourceTree = "<group>"; };
+		560A43B42AA9A4D000DB0F92 /* GLTexture3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLTexture3D.h; path = ../../Utils/GLTexture3D.h; sourceTree = "<group>"; };
 		564FB14A262839C2004F5F08 /* helvetica_neue.pos */ = {isa = PBXFileReference; lastKnownFileType = text; path = helvetica_neue.pos; sourceTree = "<group>"; };
 		564FB14B262839C2004F5F08 /* helvetica_neue.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = helvetica_neue.bmp; sourceTree = "<group>"; };
 		5677394C25FB7BF000AB2341 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -34,6 +143,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		560A43762AA9A43B00DB0F92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A231F0FC25EAF61A00CBFC23 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -44,12 +160,77 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A231F0F625EAF61A00CBFC23 = {
+		560A43732AA9A40400DB0F92 /* Application */ = {
 			isa = PBXGroup;
 			children = (
 				564FB14B262839C2004F5F08 /* helvetica_neue.bmp */,
 				564FB14A262839C2004F5F08 /* helvetica_neue.pos */,
 				5677394C25FB7BF000AB2341 /* main.cpp */,
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		560A43792AA9A43B00DB0F92 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				560A43912AA9A4D000DB0F92 /* ArcBall.cpp */,
+				560A43852AA9A4D000DB0F92 /* ArcBall.h */,
+				560A43902AA9A4D000DB0F92 /* bmp.cpp */,
+				560A43AA2AA9A4D000DB0F92 /* bmp.h */,
+				560A43B22AA9A4D000DB0F92 /* Camera.h */,
+				560A43A12AA9A4D000DB0F92 /* FontRenderer.cpp */,
+				560A439B2AA9A4D000DB0F92 /* FontRenderer.h */,
+				560A43B02AA9A4D000DB0F92 /* FresnelVisualizer.cpp */,
+				560A43A72AA9A4D000DB0F92 /* FresnelVisualizer.h */,
+				560A439F2AA9A4D000DB0F92 /* GLApp.cpp */,
+				560A43872AA9A4D000DB0F92 /* GLApp.h */,
+				560A43882AA9A4D000DB0F92 /* GLArray.cpp */,
+				560A43A62AA9A4D000DB0F92 /* GLArray.h */,
+				560A43A02AA9A4D000DB0F92 /* GLBuffer.cpp */,
+				560A43962AA9A4D000DB0F92 /* GLBuffer.h */,
+				560A43892AA9A4D000DB0F92 /* GLDebug.cpp */,
+				560A43AE2AA9A4D000DB0F92 /* GLDebug.h */,
+				560A43AC2AA9A4D000DB0F92 /* GLDepthBuffer.cpp */,
+				560A438E2AA9A4D000DB0F92 /* GLDepthBuffer.h */,
+				560A43A82AA9A4D000DB0F92 /* GLEnv.cpp */,
+				560A43842AA9A4D000DB0F92 /* GLEnv.h */,
+				560A43932AA9A4D000DB0F92 /* GLFramebuffer.cpp */,
+				560A43AD2AA9A4D000DB0F92 /* GLFramebuffer.h */,
+				560A43922AA9A4D000DB0F92 /* GLProgram.cpp */,
+				560A43A52AA9A4D000DB0F92 /* GLProgram.h */,
+				560A43A22AA9A4D000DB0F92 /* GLTexture1D.cpp */,
+				560A43972AA9A4D000DB0F92 /* GLTexture1D.h */,
+				560A43992AA9A4D000DB0F92 /* GLTexture2D.cpp */,
+				560A43AF2AA9A4D000DB0F92 /* GLTexture2D.h */,
+				560A438C2AA9A4D000DB0F92 /* GLTexture3D.cpp */,
+				560A43B42AA9A4D000DB0F92 /* GLTexture3D.h */,
+				560A439D2AA9A4D000DB0F92 /* Grid2D.cpp */,
+				560A43942AA9A4D000DB0F92 /* Grid2D.h */,
+				560A438D2AA9A4D000DB0F92 /* Image.cpp */,
+				560A43B12AA9A4D000DB0F92 /* Image.h */,
+				560A439C2AA9A4D000DB0F92 /* Mat3.h */,
+				560A43982AA9A4D000DB0F92 /* Mat4.h */,
+				560A43862AA9A4D000DB0F92 /* OBJFile.cpp */,
+				560A439E2AA9A4D000DB0F92 /* OBJFile.h */,
+				560A43A32AA9A4D000DB0F92 /* PlanarMirror.cpp */,
+				560A438A2AA9A4D000DB0F92 /* PlanarMirror.h */,
+				560A43A92AA9A4D000DB0F92 /* Quaternion.h */,
+				560A43952AA9A4D000DB0F92 /* Rand.cpp */,
+				560A43AB2AA9A4D000DB0F92 /* Rand.h */,
+				560A438F2AA9A4D000DB0F92 /* Tesselation.cpp */,
+				560A43B32AA9A4D000DB0F92 /* Tesselation.h */,
+				560A43A42AA9A4D000DB0F92 /* Vec2.h */,
+				560A438B2AA9A4D000DB0F92 /* Vec3.h */,
+				560A43832AA9A4D000DB0F92 /* Vec4.h */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A231F0F625EAF61A00CBFC23 = {
+			isa = PBXGroup;
+			children = (
+				560A43732AA9A40400DB0F92 /* Application */,
+				560A43792AA9A43B00DB0F92 /* Utils */,
 				A231F10025EAF61A00CBFC23 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,13 +239,69 @@
 			isa = PBXGroup;
 			children = (
 				A231F0FF25EAF61A00CBFC23 /* Color */,
+				560A43782AA9A43B00DB0F92 /* libUtils.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		560A43742AA9A43B00DB0F92 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				560A43D92AA9A4D000DB0F92 /* FresnelVisualizer.h in Headers */,
+				560A43E42AA9A4D000DB0F92 /* Camera.h in Headers */,
+				560A43D62AA9A4D000DB0F92 /* Vec2.h in Headers */,
+				560A43DC2AA9A4D000DB0F92 /* bmp.h in Headers */,
+				560A43CE2AA9A4D000DB0F92 /* Mat3.h in Headers */,
+				560A43C92AA9A4D000DB0F92 /* GLTexture1D.h in Headers */,
+				560A43E62AA9A4D000DB0F92 /* GLTexture3D.h in Headers */,
+				560A43C82AA9A4D000DB0F92 /* GLBuffer.h in Headers */,
+				560A43E02AA9A4D000DB0F92 /* GLDebug.h in Headers */,
+				560A43D82AA9A4D000DB0F92 /* GLArray.h in Headers */,
+				560A43CD2AA9A4D000DB0F92 /* FontRenderer.h in Headers */,
+				560A43E32AA9A4D000DB0F92 /* Image.h in Headers */,
+				560A43D02AA9A4D000DB0F92 /* OBJFile.h in Headers */,
+				560A43DD2AA9A4D000DB0F92 /* Rand.h in Headers */,
+				560A43BC2AA9A4D000DB0F92 /* PlanarMirror.h in Headers */,
+				560A43B52AA9A4D000DB0F92 /* Vec4.h in Headers */,
+				560A43C62AA9A4D000DB0F92 /* Grid2D.h in Headers */,
+				560A43E52AA9A4D000DB0F92 /* Tesselation.h in Headers */,
+				560A43B92AA9A4D000DB0F92 /* GLApp.h in Headers */,
+				560A43CA2AA9A4D000DB0F92 /* Mat4.h in Headers */,
+				560A43DB2AA9A4D000DB0F92 /* Quaternion.h in Headers */,
+				560A43B62AA9A4D000DB0F92 /* GLEnv.h in Headers */,
+				560A43D72AA9A4D000DB0F92 /* GLProgram.h in Headers */,
+				560A43C02AA9A4D000DB0F92 /* GLDepthBuffer.h in Headers */,
+				560A43B72AA9A4D000DB0F92 /* ArcBall.h in Headers */,
+				560A43E12AA9A4D000DB0F92 /* GLTexture2D.h in Headers */,
+				560A43BD2AA9A4D000DB0F92 /* Vec3.h in Headers */,
+				560A43DF2AA9A4D000DB0F92 /* GLFramebuffer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		560A43772AA9A43B00DB0F92 /* Utils */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 560A43802AA9A43B00DB0F92 /* Build configuration list for PBXNativeTarget "Utils" */;
+			buildPhases = (
+				560A43742AA9A43B00DB0F92 /* Headers */,
+				560A43752AA9A43B00DB0F92 /* Sources */,
+				560A43762AA9A43B00DB0F92 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Utils;
+			productName = Utils;
+			productReference = 560A43782AA9A43B00DB0F92 /* libUtils.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		A231F0FE25EAF61A00CBFC23 /* Color */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A231F10625EAF61A00CBFC23 /* Build configuration list for PBXNativeTarget "Color" */;
@@ -76,6 +313,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				560A43E82AA9A53100DB0F92 /* PBXTargetDependency */,
 			);
 			name = Color;
 			productName = Color;
@@ -88,8 +326,12 @@
 		A231F0F725EAF61A00CBFC23 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1240;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					560A43772AA9A43B00DB0F92 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
 					A231F0FE25EAF61A00CBFC23 = {
 						CreatedOnToolsVersion = 12.4;
 					};
@@ -109,11 +351,40 @@
 			projectRoot = "";
 			targets = (
 				A231F0FE25EAF61A00CBFC23 /* Color */,
+				560A43772AA9A43B00DB0F92 /* Utils */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		560A43752AA9A43B00DB0F92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				560A43D12AA9A4D000DB0F92 /* GLApp.cpp in Sources */,
+				560A43BA2AA9A4D000DB0F92 /* GLArray.cpp in Sources */,
+				560A43C22AA9A4D000DB0F92 /* bmp.cpp in Sources */,
+				560A43E22AA9A4D000DB0F92 /* FresnelVisualizer.cpp in Sources */,
+				560A43BB2AA9A4D000DB0F92 /* GLDebug.cpp in Sources */,
+				560A43B82AA9A4D000DB0F92 /* OBJFile.cpp in Sources */,
+				560A43D52AA9A4D000DB0F92 /* PlanarMirror.cpp in Sources */,
+				560A43BE2AA9A4D000DB0F92 /* GLTexture3D.cpp in Sources */,
+				560A43C32AA9A4D000DB0F92 /* ArcBall.cpp in Sources */,
+				560A43CB2AA9A4D000DB0F92 /* GLTexture2D.cpp in Sources */,
+				560A43D42AA9A4D000DB0F92 /* GLTexture1D.cpp in Sources */,
+				560A43C72AA9A4D000DB0F92 /* Rand.cpp in Sources */,
+				560A43DE2AA9A4D000DB0F92 /* GLDepthBuffer.cpp in Sources */,
+				560A43D22AA9A4D000DB0F92 /* GLBuffer.cpp in Sources */,
+				560A43CF2AA9A4D000DB0F92 /* Grid2D.cpp in Sources */,
+				560A43C52AA9A4D000DB0F92 /* GLFramebuffer.cpp in Sources */,
+				560A43BF2AA9A4D000DB0F92 /* Image.cpp in Sources */,
+				560A43C12AA9A4D000DB0F92 /* Tesselation.cpp in Sources */,
+				560A43D32AA9A4D000DB0F92 /* FontRenderer.cpp in Sources */,
+				560A43DA2AA9A4D000DB0F92 /* GLEnv.cpp in Sources */,
+				560A43C42AA9A4D000DB0F92 /* GLProgram.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A231F0FB25EAF61A00CBFC23 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +395,65 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		560A43E82AA9A53100DB0F92 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 560A43772AA9A43B00DB0F92 /* Utils */;
+			targetProxy = 560A43E72AA9A53100DB0F92 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		560A43812AA9A43B00DB0F92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = (
+					../Network,
+					../Utils,
+					/usr/local/Cellar/glew/2.1.0_1/include,
+					/usr/local/Cellar/glfw/3.3.2/include,
+					/opt/homebrew/include,
+					/usr/local/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		560A43822AA9A43B00DB0F92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_WARN_SHADOW = NO;
+				HEADER_SEARCH_PATHS = (
+					../Network,
+					../Utils,
+					/usr/local/Cellar/glew/2.1.0_1/include,
+					/usr/local/Cellar/glfw/3.3.2/include,
+					/opt/homebrew/include,
+					/usr/local/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		A231F10425EAF61A00CBFC23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -165,6 +494,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -262,6 +592,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -316,6 +647,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					../Utils,
@@ -343,6 +675,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					../Utils,
@@ -369,6 +702,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		560A43802AA9A43B00DB0F92 /* Build configuration list for PBXNativeTarget "Utils" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				560A43812AA9A43B00DB0F92 /* Debug */,
+				560A43822AA9A43B00DB0F92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A231F0FA25EAF61A00CBFC23 /* Build configuration list for PBXProject "Color" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
