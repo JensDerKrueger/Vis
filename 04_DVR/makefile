@@ -3,13 +3,13 @@ OSTYPE := $(shell uname)
 
 ifeq ($(OSTYPE),Linux)
 	CFLAGS=-c -Wall -std=c++17 -Wunreachable-code
-	LFLAGS=-lglfw -lGLEW -lGL -L../Utils -lutils -lstdc++fs
+	LFLAGS=-lglfw -lGLEW -lGL -lstdc++fs
 	LIBS=
 	INCLUDES=-I. -I../Utils
 else
 	CFLAGS=-c -Wall -std=c++17 -Wunreachable-code -Xclang
-	LFLAGS=-lglfw -lGLEW -framework OpenGL -L../Utils -lutils
-	LIBS=-L /opt/homebrew/lib
+	LFLAGS=-lglfw -lGLEW -framework OpenGL
+	LIBS=
 	INCLUDES=-I. -I../Utils -I /opt/homebrew/include
 endif
 
