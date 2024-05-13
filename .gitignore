@@ -10,3 +10,8 @@
 **/VS/**/x64/*
 **/VS/**/*.glsl
 **/VS/**/*.obj
+
+**/Assignment
+**/Solution
+xcuserdata
+LatexUtils
