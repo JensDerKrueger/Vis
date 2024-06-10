@@ -40,7 +40,7 @@ public:
   void loadVolume() {
     volume = QVis{filenames[currentFile]}.volume;
     voxelCount = Vec3{float(volume.width),float(volume.height),float(volume.depth)};
-    volumeExtend = volume.scale*voxelCount/volume.maxSize;
+    volumeExtend = volume.scale*voxelCount/float(volume.maxSize);
 
     volumeTex.setData(volume.data,
                       uint32_t(volume.width),
