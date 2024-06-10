@@ -21,12 +21,18 @@
     <ClCompile Include="..\QVis.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\Clipper.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\QVis.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\Volume.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Clipper.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
