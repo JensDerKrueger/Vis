@@ -29,26 +29,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -108,6 +108,19 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\VS\lib\Win32;$(PlatformTarget)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>utils.lib;opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying Resources</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -127,6 +140,19 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\..\VS\lib\Win32;$(PlatformTarget)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>utils.lib;opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying Resources</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -142,6 +168,19 @@
       <AdditionalDependencies>utils.lib;opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\VS\lib\x64;$(PlatformTarget)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying Resources</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -161,6 +200,19 @@
       <AdditionalDependencies>utils.lib;opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)..\..\VS\lib\x64;$(PlatformTarget)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copying Resources</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
