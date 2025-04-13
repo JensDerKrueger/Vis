@@ -1,13 +1,126 @@
 #include "GLApp.h"
 
+#ifndef __EMSCRIPTEN__
 GLApp* GLApp::staticAppPtr = nullptr;
+#endif
 
 GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
              const std::string& title,
              bool fpsCounter, bool sync) :
+#ifdef __EMSCRIPTEN__
+  glEnv{w,h,s,title,fpsCounter,sync,3,0,true},
+#else
   glEnv{w,h,s,title,fpsCounter,sync,4,1,true},
+#endif
   p{},
   mv{},
+#ifdef __EMSCRIPTEN__
+  simpleProg{GLProgram::createFromString(R"(#version 300 es
+    uniform mat4 MVP;
+    in vec3 vPos;
+    in vec4 vColor;
+    out vec4 color;
+    void main() {
+      gl_Position = MVP * vec4(vPos, 1.0);
+      color = vColor;
+    }
+  )",R"(#version 300 es
+    precision mediump float;
+    in vec4 color;
+    out vec4 FragColor;
+    void main() {
+      FragColor = color;
+    }
+  )")},
+  simpleSpriteProg{GLProgram::createFromString(R"(#version 300 es
+    uniform mat4 MVP;
+    uniform float pointSize;
+    in vec3 vPos;
+    in vec4 vColor;
+    out vec4 color;
+    void main() {
+      gl_Position = MVP * vec4(vPos, 1.0);
+      gl_PointSize = pointSize;
+      color = vColor;
+    }
+  )",R"(#version 300 es
+    precision mediump float;
+    uniform sampler2D pointSprite;
+    in vec4 color;
+    out vec4 FragColor;
+    void main() {
+      FragColor = color*texture(pointSprite, gl_PointCoord);
+    }
+  )")},
+  simpleHLSpriteProg{GLProgram::createFromString(R"(#version 300 es
+    uniform mat4 MVP;
+    uniform float pointSize;
+    in vec3 vPos;
+    in vec4 vColor;
+    out vec4 color;
+    void main() {
+      gl_Position = MVP * vec4(vPos, 1.0);
+      gl_PointSize = pointSize;
+      color = vColor;
+    }
+  )",R"(#version 300 es
+    precision mediump float;
+    uniform sampler2D pointSprite;
+    uniform sampler2D pointSpriteHighlight;
+    in vec4 color;
+    out vec4 FragColor;
+    void main() {
+      FragColor = color*texture(pointSprite, gl_PointCoord)+texture(pointSpriteHighlight, gl_PointCoord);
+    }
+  )")},
+  simpleTexProg{GLProgram::createFromString(R"(#version 300 es
+    uniform mat4 MVP;
+    in vec3 vPos;
+    in vec2 vTexCoords;
+    out vec4 color;
+    out vec2 texCoords;
+    void main() {
+      gl_Position = MVP * vec4(vPos, 1.0);
+      texCoords = vTexCoords;
+    }
+  )",R"(#version 300 es
+    precision mediump float;
+    uniform sampler2D raster;
+    in vec2 texCoords;
+    out vec4 FragColor;
+    void main() {
+      FragColor = texture(raster, texCoords);
+    }
+  )")},
+  simpleLightProg{GLProgram::createFromString(R"(#version 300 es
+  uniform mat4 MVP;
+  uniform mat4 MV;
+  uniform mat4 MVit;
+  in vec3 vPos;
+  in vec4 vColor;
+  in vec3 vNormal;
+  out vec4 color;
+  out vec3 normal;
+  out vec3 pos;
+  void main() {
+    gl_Position = MVP * vec4(vPos, 1.0);
+    pos = (MV * vec4(vPos, 1.0)).xyz;
+    color = vColor;
+    normal = (MVit * vec4(vNormal, 0.0)).xyz;
+  }
+  )",R"(#version 300 es
+    precision mediump float;
+    in vec4 color;
+    in vec3 pos;
+  in vec3 normal;
+  out vec4 FragColor;
+  void main() {
+    vec3 nnormal = normalize(normal);
+    vec3 nlightDir = normalize(vec3(0.0,0.0,0.0)-pos);
+    FragColor = vec4(color.rgb*abs(dot(nlightDir,nnormal)),color.a);
+  }
+  )")},
+#else
   simpleProg{GLProgram::createFromString(
      "#version 410\n"
      "uniform mat4 MVP;\n"
@@ -104,25 +217,38 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
      "    vec3 nlightDir = normalize(vec3(0.0,0.0,0.0)-pos);"
      "    FragColor = color*abs(dot(nlightDir,nnormal));\n"
      "}\n")},
+#endif
   simpleArray{},
   simpleVb{GL_ARRAY_BUFFER},
-  raster{GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE},
+  raster{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE},
   pointSprite{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE},
   pointSpriteHighlight{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE},
   resumeTime{0},
   animationActive{true}
 {
+#ifdef __EMSCRIPTEN__
+  glEnv.setMouseCallbacks(cursorPositionCallback, mouseButtonCallback,
+                          mouseButtonUpCallback, mouseButtonDownCallback,
+                          scrollCallback, this);
+  glEnv.setKeyCallback(keyCallback, this);
+  glEnv.setResizeCallback(sizeCallback, this);
+#else
   staticAppPtr = this;
   glEnv.setMouseCallbacks(cursorPositionCallback, mouseButtonCallback, scrollCallback);
   glEnv.setKeyCallbacks(keyCallback, keyCharCallback);
   glEnv.setResizeCallback(sizeCallback);
-  
+#endif
+
   resetPointTexture();
   
   // setup a minimal shader and buffer
   shaderUpdate();
-  
-  glfwSetTime(0);
+
+#ifdef __EMSCRIPTEN__
+  startTime = emscripten_performance_now()/1000.0;
+#else
+  startTime = glfwGetTime();
+#endif
   Dimensions dim{ glEnv.getFramebufferSize() };
   glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height));
 }
@@ -138,7 +264,7 @@ void GLApp::setPointHighlightTexture(const Image& shape) {
   pointSpriteHighlight.setData(shape.data, shape.width, shape.height, shape.componentCount);
 }
 
-void GLApp::setPointTexture(const std::vector<uint8_t>& shape, uint32_t x,
+void GLApp::setPointTexture(const std::vector<uint8_t>& shape, uint32_t x, 
                             uint32_t y, uint8_t components) {
   pointSprite.setData(shape, x, y, components);
 }
@@ -164,17 +290,35 @@ void GLApp::resetPointHighlightTexture() {
   setPointHighlightTexture(i);
 }
 
-void GLApp::run() {
-  init();
-  const Dimensions dim{ glEnv.getFramebufferSize() };
-  resize(int(dim.width), int(dim.height));
+void GLApp::mainLoop() {
+#ifdef __EMSCRIPTEN__
+  if (animationActive) {
+    animate(emscripten_performance_now()/1000.0-startTime);
+  }
+  draw();
+  glEnv.endOfFrame();
+#else
   do {
     if (animationActive) {
-      animate(glfwGetTime());
+      animate(glfwGetTime()-startTime);
     }
     draw();
     glEnv.endOfFrame();
   } while (!glEnv.shouldClose());
+#endif
+}
+
+void GLApp::run() {
+  init();
+  const Dimensions dim{ glEnv.getFramebufferSize() };
+  resize(GLsizei(dim.width), GLsizei(dim.height));
+
+#ifdef __EMSCRIPTEN__
+  emscripten_set_main_loop_arg(mainLoopWrapper, this, 0, 1);
+  glEnv.setSync(glEnv.getSync());
+#else
+  mainLoop();
+#endif
 }
  
 void GLApp::resize(int width, int height) {
@@ -303,9 +447,9 @@ void GLApp::drawLines(const std::vector<float>& data, LineDrawType t, float line
         }
         break;
     }
-    
+#ifndef __EMSCRIPTEN__
     GL(glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ));
-
+#endif
     simpleVb.setData(trisData,7,GL_DYNAMIC_DRAW);
     simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vPos", 3);
     simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vColor", 4, 3);
@@ -335,6 +479,9 @@ void GLApp::drawPoints(const std::vector<float>& data, float pointSize, bool use
   if (useTex) {
     if (pointSpriteHighlight.getHeight() > 0) {
       simpleHLSpriteProg.enable();
+#ifdef __EMSCRIPTEN__
+      simpleHLSpriteProg.setUniform("pointSize", pointSize);
+#endif
       simpleHLSpriteProg.setTexture("pointSprite", pointSprite, 0);
       simpleHLSpriteProg.setTexture("pointSpriteHighlight", pointSpriteHighlight, 1);
       simpleVb.setData(data,7,GL_DYNAMIC_DRAW);
@@ -343,6 +490,9 @@ void GLApp::drawPoints(const std::vector<float>& data, float pointSize, bool use
       simpleArray.connectVertexAttrib(simpleVb, simpleHLSpriteProg, "vColor", 4, 3);
     } else {
       simpleSpriteProg.enable();
+#ifdef __EMSCRIPTEN__
+      simpleSpriteProg.setUniform("pointSize", pointSize);
+#endif
       simpleSpriteProg.setTexture("pointSprite", pointSprite, 0);
       simpleVb.setData(data,7,GL_DYNAMIC_DRAW);
       simpleArray.bind();
@@ -358,8 +508,9 @@ void GLApp::drawPoints(const std::vector<float>& data, float pointSize, bool use
     simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vColor", 4, 3);
   }
 
-
+#ifndef __EMSCRIPTEN__
   GL(glPointSize(pointSize));
+#endif
   GL(glDrawArrays(GL_POINTS, 0, GLsizei(data.size()/7)));
 }
 
@@ -378,11 +529,13 @@ void GLApp::redrawTriangles(bool wireframe) {
     simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vPos", 3);
     simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vColor", 4, 3);
   }
-  
+
+#ifndef __EMSCRIPTEN__
   if (wireframe)
     GL(glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ));
   else
     GL(glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ));
+#endif
 
   switch (lastTrisType) {
     case TrisDrawType::LIST :
@@ -415,17 +568,17 @@ void GLApp::setDrawProjection(const Mat4& mat) {
   p = mat;
 }
 
-void GLApp::setDrawTransform(const Mat4& mat) {
-  mv = mat;
-  mvi = Mat4::inverse(mv);
-}
-
 Mat4 GLApp::getDrawProjection() const {
   return p;
 }
 
 Mat4 GLApp::getDrawTransform() const {
   return mv;
+}
+
+void GLApp::setDrawTransform(const Mat4& mat) {
+  mv = mat;
+  mvi = Mat4::inverse(mv);
 }
 
 void GLApp::shaderUpdate() {
@@ -437,7 +590,7 @@ void GLApp::shaderUpdate() {
 
   simpleHLSpriteProg.enable();
   simpleHLSpriteProg.setUniform("MVP", p*mv);
-  
+
   simpleTexProg.enable();
   simpleTexProg.setUniform("MVP", p*mv);
 
@@ -451,48 +604,38 @@ void GLApp::setImageFilter(GLint magFilter, GLint minFilter) {
   raster.setFilter(magFilter, minFilter);
 }
 
-void GLApp::drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr,
-                      bool noBoundary) {
+void GLApp::drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr) {
   drawImage(image,
             {bl.x,bl.y,0.0f},
             {tr.x,bl.y,0.0f},
             {bl.x,tr.y,0.0f},
-            {tr.x,tr.y,0.0f},
-            noBoundary);
+            {tr.x,tr.y,0.0f});
 }
 
-void GLApp::drawImage(const Image& image, const Vec2& bl, const Vec2& tr,
-                      bool noBoundary) {
+void GLApp::drawImage(const Image& image, const Vec2& bl, const Vec2& tr) {
     drawImage(image,
               {bl.x,bl.y,0.0f},
               {tr.x,bl.y,0.0f},
               {bl.x,tr.y,0.0f},
-              {tr.x,tr.y,0.0f},
-              noBoundary);
+              {tr.x,tr.y,0.0f});
 }
 
 
 void GLApp::drawImage(const GLTexture2D& image, const Vec3& bl,
                       const Vec3& br, const Vec3& tl,
-                      const Vec3& tr, bool noBoundary) {
+                      const Vec3& tr) {
 
   shaderUpdate();
   
   simpleTexProg.enable();
-
-  const float minCoordX = noBoundary ? 0.5f/image.getWidth() : 0.0f;
-  const float minCoordY = noBoundary ? 0.5f/image.getHeight() : 0.0f;
-
-  const float maxCoordX = noBoundary ? 1.0f-0.5f/image.getWidth() : 1.0f;
-  const float maxCoordY = noBoundary ? 1.0f-0.5f/image.getHeight() : 1.0f;
-
+  
   std::vector<float> data = {
-    tr[0], tr[1], tr[2], maxCoordX, maxCoordY,
-    br[0], br[1], br[2], maxCoordX, minCoordY,
-    tl[0], tl[1], tl[2], minCoordX, maxCoordY,
-    tl[0], tl[1], tl[2], minCoordX, maxCoordY,
-    bl[0], bl[1], bl[2], minCoordX, minCoordY,
-    br[0], br[1], br[2], maxCoordX, minCoordY
+    tr[0], tr[1], tr[2], 1.0f, 1.0f,
+    br[0], br[1], br[2], 1.0f, 0.0f,
+    tl[0], tl[1], tl[2], 0.0f, 1.0f,
+    tl[0], tl[1], tl[2], 0.0f, 1.0f,
+    bl[0], bl[1], bl[2], 0.0f, 0.0f,
+    br[0], br[1], br[2], 1.0f, 0.0f
   };
   
   simpleVb.setData(data,5,GL_DYNAMIC_DRAW);
@@ -507,10 +650,10 @@ void GLApp::drawImage(const GLTexture2D& image, const Vec3& bl,
 
 void GLApp::drawImage(const Image& image, const Vec3& bl,
                       const Vec3& br, const Vec3& tl,
-                      const Vec3& tr, bool noBoundary) {
+                      const Vec3& tr) {
 
   raster.setData(image.data, image.width, image.height, image.componentCount);
-  drawImage(raster, bl, br, tl, tr, noBoundary);
+  drawImage(raster, bl, br, tl, tr);
 }
 
 void GLApp::drawRect(const Vec4& color, const Vec2& bl, const Vec2& tr) {

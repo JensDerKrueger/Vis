@@ -70,14 +70,14 @@ void GLTexture3D::setData(const std::vector<GLubyte>& data) {
   setData(data,width,height,depth,componentCount);
 }
 
-void GLTexture3D::setEmpty(uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount, bool isFloat) {
+void GLTexture3D::setEmpty(uint32_t width, uint32_t height, uint32_t depth, uint8_t componentCount, bool isFloat) {
   if (isFloat)
     setData(std::vector<GLfloat>(width*height*depth*componentCount), width, height, depth, componentCount);
   else
     setData(std::vector<GLubyte>(width*height*depth*componentCount), width, height, depth, componentCount);
 }
 
-void GLTexture3D::setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount) {
+void GLTexture3D::setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint32_t depth, uint8_t componentCount) {
   if (data.size() != componentCount*width*height*depth) {
     throw GLException{"Data size and texure dimensions do not match."};
   }
@@ -90,9 +90,7 @@ void GLTexture3D::setData(const std::vector<GLfloat>& data) {
   setData(data,width,height,depth,componentCount);
 }
 
-void GLTexture3D::setData(const std::vector<GLfloat>& data, uint32_t width,
-                          uint32_t height, uint32_t depth,
-                          uint32_t componentCount) {
+void GLTexture3D::setData(const std::vector<GLfloat>& data, uint32_t width, uint32_t height, uint32_t depth, uint8_t componentCount) {
   if (data.size() != componentCount*width*height*depth*4) {
     throw GLException{"Data size and texure dimensions do not match."};
   }
@@ -100,8 +98,8 @@ void GLTexture3D::setData(const std::vector<GLfloat>& data, uint32_t width,
   setData((GLvoid*)data.data(), width, height, depth, componentCount, true);
 }
 
-void GLTexture3D::setData(GLvoid* data, uint32_t width, uint32_t height,
-                          uint32_t depth, uint32_t componentCount,
+void GLTexture3D::setData(GLvoid* data, uint32_t width, uint32_t height, 
+                          uint32_t depth, uint8_t componentCount,
                           bool isFloat) {
   this->isFloat = isFloat;
   this->width = width;
@@ -134,11 +132,10 @@ void GLTexture3D::setData(GLvoid* data, uint32_t width, uint32_t height,
       break;
   }
   
-  GL(glTexImage3D(GL_TEXTURE_3D, 0, internalformat,
-                  GLsizei(width), GLsizei(height), GLsizei(depth),
-                  0, format, type, data));
+  GL(glTexImage3D(GL_TEXTURE_3D, 0, internalformat, GLsizei(width), GLsizei(height), GLsizei(depth), 0, format, type, data));
 }
 
+#ifndef __EMSCRIPTEN__
 const std::vector<GLubyte>& GLTexture3D::getDataByte() {
   GL(glPixelStorei(GL_PACK_ALIGNMENT, 1));
   GL(glPixelStorei(GL_UNPACK_ALIGNMENT, 1));
@@ -154,3 +151,4 @@ const std::vector<GLfloat>& GLTexture3D::getDataFloat() {
   GL(glGetTexImage(GL_TEXTURE_3D, 0, format, type, fdata.data()));
   return fdata;
 }
+#endif

@@ -31,20 +31,24 @@ public:
   
   void setPixel(const std::vector<GLubyte>& data, uint32_t x, uint32_t y);
   
+  void generateMipmap();
+  
   uint32_t getHeight() const {return height;}
   uint32_t getWidth() const {return width;}
-  uint8_t getComponentCount() const {return componentCount;}
+  uint32_t getComponentCount() const {return componentCount;}
   uint32_t getSize() const {return height*width*componentCount;}
   GLDataType getType() const {return dataType;}
-  
+
+#ifndef __EMSCRIPTEN__
   Image getImage();
   const std::vector<GLubyte>& getDataByte();
   const std::vector<GLhalf>& getDataHalf();
   const std::vector<GLfloat>& getDataFloat();
-  
+#endif
+
 private:
 	GLuint id;
-	GLenum internalformat;
+  GLint internalformat;
 	GLenum format;
 	GLenum type;
 
@@ -60,5 +64,6 @@ private:
   uint8_t componentCount;
   GLDataType dataType;
   
-  void setData(GLvoid* data, uint32_t width, uint32_t height, uint8_t componentCount, GLDataType dataType);
+  void setData(GLvoid* data, uint32_t width, uint32_t height, 
+               uint8_t componentCount, GLDataType dataType);
 };

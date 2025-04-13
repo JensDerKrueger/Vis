@@ -32,7 +32,6 @@ public:
     e{T(other.x), T(other.y)}
   {}
 
-
   const std::string toString() const {
     std::stringstream s;
     s << "[" << e[0] << ", " << e[1] << "]";
@@ -87,13 +86,11 @@ public:
     return e[0]*e[0]+e[1]*e[1];
   }
 
-  friend std::ostream& operator<<(std::ostream &os, const Vec2t& v) {os << v.toString() ; return os;}
-
   operator T*(void) {return e.data();}
   operator const T*(void) const  {return e.data();}
           
   static Vec2t random() {
-      return Vec2t{T{Rand::rand01()},T{Rand::rand01()}};
+      return Vec2t{T{staticRand.rand01()},T{staticRand.rand01()}};
   }
   
   static Vec2t normalize(const Vec2t& a) {
@@ -101,7 +98,18 @@ public:
     return (l != T(0)) ? a/l : Vec2t{T(0),T(0)};
   }
 		
+  static Vec2t<float> clamp(const Vec2t& val, float minVal, float maxVal) {
+    return { std::clamp(val.x, minVal, maxVal),
+             std::clamp(val.y, minVal, maxVal)
+    };
+  }
 };
+
+template <typename T>
+std::ostream & operator<<(std::ostream & os, const Vec2t<T> & v) {
+   os << v.toString();
+   return os;
+}
 
 typedef Vec2t<float> Vec2;
 typedef Vec2t<int32_t> Vec2i;

@@ -15,10 +15,10 @@ public:
     
 	const GLuint getId() const;
   void clear();
-  void setEmpty(uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount, bool isFloat=false);
-	void setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount=4);
+  void setEmpty(uint32_t width, uint32_t height, uint32_t depth, uint8_t componentCount, bool isFloat=false);
+	void setData(const std::vector<GLubyte>& data, uint32_t width, uint32_t height, uint32_t depth, uint8_t componentCount=4);
   void setData(const std::vector<GLubyte>& data);
-  void setData(const std::vector<GLfloat>& data, uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount=4);
+  void setData(const std::vector<GLfloat>& data, uint32_t width, uint32_t height, uint32_t depth, uint8_t componentCount=4);
   void setData(const std::vector<GLfloat>& data);
 
   uint32_t getHeight() const {return height;}
@@ -28,12 +28,14 @@ public:
   uint32_t getSize() const {return height*width*depth*componentCount;}
   bool getIsFloat() const {return isFloat;}
   
+#ifndef __EMSCRIPTEN__
   const std::vector<GLubyte>& getDataByte();
   const std::vector<GLfloat>& getDataFloat();
-
+#endif
+  
 private:
 	GLuint id;
-  GLint internalformat;
+	GLint internalformat;
 	GLenum format;
 	GLenum type;
 
@@ -47,8 +49,9 @@ private:
   uint32_t width;
   uint32_t height;
   uint32_t depth;
-  uint32_t componentCount;
+  uint8_t componentCount;
   bool isFloat;
   
-  void setData(GLvoid* data, uint32_t width, uint32_t height, uint32_t depth, uint32_t componentCount, bool isFloat);
+  void setData(GLvoid* data, uint32_t width, uint32_t height, uint32_t depth, 
+               uint8_t componentCount, bool isFloat);
 };

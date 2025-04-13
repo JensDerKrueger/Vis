@@ -89,7 +89,7 @@ std::string GLProgram::loadFile(const std::string& filename) {
 }
 
 GLint GLProgram::getAttributeLocation(const std::string& id) const {
-	GLint l = glGetAttribLocation(glProgram, id.c_str());
+  const GLint l = glGetAttribLocation(glProgram, id.c_str());
 	checkAndThrow();	
 	if(l == -1)
 		throw ProgramException{std::string("Can't find attribute ") +  id};	
@@ -97,7 +97,7 @@ GLint GLProgram::getAttributeLocation(const std::string& id) const {
 }
 
 GLint GLProgram::getUniformLocation(const std::string& id) const {
-	GLint l = glGetUniformLocation(glProgram, id.c_str());
+	const GLint l = glGetUniformLocation(glProgram, id.c_str());
 	checkAndThrow();
 	if(l == -1)
 		throw ProgramException{std::string("Can't find uniform ") +  id};	
@@ -136,81 +136,95 @@ void GLProgram::setUniform(GLint id, const Vec2i& value) const {
   GL(glUniform2iv(id, 1, value));
 }
 
+void GLProgram::setUniform(GLint id, const Vec3i& value) const {
+  GL(glUniform3iv(id, 1, value));
+}
+
+void GLProgram::setUniform(GLint id, const Vec4i& value) const {
+  GL(glUniform4iv(id, 1, value));
+}
+
 void GLProgram::setUniform(GLint id, const Mat4& value, bool transpose) const {
-	// since OpenGL matrices are usuall expcted
+	// since OpenGL matrices are usuall expected
   // column major but our matrices are row major
   // hence, we invert the transposition flag
   GL(glUniformMatrix4fv(id, 1, !transpose, value));
 }
 
-void GLProgram::setTexture(GLint id, const GLTexture1D& texture, GLuint unit) const {
-  GL(glActiveTexture(GLenum(GL_TEXTURE0 + unit)));
+void GLProgram::setUniform(GLint id, const std::vector<float>& value) const {
+  GL(glUniform1fv(id, GLsizei(value.size()), value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Vec2>& value) const {
+  GL(glUniform2fv(id, GLsizei(value.size()), (GLfloat*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Vec3>& value) const {
+  GL(glUniform3fv(id, GLsizei(value.size()), (GLfloat*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Vec4>& value) const {
+  GL(glUniform4fv(id, GLsizei(value.size()), (GLfloat*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<int>& value) const {
+  GL(glUniform1iv(id, GLsizei(value.size()), (GLint*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Vec2i>& value) const {
+  GL(glUniform2iv(id, GLsizei(value.size()), (GLint*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Vec3i>& value) const {
+  GL(glUniform3iv(id, GLsizei(value.size()), (GLint*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Vec4i>& value) const {
+  GL(glUniform4iv(id, GLsizei(value.size()), (GLint*)value.data()));
+}
+
+void GLProgram::setUniform(GLint id, const std::vector<Mat4>& value, bool transpose) const {
+  // since OpenGL matrices are usuall expected
+  // column major but our matrices are row major
+  // hence, we invert the transposition flag
+  GL(glUniformMatrix4fv(id, GLsizei(value.size()), !transpose, (GLfloat*)value.data()));
+}
+
+#ifndef __EMSCRIPTEN__
+void GLProgram::setTexture(GLint id, const GLTexture1D& texture, GLenum unit) const {
+  GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_1D, texture.getId()));
   GL(glUniform1i(id, GLint(unit)));
 }
+#endif
 
-void GLProgram::setTexture(GLint id, const GLTexture2D& texture, GLuint unit) const {
-	GL(glActiveTexture(GLenum(GL_TEXTURE0 + unit)));
+void GLProgram::setTexture(GLint id, const GLTexture2D& texture, GLenum unit) const {
+	GL(glActiveTexture(GL_TEXTURE0 + unit));
 	GL(glBindTexture(GL_TEXTURE_2D, texture.getId()));
 	GL(glUniform1i(id, GLint(unit)));
 }
 
-void GLProgram::setTexture(GLint id, const GLTexture3D& texture, GLuint unit) const {
-  GL(glActiveTexture(GLenum(GL_TEXTURE0 + unit)));
+void GLProgram::setTexture(GLint id, const GLTexture3D& texture, GLenum unit) const {
+  GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_3D, texture.getId()));
   GL(glUniform1i(id, GLint(unit)));
 }
 
-void GLProgram::unsetTexture1D(GLuint unit) const {
+#ifndef __EMSCRIPTEN__
+void GLProgram::unsetTexture1D(GLenum unit) const {
   GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_1D, 0));
 }
+#endif
 
-void GLProgram::unsetTexture2D(GLuint unit) const {
+void GLProgram::unsetTexture2D(GLenum unit) const {
   GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void GLProgram::unsetTexture3D(GLuint unit) const {
+void GLProgram::unsetTexture3D(GLenum unit) const {
   GL(glActiveTexture(GL_TEXTURE0 + unit));
   GL(glBindTexture(GL_TEXTURE_3D, 0));
-}
-
-void GLProgram::checkAndThrow() {
-	GLenum e = glGetError();
-	if (e != GL_NO_ERROR) {
-		std::stringstream s;
-		s << "An openGL error occured:" << errorString(e);
-		throw ProgramException{s.str()};
-	}	
-}
-
-void GLProgram::checkAndThrowShader(GLuint shader) {
-	GLint success[1] = { GL_TRUE };
-	glGetShaderiv(shader, GL_COMPILE_STATUS, success);
-	if(success[0] == GL_FALSE) {
-		GLint log_length{0};
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &log_length);
-		log_length = std::min(static_cast<GLint>(4096), log_length);
-		std::vector<GLchar> log((size_t)(log_length));
-		glGetShaderInfoLog(shader, static_cast<GLsizei>(log.size()), NULL, log.data());
-		std::string str{log.data()};
-		throw ProgramException{str};
-	}
-}
-
-void GLProgram::checkAndThrowProgram(GLuint program) {
-	GLint linked{GL_TRUE};
-	glGetProgramiv(program, GL_LINK_STATUS, &linked);
-	if(linked != GL_TRUE) {
-		GLint log_length{0};
-		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &log_length);
-		log_length = std::min(static_cast<GLint>(4096), log_length);
-		std::vector<GLchar> log((size_t)log_length);
-		glGetProgramInfoLog(program, static_cast<GLsizei>(log.size()), NULL, log.data());
-		std::string str{log.data()};
-		throw ProgramException{str};
-	}		
 }
 
 void GLProgram::programFromVectors(std::vector<std::string> vs, std::vector<std::string> fs, std::vector<std::string> gs) {
@@ -272,15 +286,16 @@ void GLProgram::setUniform(const std::string& id, const Mat4& value, bool transp
 }
 
 
-void GLProgram::setTexture(const std::string& id, const GLTexture1D& texture, GLuint unit) const {
+#ifndef __EMSCRIPTEN__
+void GLProgram::setTexture(const std::string& id, const GLTexture1D& texture, GLenum unit) const {
+  setTexture(getUniformLocation(id), texture, unit);
+}
+#endif
+
+void GLProgram::setTexture(const std::string& id, const GLTexture2D& texture, GLenum unit) const {
   setTexture(getUniformLocation(id), texture, unit);
 }
 
-void GLProgram::setTexture(const std::string& id, const GLTexture2D& texture, GLuint unit) const {
+void GLProgram::setTexture(const std::string& id, const GLTexture3D& texture, GLenum unit) const {
   setTexture(getUniformLocation(id), texture, unit);
 }
-
-void GLProgram::setTexture(const std::string& id, const GLTexture3D& texture, GLuint unit) const {
-  setTexture(getUniformLocation(id), texture, unit);
-}
-

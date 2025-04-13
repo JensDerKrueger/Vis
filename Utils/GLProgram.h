@@ -40,8 +40,8 @@ public:
   GLProgram(const GLProgram& other);
   GLProgram& operator=(const GLProgram& other);
   
-	GLint getAttributeLocation(const std::string& id) const;
-	GLint getUniformLocation(const std::string& id) const;
+  GLint getAttributeLocation(const std::string& id) const;
+  GLint getUniformLocation(const std::string& id) const;
 
   void setUniform(const std::string& id, float value) const;
   void setUniform(const std::string& id, const Vec2& value) const;
@@ -51,9 +51,11 @@ public:
   void setUniform(const std::string& id, const Vec2i& value) const;
   void setUniform(const std::string& id, const Mat4& value, bool transpose=false) const;
   
-  void setTexture(const std::string& id, const GLTexture1D& texture, GLuint unit=0) const;
-  void setTexture(const std::string& id, const GLTexture2D& texture, GLuint unit=0) const;
-  void setTexture(const std::string& id, const GLTexture3D& texture, GLuint unit=0) const;
+#ifndef __EMSCRIPTEN__
+  void setTexture(const std::string& id, const GLTexture1D& texture, GLenum unit=0) const;
+#endif
+  void setTexture(const std::string& id, const GLTexture2D& texture, GLenum unit=0) const;
+  void setTexture(const std::string& id, const GLTexture3D& texture, GLenum unit=0) const;
 
 	void setUniform(GLint id, float value) const;
   void setUniform(GLint id, const Vec2& value) const;
@@ -61,15 +63,31 @@ public:
   void setUniform(GLint id, const Vec4& value) const;
   void setUniform(GLint id, int value) const;
   void setUniform(GLint id, const Vec2i& value) const;
+  void setUniform(GLint id, const Vec3i& value) const;
+  void setUniform(GLint id, const Vec4i& value) const;
 	void setUniform(GLint id, const Mat4& value, bool transpose=false) const;
-	
-  void setTexture(GLint id, const GLTexture1D& texture, GLuint unit=0) const;
-  void setTexture(GLint id, const GLTexture2D& texture, GLuint unit=0) const;
-	void setTexture(GLint id, const GLTexture3D& texture, GLuint unit=0) const;
-	
-  void unsetTexture1D(GLuint unit) const;
-  void unsetTexture2D(GLuint unit) const;
-  void unsetTexture3D(GLuint unit) const;
+
+  void setUniform(GLint id, const std::vector<float>& value) const;
+  void setUniform(GLint id, const std::vector<Vec2>& value) const;
+  void setUniform(GLint id, const std::vector<Vec3>& value) const;
+  void setUniform(GLint id, const std::vector<Vec4>& value) const;
+  void setUniform(GLint id, const std::vector<int>& value) const;
+  void setUniform(GLint id, const std::vector<Vec2i>& value) const;
+  void setUniform(GLint id, const std::vector<Vec3i>& value) const;
+  void setUniform(GLint id, const std::vector<Vec4i>& value) const;
+  void setUniform(GLint id, const std::vector<Mat4>& value, bool transpose=false) const;
+  
+#ifndef __EMSCRIPTEN__
+  void setTexture(GLint id, const GLTexture1D& texture, GLenum unit=0) const;
+#endif
+  void setTexture(GLint id, const GLTexture2D& texture, GLenum unit=0) const;
+	void setTexture(GLint id, const GLTexture3D& texture, GLenum unit=0) const;
+
+#ifndef __EMSCRIPTEN__
+  void unsetTexture1D(GLenum unit) const;
+#endif
+  void unsetTexture2D(GLenum unit) const;
+  void unsetTexture3D(GLenum unit) const;
 
 	void enable() const;
 	void disable() const;
@@ -87,9 +105,6 @@ private:
 	static std::string loadFile(const std::string& filename);
 	
 	static GLuint createShader(GLenum type, const GLchar** src, GLsizei count);
-	static void checkAndThrow();
-	static void checkAndThrowShader(GLuint shader);
-	static void checkAndThrowProgram(GLuint program);
 
   GLProgram(std::vector<std::string> vertexShaderStrings, std::vector<std::string> fragmentShaderStrings, std::vector<std::string> geometryShaderStrings);
 

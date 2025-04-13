@@ -37,6 +37,7 @@ public:
   Vec3 normal(const Vec2& pos) const;
 
   static Grid2D genRandom(size_t x, size_t y);
+  static Grid2D genRandom(size_t x, size_t y, uint32_t seed);
   Grid2D operator*(const float& value) const;
   Grid2D operator/(const float& value) const;
   Grid2D operator+(const float& value) const;
@@ -46,7 +47,7 @@ public:
   Grid2D operator/(const Grid2D& other) const;
   Grid2D operator*(const Grid2D& other) const;
   Grid2D operator-(const Grid2D& other) const;
-  void normalize();
+  void normalize(const float maxVal = 1);
 
   Vec2t<size_t> maxValue() const;
   Vec2t<size_t> minValue() const;
@@ -62,4 +63,6 @@ private:
   size_t height;
   std::vector<float> data{};
   size_t index(size_t x, size_t y) const;
+  
+  std::pair<size_t,size_t> findMaxSize(const Grid2D& other) const;
 };

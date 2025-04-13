@@ -5,6 +5,7 @@
 #include <string>
 #include <array>
 #include <cmath>
+#include <optional>
 
 #include "Rand.h"
 #include "Vec2.h"
@@ -42,8 +43,6 @@ public:
   explicit Vec3t(const Vec2t<U>& other, T z) :
     e{T(other.x), T(other.y), z}
   {}
-  
-  friend std::ostream& operator<<(std::ostream &os, const Vec3t& v) {os << v.toString() ; return os;}
   
   const std::string toString() const {
     std::stringstream s;
@@ -133,12 +132,26 @@ public:
     return a-n*dot(a,n)*T(2);
   }
   
-  static Vec3t refract(const Vec3t& a, const Vec3t& n,
-                          const T index) {
-    const T cosTheta = T(std::min(-dot(a, n), T(1)));
-    const Vec3t rOutParallel{(a + n*cosTheta) * index};
-    const Vec3t rOutPerpendicular{n * -sqrt(T(1) - std::min(rOutParallel.sqlength(), T(1)))};
-    return rOutParallel + rOutPerpendicular;
+  static std::optional<Vec3t> refract(const Vec3t& a, const Vec3t& normal, const T IOR) {
+    const T cosI = Vec3t::dot(a, normal);
+    int sign = (cosI < 0) ? -1 : 1;
+
+    // we assume that if we look from the back side we are exiting the material
+    // back side means that the sign/cosI is positive because the incoming ray
+    // is assumed to point
+    // towards the surface and the normal away
+    const T n = (sign == 1) ? IOR : 1.0f / IOR;
+    const T sinThetaSq = n * n * (1.0f - cosI * cosI);
+
+    if (sinThetaSq > 1.0f) {
+      // Total internal reflection
+      return {};
+    } else {
+      const Vec3t d = a * n;
+      const T c = n * cosI -sign * sqrt(1.0f - sinThetaSq);
+      const Vec3t b = normal * c;
+      return d - b;
+    }
   }
       
   static Vec3t minV(const Vec3t& a, const Vec3t& b) {
@@ -150,12 +163,12 @@ public:
   }
   
   static Vec3t<float> random() {
-    return {Rand::rand01(),Rand::rand01(),Rand::rand01()};
+    return {staticRand.rand01(),staticRand.rand01(),staticRand.rand01()};
   }
   
   static Vec3t<float> randomPointInSphere() {
     while (true) {
-      Vec3t<float> p{Rand::rand11(),Rand::rand11(),Rand::rand11()};
+      Vec3t<float> p{staticRand.rand11(),staticRand.rand11(),staticRand.rand11()};
       if (p.sqlength() > 1) continue;
       return p;
     }
@@ -163,7 +176,7 @@ public:
   
   static Vec3t<float> randomPointInHemisphere() {
     while (true) {
-      Vec3t<float> p{Rand::rand01(),Rand::rand01(),Rand::rand01()};
+      Vec3t<float> p{staticRand.rand01(),staticRand.rand01(),staticRand.rand01()};
       if (p.sqlength() > 1) continue;
       return p;
     }
@@ -171,21 +184,32 @@ public:
   
   static Vec3t<float> randomPointInDisc() {
     while (true) {
-      Vec3t<float> p{Rand::rand11(),Rand::rand11(),0};
+      Vec3t<float> p{staticRand.rand11(),staticRand.rand11(),0};
       if (p.sqlength() > 1) continue;
       return p;
     }
   }
   
   static Vec3t<float> randomUnitVector() {
-    const float a = Rand::rand0Pi();
-    const float z = Rand::rand11();
+    const float a = staticRand.rand0Pi();
+    const float z = staticRand.rand11();
     const float r = sqrt(1.0f - z*z);
     return {r*cosf(a), r*sinf(a), z};
   }
-  
-  		
+    
+  static Vec3t<float> clamp(const Vec3t& val, float minVal, float maxVal) {
+    return { std::clamp(val.x, minVal, maxVal),
+             std::clamp(val.y, minVal, maxVal),
+             std::clamp(val.z, minVal, maxVal)
+    };
+  }
 };
+
+template <typename T>
+std::ostream & operator<<(std::ostream & os, const Vec3t<T> & v) {
+   os << v.toString();
+   return os;
+}
 
 typedef Vec3t<float> Vec3;
 typedef Vec3t<int32_t> Vec3i;

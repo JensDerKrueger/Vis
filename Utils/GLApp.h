@@ -1,10 +1,6 @@
 #pragma once
 
-#include <memory>
 #include <string>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include "GLEnv.h"
 #include "GLProgram.h"
@@ -12,6 +8,7 @@
 #include "GLBuffer.h"
 #include "GLTexture2D.h"
 #include "Image.h"
+#include "GLAppKeyTranslation.h"
 
 enum class LineDrawType {
   LIST,
@@ -33,21 +30,42 @@ public:
   virtual ~GLApp();
   void run();
   void setAnimation(bool animationActive) {
-    if (this->animationActive && !animationActive)
+    if (this->animationActive && !animationActive) {
+#ifdef __EMSCRIPTEN__
+      resumeTime = emscripten_performance_now()/1000.0;
+#else
       resumeTime = glfwGetTime();
-    
-    if (!this->animationActive && animationActive)
-      glfwSetTime(resumeTime);
-      
+#endif
+    }
+
+    if (!this->animationActive && animationActive) {
+      if (resumeTime == 0) {
+#ifdef __EMSCRIPTEN__
+        startTime = emscripten_performance_now()/1000.0;
+#else
+        startTime = glfwGetTime();
+#endif
+      } else {
+#ifdef __EMSCRIPTEN__
+        startTime += emscripten_performance_now()/1000.0-resumeTime;
+#else
+        startTime += glfwGetTime()-resumeTime;
+#endif
+      }
+    }
+
     this->animationActive = animationActive;
   }
   bool getAnimation() const {
     return animationActive;
   }
-
   void resetAnimation() {
+#ifdef __EMSCRIPTEN__
+    startTime = emscripten_performance_now()/1000.0;
+#else
+    startTime = glfwGetTime();
+#endif
     resumeTime = 0;
-    glfwSetTime(0);
     animate(0);
   }
 
@@ -65,22 +83,18 @@ public:
                 const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
 
-  void drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr,
-                 bool noBoundary=false);
-  void drawImage(const Image& image, const Vec2& bl, const Vec2& tr,
-                 bool noBoundary=false);
+  void drawImage(const GLTexture2D& image, const Vec2& bl, const Vec2& tr);
+  void drawImage(const Image& image, const Vec2& bl, const Vec2& tr);
   void drawImage(const GLTexture2D& image,
                  const Vec3& bl=Vec3{-1.0f,-1.0f,0.0f},
                  const Vec3& br=Vec3{1.0f,-1.0f,0.0f},
                  const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
-                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f},
-                 bool noBoundary=false);
+                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
   void drawImage(const Image& image,
                  const Vec3& bl=Vec3{-1.0f,-1.0f,0.0f},
                  const Vec3& br=Vec3{1.0f,-1.0f,0.0f},
                  const Vec3& tl=Vec3{-1.0f,1.0f,0.0f},
-                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f},
-                 bool noBoundary=false);
+                 const Vec3& tr=Vec3{1.0f,1.0f,0.0f});
   void drawTriangles(const std::vector<float>& data, TrisDrawType t, bool wireframe, bool lighting);
   void redrawTriangles(bool wireframe);
 
@@ -96,12 +110,13 @@ public:
   void drawPoints(const std::vector<float>& data, float pointSize=1.0f, bool useTex=false);
   void setDrawProjection(const Mat4& mat);
   void setDrawTransform(const Mat4& mat);
-
+  
   Mat4 getDrawProjection() const;
   Mat4 getDrawTransform() const;
-
+  
   void resetPointTexture(uint32_t resolution=64);
-  void setPointTexture(const std::vector<uint8_t>& shape, uint32_t x, uint32_t y, uint8_t components);
+  void setPointTexture(const std::vector<uint8_t>& shape, uint32_t x,
+                       uint32_t y, uint8_t components);
   void setPointTexture(const Image& shape);
   void setPointHighlightTexture(const Image& shape);
   void resetPointHighlightTexture();
@@ -112,7 +127,7 @@ public:
   
   virtual void resize(int width, int height);
   virtual void keyboard(int key, int scancode, int action, int mods) {}
-  virtual void keyboardChar(unsigned int codepoint) {}
+  virtual void keyboardChar(unsigned int key) {}
   virtual void mouseMove(double xPosition, double yPosition) {}
   virtual void mouseButton(int button, int state, int mods, double xPosition, double yPosition) {}
   virtual void mouseWheel(double x_offset, double y_offset, double xPosition, double yPosition) {}
@@ -133,6 +148,10 @@ protected:
   GLTexture2D pointSprite;
   GLTexture2D pointSpriteHighlight;
   double resumeTime;
+#ifdef __EMSCRIPTEN__
+  float xMousePos;
+  float yMousePos;
+#endif
 
   void shaderUpdate();
 
@@ -145,7 +164,75 @@ private:
   TrisDrawType lastTrisType;
   GLsizei lastTrisCount;
   bool lastLighting;
+  double startTime;
 
+  void mainLoop();
+
+#ifdef __EMSCRIPTEN__
+  static void mainLoopWrapper(void* arg) {
+    GLApp* app = static_cast<GLApp*>(arg);
+    app->mainLoop();
+  }
+
+  static bool sizeCallback(int eventType, const EmscriptenUiEvent *uiEvent, void *userData) {
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+
+    //TODO
+    return EM_TRUE;
+  }
+  static bool keyCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData) {
+
+    // TODO: handle modifiers properly
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+    if (eventType == EMSCRIPTEN_EVENT_KEYDOWN)
+      glApp->keyboardChar(keyEvent->key[0]);
+    glApp->keyboard(keyEvent->key[0], keyEvent->key[0], eventType, 0);
+
+    return EM_TRUE;
+  }
+
+  static bool cursorPositionCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData) {
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+
+    glApp->xMousePos = mouseEvent->targetX;
+    glApp->yMousePos = mouseEvent->targetY;
+
+    glApp->mouseMove(glApp->xMousePos, glApp->yMousePos);
+    return EM_TRUE;
+  }
+  static bool mouseButtonUpCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData) {
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+
+    glApp->mouseButton(mouseEvent->button, GLFW_RELEASE, 0, glApp->xMousePos, glApp->yMousePos);
+    return EM_TRUE;
+  }
+  static bool mouseButtonDownCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData) {
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+
+    glApp->mouseButton(mouseEvent->button, GLFW_PRESS, 0, glApp->xMousePos, glApp->yMousePos);
+    return EM_TRUE;
+  }
+  static bool mouseButtonCallback(int eventType, const EmscriptenMouseEvent *mouseEvent, void *userData) {
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+
+    glApp->mouseButton(mouseEvent->button, 0, 0, glApp->xMousePos, glApp->yMousePos);
+    return EM_TRUE;
+  }
+  static bool scrollCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData) {
+    GLApp* glApp = static_cast<GLApp*>(userData);
+    if (!glApp) return EM_FALSE;
+
+    // TODO
+
+    return EM_TRUE;
+  }
+#else
   static GLApp* staticAppPtr;
   static void sizeCallback(GLFWwindow* window, int width, int height) {
     if (staticAppPtr) staticAppPtr->resize(width, height);
@@ -160,8 +247,6 @@ private:
     if (staticAppPtr) staticAppPtr->mouseMove(xPosition, yPosition);
   }
   static void mouseButtonCallback(GLFWwindow* window, int button, int state, int mods) {
-    double xpos, ypos;
-    glfwGetCursorPos(window, &xpos, &ypos);
     if (staticAppPtr) {
       double xpos, ypos;
       glfwGetCursorPos(window, &xpos, &ypos);
@@ -175,7 +260,8 @@ private:
       staticAppPtr->mouseWheel(x_offset, y_offset, xpos, ypos);
     }
   }
-  
+#endif
+
   void triangulate(const Vec3& p0,
                    const Vec3& p1, const Vec4& c1,
                    const Vec3& p2, const Vec4& c2,

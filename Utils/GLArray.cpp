@@ -16,10 +16,12 @@ void GLArray::bind() const {
 void GLArray::connectVertexAttrib(const GLBuffer& buffer,
                                   const GLProgram& program,
                                   const std::string& variable,
-                                  size_t elemCount, size_t offset) const {
+                                  size_t elemCount, size_t offset,
+                                  GLuint divisor) const {
 	bind();
 	const GLint location = program.getAttributeLocation(variable.c_str());
-	buffer.connectVertexAttrib(GLuint(location), elemCount, offset);
+  // TODO: consider handling -1 location, maybe throw an exception?
+	buffer.connectVertexAttrib(GLuint(location), elemCount, offset, divisor);
 }
 
 void GLArray::connectIndexBuffer(const GLBuffer& buffer) const {
