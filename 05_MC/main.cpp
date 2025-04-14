@@ -10,6 +10,7 @@ public:
   std::vector<float> data;
   QVis q{"bonsai.dat"};
   uint8_t isovalue{40};
+  float eye{2.0f};
   bool wireframe{false};
   bool surfaceChanged{true};
   ArcBall arcball{{512, 512}};
@@ -19,10 +20,6 @@ public:
   virtual void init() override {
     glEnv.setTitle("Marching Cubes demo");
     glEnv.setSync(false);
-    GL(glDisable(GL_CULL_FACE));
-    GL(glEnable(GL_DEPTH_TEST));
-    GL(glClearColor(0,0,0,0));
-    
     extractIsosurface();
   }
   
@@ -47,10 +44,14 @@ public:
   }
   
   virtual void draw() override {
+    GL(glDisable(GL_CULL_FACE));
+    GL(glEnable(GL_DEPTH_TEST));
+    GL(glClearColor(0,0,0,1));
+
     GL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
     setDrawProjection(Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), 0.0001f, 100));
-    setDrawTransform(Mat4::lookAt({0,0,2},{0,0,0},{0,1,0}) * rotation);
-    
+    setDrawTransform(Mat4::lookAt({0,0,eye},{0,0,0},{0,1,0}) * rotation);
+
     if (surfaceChanged) {
       drawTriangles(data, TrisDrawType::LIST, wireframe, true);
       surfaceChanged = false;
@@ -61,22 +62,30 @@ public:
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
 
-    if (action == GLFW_PRESS) {
+    if (action == GLENV_PRESS) {
       switch (key) {
-        case GLFW_KEY_ESCAPE:
+        case GLENV_KEY_ESCAPE:
           closeWindow();
           break;
-        case GLFW_KEY_W:
+        case GLENV_KEY_W:
           wireframe = !wireframe;
+          surfaceChanged = true;
+          std::cout << "wireframe is now " << wireframe << std::endl;
           break;
       }
     }
     switch (key) {
-      case GLFW_KEY_UP:
+      case GLENV_KEY_UP:
+        eye *= 0.9f;
+        break;
+      case GLENV_KEY_DOWN:
+        eye /= 0.9f;
+        break;
+      case GLENV_KEY_LEFT:
         isovalue++;
         extractIsosurface();
         break;
-      case GLFW_KEY_DOWN:
+      case GLENV_KEY_RIGHT:
         isovalue--;
         extractIsosurface();
         break;
@@ -91,8 +100,8 @@ public:
     }
   }
   virtual void mouseButton(int button, int state, int mods, double xPosition, double yPosition) override {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-      leftMouseDown = state == GLFW_PRESS;
+    if (button == GLENV_MOUSE_BUTTON_LEFT) {
+      leftMouseDown = state == GLENV_MOUSE_PRESS;
       arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
     }
   }
