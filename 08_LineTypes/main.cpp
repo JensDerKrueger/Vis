@@ -110,12 +110,12 @@ public:
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
-    if (action == GLFW_PRESS) {
+    if (action == GLENV_PRESS) {
       switch (key) {
-        case GLFW_KEY_ESCAPE:
+        case GLENV_KEY_ESCAPE:
           closeWindow();
           break;
-        case GLFW_KEY_SPACE:
+        case GLENV_KEY_SPACE:
           activeLineType = (activeLineType+1) % data.size();
           updateTitle();
           break;
@@ -131,8 +131,8 @@ public:
     }
   }
   virtual void mouseButton(int button, int state, int mods, double xPosition, double yPosition) override {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-      leftMouseDown = state == GLFW_PRESS;
+    if (button == GLENV_MOUSE_BUTTON_LEFT) {
+      leftMouseDown = state == GLENV_PRESS;
       arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
     }
   }
