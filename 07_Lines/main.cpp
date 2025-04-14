@@ -18,9 +18,6 @@ public:
   
   virtual void init() override {
     glEnv.setTitle("Flow Vis Demo 2 (Integral Curves)");
-    GL(glDisable(GL_CULL_FACE));
-    GL(glEnable(GL_DEPTH_TEST));
-    GL(glClearColor(0,0,0,0));
     initLines();
   }
 
@@ -70,6 +67,9 @@ public:
   }
   
   virtual void draw() override {
+    GL(glDisable(GL_CULL_FACE));
+    GL(glEnable(GL_DEPTH_TEST));
+    GL(glClearColor(0,0,0,1));
     GL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
     setDrawProjection(Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), 0.0001f, 100));
     setDrawTransform(Mat4::lookAt({0,0,5},{0,0,0},{0,1,0}) * rotation);
@@ -77,9 +77,9 @@ public:
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
-    if (action == GLFW_PRESS) {
+    if (action == GLENV_PRESS) {
       switch (key) {
-        case GLFW_KEY_ESCAPE:
+        case GLENV_KEY_ESCAPE:
           closeWindow();
           break;
       }
@@ -94,8 +94,8 @@ public:
     }
   }
   virtual void mouseButton(int button, int state, int mods, double xPosition, double yPosition) override {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-      leftMouseDown = state == GLFW_PRESS;
+    if (button == GLENV_MOUSE_BUTTON_LEFT) {
+      leftMouseDown = state == GLENV_MOUSE_PRESS;
       arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
     }
   }
