@@ -530,16 +530,14 @@ void GLApp::redrawTriangles(bool wireframe) {
     simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vColor", 4, 3);
   }
 
-#ifndef __EMSCRIPTEN__
-  if (wireframe)
-    GL(glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ));
-  else
-    GL(glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ));
-#endif
 
   switch (lastTrisType) {
     case TrisDrawType::LIST :
-      GL(glDrawArrays(GL_TRIANGLES, 0, lastTrisCount));
+      if (wireframe) {
+        GL(glDrawArrays(GL_LINES, 0, lastTrisCount));
+      } else {
+        GL(glDrawArrays(GL_TRIANGLES, 0, lastTrisCount));
+      }
       break;
     case TrisDrawType::STRIP :
       GL(glDrawArrays(GL_TRIANGLE_STRIP, 0, lastTrisCount));
@@ -550,16 +548,141 @@ void GLApp::redrawTriangles(bool wireframe) {
   }
 }
 
+static std::vector<float> convertTriangleFanToLines(
+                                                    const std::vector<float>& fanVertices,
+                                                    std::size_t compCount // floats per vertex
+) {
+  std::vector<float> lineVertices;
+
+  const std::size_t totalVertices = fanVertices.size() / compCount;
+  if (totalVertices < 3) return lineVertices; // Not enough for a triangle
+
+  const float* v0 = &fanVertices[0]; // shared center vertex
+
+  for (std::size_t i = 1; i < totalVertices - 1; ++i) {
+    const float* v1 = &fanVertices[i * compCount];
+    const float* v2 = &fanVertices[(i + 1) * compCount];
+
+    // Line v0 -> v1
+    lineVertices.insert(lineVertices.end(), v0, v0 + compCount);
+    lineVertices.insert(lineVertices.end(), v1, v1 + compCount);
+
+    // Line v1 -> v2
+    lineVertices.insert(lineVertices.end(), v1, v1 + compCount);
+    lineVertices.insert(lineVertices.end(), v2, v2 + compCount);
+
+    // Line v2 -> v0
+    lineVertices.insert(lineVertices.end(), v2, v2 + compCount);
+    lineVertices.insert(lineVertices.end(), v0, v0 + compCount);
+  }
+
+  return lineVertices;
+}
+
+static std::vector<float> convertTriangleStripToLines(
+                                               const std::vector<float>& stripVertices,
+                                               std::size_t compCount // floats per vertex
+) {
+  std::vector<float> lineVertices;
+
+  const std::size_t totalVertices = stripVertices.size() / compCount;
+  if (totalVertices < 3) return lineVertices; // Not enough to form a triangle
+
+  for (std::size_t i = 2; i < totalVertices; ++i) {
+    const float* v0;
+    const float* v1;
+    const float* v2;
+
+    // Determine winding order based on parity
+    if ((i % 2) == 0) {
+      // Even triangle: v0, v1, v2 = i-2, i-1, i
+      v0 = &stripVertices[(i - 2) * compCount];
+      v1 = &stripVertices[(i - 1) * compCount];
+      v2 = &stripVertices[i * compCount];
+    } else {
+      // Odd triangle: v0, v1, v2 = i-1, i-2, i
+      v0 = &stripVertices[(i - 1) * compCount];
+      v1 = &stripVertices[(i - 2) * compCount];
+      v2 = &stripVertices[i * compCount];
+    }
+
+    // Line v0 -> v1
+    lineVertices.insert(lineVertices.end(), v0, v0 + compCount);
+    lineVertices.insert(lineVertices.end(), v1, v1 + compCount);
+
+    // Line v1 -> v2
+    lineVertices.insert(lineVertices.end(), v1, v1 + compCount);
+    lineVertices.insert(lineVertices.end(), v2, v2 + compCount);
+
+    // Line v2 -> v0
+    lineVertices.insert(lineVertices.end(), v2, v2 + compCount);
+    lineVertices.insert(lineVertices.end(), v0, v0 + compCount);
+  }
+  return lineVertices;
+}
+
+static std::vector<float> convertTrianglesToLines(
+                                           const std::vector<float>& triangleVertices,
+                                           std::size_t compCount // number of floats per vertex
+) {
+  std::vector<float> lineVertices;
+
+  const std::size_t floatsPerTriangle = 3 * compCount;
+
+  if (triangleVertices.size() % floatsPerTriangle != 0) {
+    // Not a clean set of triangles
+    return lineVertices;
+  }
+
+  for (std::size_t i = 0; i < triangleVertices.size(); i += floatsPerTriangle) {
+    // Extract pointers to the three full vertices
+    const float* v0 = &triangleVertices[i];
+    const float* v1 = &triangleVertices[i + compCount];
+    const float* v2 = &triangleVertices[i + 2 * compCount];
+
+    // Line v0 -> v1
+    lineVertices.insert(lineVertices.end(), v0, v0 + compCount);
+    lineVertices.insert(lineVertices.end(), v1, v1 + compCount);
+
+    // Line v1 -> v2
+    lineVertices.insert(lineVertices.end(), v1, v1 + compCount);
+    lineVertices.insert(lineVertices.end(), v2, v2 + compCount);
+
+    // Line v2 -> v0
+    lineVertices.insert(lineVertices.end(), v2, v2 + compCount);
+    lineVertices.insert(lineVertices.end(), v0, v0 + compCount);
+  }
+
+  return lineVertices;
+}
 
 void GLApp::drawTriangles(const std::vector<float>& data, TrisDrawType t, bool wireframe, bool lighting) {
   shaderUpdate();
-  
-  size_t compCount = lighting ? 10 : 7;
-  simpleVb.setData(data,compCount,GL_DYNAMIC_DRAW);
 
+  size_t compCount = lighting ? 10 : 7;
+
+  if (wireframe) {
+    std::vector<float> lineVerts;
+    switch (t) {
+      case TrisDrawType::LIST:
+        lineVerts = convertTrianglesToLines(data,compCount);
+        break;
+      case TrisDrawType::STRIP:
+        lineVerts = convertTriangleStripToLines(data,compCount);
+        break;
+      case TrisDrawType::FAN:
+        lineVerts = convertTriangleFanToLines(data,compCount);
+        break;
+    }
+
+    simpleVb.setData(lineVerts,compCount,GL_DYNAMIC_DRAW);
+    lastTrisCount = GLsizei(lineVerts.size()/compCount);
+  } else {
+    simpleVb.setData(data,compCount,GL_DYNAMIC_DRAW);
+    lastTrisCount = GLsizei(data.size()/compCount);
+  }
   lastLighting = lighting;
   lastTrisType = t;
-  lastTrisCount = GLsizei(data.size()/compCount);
 
   redrawTriangles(wireframe);
 }
