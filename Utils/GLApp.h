@@ -138,6 +138,7 @@ protected:
   Mat4 mv;
   Mat4 mvi;
   GLProgram simpleProg;
+  GLProgram simplePointProg;
   GLProgram simpleSpriteProg;
   GLProgram simpleHLSpriteProg;
   GLProgram simpleTexProg;

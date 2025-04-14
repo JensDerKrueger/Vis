@@ -32,6 +32,25 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
       FragColor = color;
     }
   )")},
+  simplePointProg{GLProgram::createFromString(R"(#version 300 es
+    uniform mat4 MVP;
+    uniform float pointSize;
+    in vec3 vPos;
+    in vec4 vColor;
+    out vec4 color;
+    void main() {
+      gl_Position = MVP * vec4(vPos, 1.0);
+      gl_PointSize = pointSize;
+      color = vColor;
+    }
+  )",R"(#version 300 es
+    precision mediump float;
+    in vec4 color;
+    out vec4 FragColor;
+    void main() {
+      FragColor = color;
+    }
+  )")},
   simpleSpriteProg{GLProgram::createFromString(R"(#version 300 es
     uniform mat4 MVP;
     uniform float pointSize;
@@ -122,6 +141,22 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
   )")},
 #else
   simpleProg{GLProgram::createFromString(
+     "#version 410\n"
+     "uniform mat4 MVP;\n"
+     "layout (location = 0) in vec3 vPos;\n"
+     "layout (location = 1) in vec4 vColor;\n"
+     "out vec4 color;\n"
+     "void main() {\n"
+     "    gl_Position = MVP * vec4(vPos, 1.0);\n"
+     "    color = vColor;\n"
+     "}\n",
+     "#version 410\n"
+     "in vec4 color;\n"
+     "out vec4 FragColor;\n"
+     "void main() {\n"
+     "    FragColor = color;\n"
+     "}\n")},
+  simplePointProg{GLProgram::createFromString(
      "#version 410\n"
      "uniform mat4 MVP;\n"
      "layout (location = 0) in vec3 vPos;\n"
@@ -501,16 +536,18 @@ void GLApp::drawPoints(const std::vector<float>& data, float pointSize, bool use
     }
     
   } else {
-    simpleProg.enable();
+    simplePointProg.enable();
+#ifdef __EMSCRIPTEN__
+    simpleSpriteProg.setUniform("pointSize", pointSize);
+#else
+    GL(glPointSize(pointSize));
+#endif
     simpleVb.setData(data,7,GL_DYNAMIC_DRAW);
     simpleArray.bind();
-    simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vPos", 3);
-    simpleArray.connectVertexAttrib(simpleVb, simpleProg, "vColor", 4, 3);
+    simpleArray.connectVertexAttrib(simpleVb, simplePointProg, "vPos", 3);
+    simpleArray.connectVertexAttrib(simpleVb, simplePointProg, "vColor", 4, 3);
   }
 
-#ifndef __EMSCRIPTEN__
-  GL(glPointSize(pointSize));
-#endif
   GL(glDrawArrays(GL_POINTS, 0, GLsizei(data.size()/7)));
 }
 
@@ -707,6 +744,9 @@ void GLApp::setDrawTransform(const Mat4& mat) {
 void GLApp::shaderUpdate() {
   simpleProg.enable();
   simpleProg.setUniform("MVP", p*mv);
+
+  simplePointProg.enable();
+  simplePointProg.setUniform("MVP", p*mv);
 
   simpleSpriteProg.enable();
   simpleSpriteProg.setUniform("MVP", p*mv);
