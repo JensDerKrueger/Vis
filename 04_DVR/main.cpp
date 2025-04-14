@@ -57,7 +57,7 @@ public:
     vbCube.setData(cube.getVertices(), 3);
     cubeArray.connectVertexAttrib(vbCube, cubeProgram, "vPos", 3);
 
-    GL(glClearColor(0,0,0.5,0));
+    GL(glClearColor(0,0,0.5,1));
     GL(glClearDepth(1.0f));
     GL(glEnable(GL_DEPTH_TEST));
     GL(glEnable(GL_CULL_FACE));
@@ -99,27 +99,27 @@ public:
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
     std::stringstream ss;
-    if (action == GLFW_PRESS) {
+    if (action == GLENV_PRESS) {
       switch (key) {
-        case GLFW_KEY_ESCAPE :
+        case GLENV_KEY_ESCAPE :
           closeWindow();
           break;
-        case GLFW_KEY_V:
+        case GLENV_KEY_V:
           currentFile = (currentFile + 1) % filenames.size();
           loadVolume();
           updateMatrices();
           break;
-        case GLFW_KEY_RIGHT_BRACKET:
+        case GLENV_KEY_Q:
           oversampling *= 2;
           ss << "Raycaster (" << oversampling << " x oversampling)";
           glEnv.setTitle(ss.str());
           break;
-        case GLFW_KEY_SLASH:
+        case GLENV_KEY_W:
           oversampling /= 2;
           ss << "Raycaster (" << oversampling << " x oversampling)";
           glEnv.setTitle(ss.str());
           break;
-        case GLFW_KEY_R:
+        case GLENV_KEY_R:
           rotation = Mat4{};
           stepStart = 0.12f;
           stepWidth = 0.1f;
@@ -129,57 +129,59 @@ public:
           clipBoxShift = Vec3{0,0,0};
           updateMatrices();
           break;
-        case GLFW_KEY_UP:
+        case GLENV_KEY_UP:
           zoom += 0.1f;
           updateMatrices();
           break;
-        case GLFW_KEY_DOWN:
+        case GLENV_KEY_DOWN:
           zoom -= 0.1f;
           updateMatrices();
           break;
-        case GLFW_KEY_1:
-          if (mods & GLFW_MOD_SHIFT)
-            clipBoxSize.x += 0.01f;
-          else
-            clipBoxSize.x -= 0.01f;
-          updateMatrices();
-          break;
-        case GLFW_KEY_2:
-          if (mods & GLFW_MOD_SHIFT)
-            clipBoxSize.y += 0.01f;
-          else
-            clipBoxSize.y -= 0.01f;
-          updateMatrices();
-          break;
-        case GLFW_KEY_3:
-          if (mods & GLFW_MOD_SHIFT)
-            clipBoxSize.z += 0.01f;
-          else
-            clipBoxSize.z -= 0.01f;
-          updateMatrices();
-          break;
-        case GLFW_KEY_4:
-          if (mods & GLFW_MOD_SHIFT)
-            clipBoxShift.x += 0.01f;
-          else
-            clipBoxShift.x -= 0.01f;
-          updateMatrices();
-          break;
-        case GLFW_KEY_5:
-          if (mods & GLFW_MOD_SHIFT)
-            clipBoxShift.y += 0.01f;
-          else
-            clipBoxShift.y -= 0.01f;
-          updateMatrices();
-          break;
-        case GLFW_KEY_6:
-          if (mods & GLFW_MOD_SHIFT)
-            clipBoxShift.z += 0.01f;
-          else
-            clipBoxShift.z -= 0.01f;
-          updateMatrices();
-          break;
       }
+    }
+    switch (key) {
+      case GLENV_KEY_1:
+        if (mods & GLENV_MOD_SHIFT)
+          clipBoxSize.x += 0.01f;
+        else
+          clipBoxSize.x -= 0.01f;
+        updateMatrices();
+        break;
+      case GLENV_KEY_2:
+        if (mods & GLENV_MOD_SHIFT)
+          clipBoxSize.y += 0.01f;
+        else
+          clipBoxSize.y -= 0.01f;
+        updateMatrices();
+        break;
+      case GLENV_KEY_3:
+        if (mods & GLENV_MOD_SHIFT)
+          clipBoxSize.z += 0.01f;
+        else
+          clipBoxSize.z -= 0.01f;
+        updateMatrices();
+        break;
+      case GLENV_KEY_4:
+        if (mods & GLENV_MOD_SHIFT)
+          clipBoxShift.x += 0.01f;
+        else
+          clipBoxShift.x -= 0.01f;
+        updateMatrices();
+        break;
+      case GLENV_KEY_5:
+        if (mods & GLENV_MOD_SHIFT)
+          clipBoxShift.y += 0.01f;
+        else
+          clipBoxShift.y -= 0.01f;
+        updateMatrices();
+        break;
+      case GLENV_KEY_6:
+        if (mods & GLENV_MOD_SHIFT)
+          clipBoxShift.z += 0.01f;
+        else
+          clipBoxShift.z -= 0.01f;
+        updateMatrices();
+        break;
     }
   }
   
@@ -204,14 +206,14 @@ public:
   }
   
   virtual void mouseButton(int button, int state, int mods, double xPosition, double yPosition) override {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-      rightMouseDown = state == GLFW_PRESS;
+    if (button == GLENV_MOUSE_BUTTON_RIGHT) {
+      rightMouseDown = state == GLENV_MOUSE_PRESS;
       xPositionStart = xPosition;
       yPositionStart = yPosition;
     }
     
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-      leftMouseDown = state == GLFW_PRESS;
+    if (button == GLENV_MOUSE_BUTTON_LEFT) {
+      leftMouseDown = state == GLENV_MOUSE_PRESS;
       arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
     }
   }
@@ -225,9 +227,9 @@ private:
   Volume volume;
   Vec3 voxelCount;
   Vec3 volumeExtend;
-  GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_BORDER,
-                        GL_CLAMP_TO_BORDER,GL_CLAMP_TO_BORDER};
-  
+  GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_EDGE,
+    GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE};
+
   ArcBall arcball{{512, 512}};
   Mat4 rotation;
   Mat4 clipBox;
@@ -248,7 +250,7 @@ private:
 
   bool meshNeedsUpdte{true};
 
-  std::vector<std::string> filenames{"c60.dat","bonsai.dat","Engine.dat"};
+  std::vector<std::string> filenames{"c60.dat","bonsai.dat"};
   size_t currentFile{0};
   float stepStart{0.12f};
   float stepWidth{0.1f};
