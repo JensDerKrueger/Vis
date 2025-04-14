@@ -181,14 +181,81 @@ private:
     //TODO
     return EM_TRUE;
   }
+
+  static int map_key_string_to_code(const char* key) {
+    // Common control keys
+    if (strcmp(key, " ") == 0) return GLENV_KEY_SPACE;
+    if (strcmp(key, "Enter") == 0) return GLENV_KEY_ENTER;
+    if (strcmp(key, "Tab") == 0) return GLENV_KEY_TAB;
+    if (strcmp(key, "Escape") == 0) return GLENV_KEY_ESCAPE;
+    if (strcmp(key, "Backspace") == 0) return GLENV_KEY_BACKSPACE;
+    if (strcmp(key, "CapsLock") == 0) return GLENV_KEY_CAPS_LOCK;
+    if (strcmp(key, "ScrollLock") == 0) return GLENV_KEY_SCROLL_LOCK;
+    if (strcmp(key, "NumLock") == 0) return GLENV_KEY_NUM_LOCK;
+    if (strcmp(key, "PrintScreen") == 0) return GLENV_KEY_PRINT_SCREEN;
+    if (strcmp(key, "Pause") == 0) return GLENV_KEY_PAUSE;
+    if (strcmp(key, "Insert") == 0) return GLENV_KEY_INSERT;
+    if (strcmp(key, "Delete") == 0) return GLENV_KEY_DELETE;
+
+    // Navigation keys
+    if (strcmp(key, "ArrowUp") == 0) return GLENV_KEY_UP;
+    if (strcmp(key, "ArrowDown") == 0) return GLENV_KEY_DOWN;
+    if (strcmp(key, "ArrowLeft") == 0) return GLENV_KEY_LEFT;
+    if (strcmp(key, "ArrowRight") == 0) return GLENV_KEY_RIGHT;
+    if (strcmp(key, "PageUp") == 0) return GLENV_KEY_PAGE_UP;
+    if (strcmp(key, "PageDown") == 0) return GLENV_KEY_PAGE_DOWN;
+    if (strcmp(key, "Home") == 0) return GLENV_KEY_HOME;
+    if (strcmp(key, "End") == 0) return GLENV_KEY_END;
+
+    // Function keys
+    for (int i = 1; i <= 12; i++) {
+      char fname[5];
+      snprintf(fname, sizeof(fname), "F%d", i);
+      if (strcmp(key, fname) == 0) return GLENV_KEY_F1 + (i - 1);
+    }
+
+    // Alphanumeric keys
+    if (strlen(key) == 1) {
+      char c = key[0];
+      if (c >= 'a' && c <= 'z') return GLENV_KEY_A + (c - 'a');
+      if (c >= 'A' && c <= 'Z') return GLENV_KEY_A + (c - 'A');
+      if (c >= '0' && c <= '9') return GLENV_KEY_0 + (c - '0');
+
+      // Punctuation and symbols
+      switch (c) {
+        case ';': return GLENV_KEY_SEMICOLON;
+        case '=': return GLENV_KEY_EQUAL;
+        case ',': return GLENV_KEY_COMMA;
+        case '-': return GLENV_KEY_MINUS;
+        case '.': return GLENV_KEY_PERIOD;
+        case '/': return GLENV_KEY_SLASH;
+        case '`': return GLENV_KEY_GRAVE_ACCENT;
+        case '[': return GLENV_KEY_LEFT_BRACKET;
+        case '\\': return GLENV_KEY_BACKSLASH;
+        case ']': return GLENV_KEY_RIGHT_BRACKET;
+        case '\'': return GLENV_KEY_APOSTROPHE;
+      }
+    }
+
+    // Modifier keys (detected via `e->code` or `e->location` optionally)
+    if (strcmp(key, "Shift") == 0) return GLENV_KEY_LEFT_SHIFT;     // Could differentiate with location
+    if (strcmp(key, "Control") == 0) return GLENV_KEY_LEFT_CONTROL;
+    if (strcmp(key, "Alt") == 0) return GLENV_KEY_LEFT_ALT;
+    if (strcmp(key, "ContextMenu") == 0) return GLENV_KEY_MENU;
+
+    // Default: unknown or unsupported
+    return 0;
+  }
+
   static bool keyCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void* userData) {
 
     // TODO: handle modifiers properly
     GLApp* glApp = static_cast<GLApp*>(userData);
     if (!glApp) return EM_FALSE;
+    const int keyCode = map_key_string_to_code(keyEvent->key);
     if (eventType == EMSCRIPTEN_EVENT_KEYDOWN)
-      glApp->keyboardChar(keyEvent->key[0]);
-    glApp->keyboard(keyEvent->key[0], keyEvent->key[0], eventType, 0);
+      glApp->keyboardChar(keyCode);
+    glApp->keyboard(keyCode, keyCode, eventType, 0);
 
     return EM_TRUE;
   }
