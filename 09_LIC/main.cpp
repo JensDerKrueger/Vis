@@ -30,9 +30,9 @@ public:
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
-    if (action == GLFW_PRESS) {
+    if (action == GLENV_PRESS) {
       switch (key) {
-        case GLFW_KEY_ESCAPE:
+        case GLENV_KEY_ESCAPE:
           closeWindow();
           break;
       }
