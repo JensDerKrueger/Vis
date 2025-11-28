@@ -33,7 +33,10 @@ $(TARGET): $(OBJ) ../Utils/libutils.a
 	$(CC) $(CFLAGS) $(INCLUDES) $^ -o $@
 
 clean:
-	-rm -rf $(OBJ) $(TARGET) core
+	-rm -rf $(OBJ) $(TARGET) core Solution.html Solution.wasm Solution.data Solution.js
 
 mrproper: clean
 	cd ../Utils && make clean
+
+emscripten:
+	em++ $(SRC) ../Utils/bmp.cpp ../Utils/GLApp.cpp ../Utils/GLArray.cpp ../Utils/GLBuffer.cpp ../Utils/GLDebug.cpp ../Utils/GLEnv.cpp ../Utils/GLProgram.cpp ../Utils/GLTexture2D.cpp ../Utils/Grid2D.cpp ../Utils/Image.cpp   -o Solution.html -s ALLOW_MEMORY_GROWTH=1 -D__EMSCRIPTEN__=1 -s USE_WEBGL2=1 -s USE_GLFW=3 -s FULL_ES3=1 -O2 -I. -I../Utils --preload-file lenna.bmp
