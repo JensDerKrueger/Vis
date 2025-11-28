@@ -26,8 +26,8 @@ private:
 
 class QVis {
 public:
-  QVis(const std::string& filename);
-  void load(const std::string& filename);
+  QVis(const std::string& filename, const bool computeNormals=true);
+  void load(const std::string& filename, const bool computeNormals=true);
   
   Volume volume;
   
