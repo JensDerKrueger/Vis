@@ -1,4 +1,11 @@
 #include "GLApp.h"
+#include <filesystem>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <string>
+
 
 #ifndef __EMSCRIPTEN__
 GLApp* GLApp::staticAppPtr = nullptr;
@@ -6,11 +13,13 @@ GLApp* GLApp::staticAppPtr = nullptr;
 
 GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
              const std::string& title,
-             bool fpsCounter, bool sync) :
+             bool fpsCounter, bool sync,
+             bool exactPixels,
+             std::vector<std::string> args) :
 #ifdef __EMSCRIPTEN__
-  glEnv{w,h,s,title,fpsCounter,sync,3,0,true},
+  glEnv{w,h,s,title,fpsCounter,sync,exactPixels,3,0,true,},
 #else
-  glEnv{w,h,s,title,fpsCounter,sync,4,1,true},
+  glEnv{w,h,s,title,fpsCounter,sync,exactPixels,4,1,true},
 #endif
   p{},
   mv{},
@@ -284,8 +293,10 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
 #else
   startTime = glfwGetTime();
 #endif
-  Dimensions dim{ glEnv.getFramebufferSize() };
-  glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height));
+  const Dimensions dim = glEnv.getFramebufferSize();
+  GL(glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height)));
+
+  initScript(args);
 }
 
 GLApp::~GLApp() {
@@ -325,11 +336,27 @@ void GLApp::resetPointHighlightTexture() {
   setPointHighlightTexture(i);
 }
 
+void GLApp::processScript() {
+  if (scriptRunning) {
+    CommandResultCode result = interpreter.runBatch();
+
+    if (result == CommandResultCode::success) {
+    } else if (result == CommandResultCode::waitingNoop) {
+    } else if (result == CommandResultCode::finished) {
+      scriptRunning = false;
+    } else {
+      std::cerr << "error or special result: " << static_cast<int>(result) << "\n";
+      scriptRunning = false;
+    }
+  }
+}
 void GLApp::mainLoop() {
 #ifdef __EMSCRIPTEN__
   if (animationActive) {
     animate(emscripten_performance_now()/1000.0-startTime);
   }
+  processScript();
+  glEnv.beginOfFrame();
   draw();
   glEnv.endOfFrame();
 #else
@@ -337,6 +364,8 @@ void GLApp::mainLoop() {
     if (animationActive) {
       animate(glfwGetTime()-startTime);
     }
+    processScript();
+    glEnv.beginOfFrame();
     draw();
     glEnv.endOfFrame();
   } while (!glEnv.shouldClose());
@@ -856,4 +885,119 @@ Mat4 GLApp::computeImageTransformFixedWidth(const Vec2ui& imageSize,
   const float ax = imageSize.x/float(s.width);
   const float ay = imageSize.y/float(s.height);
   return Mat4::translation(center) * Mat4::scaling({width, width*ay/ax, 1.0f});
+}
+
+static std::string getScriptFilename(const std::vector<std::string>& args) {
+  for (std::size_t i = 0; i + 1 < args.size(); ++i) {
+    std::string key = args[i];
+    std::transform(key.begin(), key.end(), key.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    if (key == "--script") {
+      return args[i + 1];
+    }
+  }
+  return "";
+}
+
+void GLApp::initScript(const std::vector<std::string>& args) {
+  const std::string scriptName = getScriptFilename(args);
+  if (!scriptName.empty()) {
+    scriptRunning = interpreter.loadFromFile(scriptName) == CommandResultCode::success;
+    interpreter.registerCommand(
+                                "screenshot",
+                                [](const std::vector<std::string> &args) {
+                                  if (args.size() != 1) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  if (GLScreenshot::saveBmp(args[0]))
+                                    return CommandResultCode::success;
+                                  else
+                                    return CommandResultCode::callbackError;
+                                });
+    interpreter.registerCommand(
+                                "clearlog",
+                                [this](const std::vector<std::string> &args) {
+                                  if (scriptLogFile.empty()) return CommandResultCode::success;
+                                  std::filesystem::remove(std::filesystem::path{scriptLogFile});
+                                  return CommandResultCode::success;
+                                });
+    interpreter.registerCommand(
+                                "logfile",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 1) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  scriptLogFile = args[0];
+                                  return CommandResultCode::success;
+                                });
+    interpreter.registerCommand(
+                                "logtime",
+                                [this](const std::vector<std::string> &args) {
+                                  auto now = std::chrono::system_clock::now();
+                                  std::time_t t = std::chrono::system_clock::to_time_t(now);
+                                  std::stringstream s;
+                                  s << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S");
+
+                                  if (writeScriptLog(s.str()))
+                                    return CommandResultCode::success;
+                                  else
+                                    return CommandResultCode::callbackError;
+                                });
+    interpreter.registerCommand(
+                                "logfps",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 0) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  std::string message{};
+                                  if (glEnv.getFPSCounterStatus()) {
+                                    std::stringstream s;
+                                    s << static_cast<int>(std::ceil(glEnv.getFps())) << " fps";
+                                    message = s.str();
+                                  } else {
+                                    message = "fpsCounter disabled";
+                                  }
+                                  if (writeScriptLog(message))
+                                    return CommandResultCode::success;
+                                  else
+                                    return CommandResultCode::callbackError;
+                                });
+    interpreter.registerCommand(
+                                "log",
+                                [this](const std::vector<std::string> &args) {
+                                  std::string result;
+                                  for (size_t i = 0; i < args.size(); ++i) {
+                                    result += args[i];
+                                    if (i + 1 < args.size()) {
+                                      result += ' ';
+                                    }
+                                  }
+                                  if (writeScriptLog(result))
+                                    return CommandResultCode::success;
+                                  else
+                                    return CommandResultCode::callbackError;
+                                });
+    interpreter.registerCommand(
+                                "quit",
+                                [this](const std::vector<std::string> &args) {
+                                  closeWindow();
+                                  return CommandResultCode::success;
+                                });
+    interpreter.setUnknownCommandHandler(
+                                         [](const std::string &command,
+                                                const std::vector<std::string> &args) {
+                                                  std::cerr << "unknown command: " << command << "\n";
+                                                  return CommandResultCode::unknownCommand;
+                                                });
+  } else {
+    scriptRunning = false;
+  }
+}
+
+bool GLApp::writeScriptLog(const std::string& text) const {
+  if (scriptLogFile.empty()) return false;
+  std::ofstream out(scriptLogFile, std::ios::app);
+  if (!out) return false;
+  out << text << std::endl;
+  return true;
 }

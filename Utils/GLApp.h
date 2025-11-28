@@ -10,6 +10,10 @@
 #include "Image.h"
 #include "GLAppKeyTranslation.h"
 
+#include "CommandInterpreter.h"
+#include "GLScreenshot.h"
+
+
 enum class LineDrawType {
   LIST,
   STRIP,
@@ -26,7 +30,8 @@ class GLApp {
 public:
   GLApp(uint32_t w=640, uint32_t h=480, uint32_t s=4,
         const std::string& title = "My OpenGL App",
-        bool fpsCounter=true, bool sync=true);
+        bool fpsCounter=true, bool sync=true, bool exactPixels=false,
+        std::vector<std::string> args = {});
   virtual ~GLApp();
   void run();
   void setAnimation(bool animationActive) {
@@ -159,7 +164,11 @@ protected:
   void closeWindow() {
     glEnv.setClose();
   }
-  
+
+  std::string scriptLogFile{"script.txt"};
+  bool scriptRunning{false};
+  CommandInterpreter interpreter;
+
 private:
   bool animationActive;
   TrisDrawType lastTrisType;
@@ -341,4 +350,7 @@ private:
                    float lineThickness,
                    std::vector<float>& trisData);
 
+  void initScript(const std::vector<std::string>& args);
+  bool writeScriptLog(const std::string& text) const;
+  void processScript();
 };

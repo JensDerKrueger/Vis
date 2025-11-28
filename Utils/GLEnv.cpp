@@ -42,14 +42,14 @@ void GLEnv::errorCallback(int error, const char* description) {
 }
 
 GLEnv::GLEnv(uint32_t w, uint32_t h, uint32_t s, const std::string& title, 
-             bool fpsCounter, bool sync, int major, int minor, bool core) :
+             bool fpsCounter, bool sync, bool exactPixels,
+             int major, int minor, bool core) :
 #ifndef __EMSCRIPTEN__
   window(nullptr),
 #endif
   sync(sync),
   title(title),
-  fpsCounter(fpsCounter),
-  last(Clock::now())
+  fpsCounter(fpsCounter)
 {
 #ifdef __EMSCRIPTEN__
   emscripten_set_canvas_element_size(ENS_CANVAS, w, h);
@@ -68,6 +68,7 @@ GLEnv::GLEnv(uint32_t w, uint32_t h, uint32_t s, const std::string& title,
   EMSCRIPTEN_WEBGL_CONTEXT_HANDLE context = emscripten_webgl_create_context(ENS_CANVAS, &attr);
   emscripten_webgl_make_context_current(context);
 
+  timer = std::make_shared<CPUTimer>();
 #else
   glfwSetErrorCallback(errorCallback);
 
@@ -84,6 +85,30 @@ GLEnv::GLEnv(uint32_t w, uint32_t h, uint32_t s, const std::string& title,
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   }
 
+
+  if (exactPixels) {
+    // Disable high-DPI framebuffer scaling on platforms that support it
+#ifdef GLFW_SCALE_FRAMEBUFFER          // GLFW 3.4+ generic name
+    glfwWindowHint(GLFW_SCALE_FRAMEBUFFER, GLFW_FALSE);
+#endif
+
+#ifdef __APPLE__
+    // For older GLFW versions and explicit macOS control
+    glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
+#endif
+
+    // On Windows/X11 this hint has no effect because framebuffer == window size anyway
+    // as long as you DON'T enable GLFW_SCALE_TO_MONITOR.
+  } else {
+#ifdef GLFW_SCALE_FRAMEBUFFER
+    glfwWindowHint(GLFW_SCALE_FRAMEBUFFER, GLFW_TRUE);
+#endif
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
+#endif
+  }
+
+  // Now create the window; framebuffer will be exactly w×h if exactPixels == true
   window = glfwCreateWindow(int(w), int(h), title.c_str(), nullptr, nullptr);
   if (window == nullptr) {
     std::stringstream s;
@@ -102,6 +127,7 @@ GLEnv::GLEnv(uint32_t w, uint32_t h, uint32_t s, const std::string& title,
     throw GLException{s.str()};
   }
   setSync(sync);
+  timer = std::make_shared<GLTimer>(true);
 #endif
 
 }
@@ -111,6 +137,7 @@ GLEnv::~GLEnv() {
   glfwDestroyWindow(window);
   glfwTerminate();
 #endif
+  timer = nullptr;
 }
 
 void GLEnv::setSync(bool sync) {
@@ -131,8 +158,17 @@ void GLEnv::setSync(bool sync) {
 }
 
 
-void GLEnv::setFPSCounter(bool fpsCounter) {
+void GLEnv::setFPSCounterStatus(bool fpsCounter) {
   this->fpsCounter = fpsCounter;
+}
+
+void GLEnv::beginOfFrame() {
+  const Dimensions dim = getFramebufferSize();
+  GL(glViewport(0, 0, GLsizei(dim.width), GLsizei(dim.height)));
+
+  if (fpsCounter && timer) {
+    timer->begin();
+  }
 }
 
 void GLEnv::endOfFrame() {
@@ -141,24 +177,37 @@ void GLEnv::endOfFrame() {
   glfwPollEvents();
 #endif
 
-  if (fpsCounter) {
-    frameCount++;
-    auto now = Clock::now();
-    auto diff = std::chrono::duration_cast<std::chrono::microseconds>(now - last);
-    if(diff.count() > 1e6) {
-        auto fps = static_cast<double>(frameCount)/diff.count()*1.e6;
-      std::stringstream s;
-      s << title << " (" << static_cast<int>(std::ceil(fps)) << " fps)";
+  if (fpsCounter && timer) {
+    glFlush();
+    timer->end();
+    currentFps = updateIntegratedFPS(timer->elapsedNanoseconds());
+    std::stringstream s;
+    s << title << " (" << static_cast<int>(std::ceil(currentFps)) << " fps)";
 #ifdef __EMSCRIPTEN__
-      emscripten_set_window_title(s.str().c_str());
+    emscripten_set_window_title(s.str().c_str());
 #else
-      glfwSetWindowTitle(window, s.str().c_str());
+    glfwSetWindowTitle(window, s.str().c_str());
 #endif
-      frameCount = 0;
-      last = now;
-    }
   }
 }
+
+double GLEnv::updateIntegratedFPS(std::uint64_t nanoseconds) {
+  constexpr std::uint64_t oneSecondNs = 1000000000ull;
+
+  accumulatedNanoseconds += nanoseconds;
+  accumulatedFrames += 1;
+
+  if (accumulatedNanoseconds >= oneSecondNs) {
+    integratedFPS = static_cast<double>(accumulatedFrames) *
+    1.0e9 /
+    static_cast<double>(accumulatedNanoseconds);
+    accumulatedNanoseconds = 0;
+    accumulatedFrames = 0;
+  }
+
+  return integratedFPS;
+}
+
 
 #ifdef __EMSCRIPTEN__
 void GLEnv::setKeyCallback(em_key_callback_func f, void *userData) {
@@ -216,7 +265,6 @@ Dimensions GLEnv::getFramebufferSize() const {
 #endif
   return Dimensions{uint32_t(width), uint32_t(height)};
 }
-
 
 Dimensions GLEnv::getWindowSize() const {
   int width, height;
