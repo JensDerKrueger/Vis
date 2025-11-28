@@ -33,7 +33,10 @@ $(TARGET): $(OBJ) ../Utils/libutils.a
 	$(CC) $(CFLAGS) $(INCLUDES) $^ -o $@
 
 clean:
-	-rm -rf $(OBJ) $(TARGET) core
+	-rm -rf $(OBJ) $(TARGET) core Solution.html Solution.js Solution.wasm
 
 mrproper: clean
 	cd ../Utils && make clean
+
+emscripten:
+	em++ $(SRC) ../Utils/GLEnv.cpp ../Utils/GLApp.cpp  ../Utils/GLDebug.cpp  ../Utils/GLProgram.cpp ../Utils/GLArray.cpp ../Utils/GLBuffer.cpp ../Utils/GLTexture2D.cpp ../Utils/Tesselation.cpp ../Utils/FontRenderer.cpp ../Utils/Image.cpp ../Utils/Grid2D.cpp ../Utils/bmp.cpp -o Solution.html -s ALLOW_MEMORY_GROWTH=1 -D__EMSCRIPTEN__=1 -s USE_WEBGL2=1 -s USE_GLFW=3 -s FULL_ES3=1 -O2 -I. -I../Utils
