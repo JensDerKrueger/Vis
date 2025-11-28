@@ -5,11 +5,11 @@
 
 #include "QVis.h"
 
-QVis::QVis(const std::string& filename) {
-  load(filename);
+QVis::QVis(const std::string& filename, const bool computeNormals) {
+  load(filename, computeNormals);
 }
 
-void QVis::load(const std::string& filename) {
+void QVis::load(const std::string& filename, const bool computeNormals) {
   std::ifstream datfile(filename);
   if (!datfile) throw QVisFileException{std::string("Unable to read file ")+filename};
 
@@ -90,7 +90,11 @@ void QVis::load(const std::string& filename) {
   }
   rawFile.close();
 
-  volume.computeNormals();
+  if (computeNormals) {
+    volume.computeNormals();
+  } else {
+    volume.normals.clear();
+  }
 }
 
 std::vector<std::string> QVis::tokenize(const std::string& str) const {
