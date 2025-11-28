@@ -32,7 +32,13 @@ public:
   const std::vector<GLubyte>& getDataByte();
   const std::vector<GLfloat>& getDataFloat();
 #endif
-  
+
+  static uint32_t getMaxSize() {
+    GLint max3DSize = 0;
+    GL(glGetIntegerv(GL_MAX_3D_TEXTURE_SIZE, &max3DSize));
+    return uint32_t(max3DSize);
+  }
+
 private:
 	GLuint id;
 	GLint internalformat;
