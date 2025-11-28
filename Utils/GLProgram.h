@@ -28,15 +28,19 @@ class ProgramException : public std::exception {
 class GLProgram {
 public:
 	~GLProgram();
-	
-	static GLProgram createFromFiles(const std::vector<std::string>& vs, const std::vector<std::string>& fs,
-                                   const std::vector<std::string>& gs = std::vector<std::string>());
-	static GLProgram createFromStrings(const std::vector<std::string>& vs, const std::vector<std::string>& fs,
-                                     const std::vector<std::string>& gs = std::vector<std::string>());
 
-	static GLProgram createFromFile(const std::string& vs, const std::string& fs, const std::string& gs="");
-	static GLProgram createFromString(const std::string& vs, const std::string& fs, const std::string& gs="");
-	
+	static GLProgram createFromFiles(const std::vector<std::string>& vs, const std::vector<std::string>& fs,
+                                   const std::vector<std::string>& gs = std::vector<std::string>(),
+                                   bool quietFail=false);
+	static GLProgram createFromStrings(const std::vector<std::string>& vs, const std::vector<std::string>& fs,
+                                     const std::vector<std::string>& gs = std::vector<std::string>(),
+                                     bool quietFail=false);
+
+	static GLProgram createFromFile(const std::string& vs, const std::string& fs,
+                                  const std::string& gs="", bool quietFail=false);
+	static GLProgram createFromString(const std::string& vs, const std::string& fs,
+                                    const std::string& gs="", bool quietFail=false);
+
   GLProgram(const GLProgram& other);
   GLProgram& operator=(const GLProgram& other);
   
@@ -93,6 +97,7 @@ public:
 	void disable() const;
 
 private:
+  bool quietFail;
 	GLuint glVertexShader;
 	GLuint glFragmentShader;
 	GLuint glGeometryShader;
@@ -106,7 +111,10 @@ private:
 	
 	static GLuint createShader(GLenum type, const GLchar** src, GLsizei count);
 
-  GLProgram(std::vector<std::string> vertexShaderStrings, std::vector<std::string> fragmentShaderStrings, std::vector<std::string> geometryShaderStrings);
+  GLProgram(std::vector<std::string> vertexShaderStrings,
+            std::vector<std::string> fragmentShaderStrings,
+            std::vector<std::string> geometryShaderStrings,
+            bool quietFail);
 
   void programFromVectors(std::vector<std::string> vs, std::vector<std::string> fs, std::vector<std::string> gs);
 };

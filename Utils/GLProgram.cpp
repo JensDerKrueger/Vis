@@ -6,7 +6,10 @@
 #include "GLDebug.h"
 
 GLProgram::GLProgram(const GLProgram& other) :
-  GLProgram(other.vertexShaderStrings, other.fragmentShaderStrings, other.geometryShaderStrings)
+  GLProgram(other.vertexShaderStrings,
+            other.fragmentShaderStrings,
+            other.geometryShaderStrings,
+            other.quietFail)
 {
 }
 
@@ -27,7 +30,11 @@ GLuint GLProgram::createShader(GLenum type, const GLchar** src, GLsizei count) {
 	return s;
 }
 
-GLProgram::GLProgram(std::vector<std::string> vertexShaderStrings, std::vector<std::string> fragmentShaderStrings, std::vector<std::string> geometryShaderStrings):
+GLProgram::GLProgram(std::vector<std::string> vertexShaderStrings,
+                     std::vector<std::string> fragmentShaderStrings,
+                     std::vector<std::string> geometryShaderStrings,
+                     bool quietFail):
+  quietFail(quietFail),
   glVertexShader(0),
   glFragmentShader(0),
   glGeometryShader(0),
@@ -46,7 +53,10 @@ GLProgram::~GLProgram() {
 	GL(glDeleteProgram(glProgram));
 }
 
-GLProgram GLProgram::createFromFiles(const std::vector<std::string>& vs, const std::vector<std::string>& fs, const std::vector<std::string>& gs) {
+GLProgram GLProgram::createFromFiles(const std::vector<std::string>& vs,
+                                     const std::vector<std::string>& fs,
+                                     const std::vector<std::string>& gs,
+                                     bool quietFail) {
 	std::vector<std::string> vsTexts;
 	for (const std::string& f : vs) {
 		vsTexts.push_back(loadFile(f));
@@ -60,19 +70,34 @@ GLProgram GLProgram::createFromFiles(const std::vector<std::string>& vs, const s
 		if (!f.empty())		
 			gsTexts.push_back(loadFile(f));
 	}
-	return createFromStrings(vsTexts,fsTexts,gsTexts);
+	return createFromStrings(vsTexts,fsTexts,gsTexts,quietFail);
 }
 
-GLProgram GLProgram::createFromStrings(const std::vector<std::string>& vs, const std::vector<std::string>& fs, const std::vector<std::string>& gs) {
-	return {vs,fs,gs};
+GLProgram GLProgram::createFromStrings(const std::vector<std::string>& vs,
+                                       const std::vector<std::string>& fs,
+                                       const std::vector<std::string>& gs,
+                                       bool quietFail) {
+	return {vs,fs,gs,quietFail};
 }
 
-GLProgram GLProgram::createFromFile(const std::string& vs, const std::string& fs, const std::string& gs) {
-	return createFromFiles(std::vector<std::string>{vs}, std::vector<std::string>{fs}, std::vector<std::string>{gs});
+GLProgram GLProgram::createFromFile(const std::string& vs,
+                                    const std::string& fs,
+                                    const std::string& gs,
+                                    bool quietFail) {
+	return createFromFiles(std::vector<std::string>{vs},
+                         std::vector<std::string>{fs},
+                         std::vector<std::string>{gs},
+                         quietFail);
 }
 
-GLProgram GLProgram::createFromString(const std::string& vs, const std::string& fs, const std::string& gs) {
-	return createFromStrings(std::vector<std::string>{vs}, std::vector<std::string>{fs}, std::vector<std::string> {gs});
+GLProgram GLProgram::createFromString(const std::string& vs,
+                                      const std::string& fs,
+                                      const std::string& gs,
+                                      bool quietFail) {
+	return createFromStrings(std::vector<std::string>{vs},
+                           std::vector<std::string>{fs},
+                           std::vector<std::string> {gs},
+                           quietFail);
 }
 
 std::string GLProgram::loadFile(const std::string& filename) {
@@ -91,15 +116,15 @@ std::string GLProgram::loadFile(const std::string& filename) {
 GLint GLProgram::getAttributeLocation(const std::string& id) const {
   const GLint l = glGetAttribLocation(glProgram, id.c_str());
 	checkAndThrow();	
-	if(l == -1)
-		throw ProgramException{std::string("Can't find attribute ") +  id};	
+	if(!quietFail && l == -1)
+		throw ProgramException{std::string("Can't find attribute ") +  id};
 	return l;
 }
 
 GLint GLProgram::getUniformLocation(const std::string& id) const {
 	const GLint l = glGetUniformLocation(glProgram, id.c_str());
 	checkAndThrow();
-	if(l == -1)
+	if(!quietFail && l == -1)
 		throw ProgramException{std::string("Can't find uniform ") +  id};	
 	return l;
 }
