@@ -13,6 +13,16 @@
 #include "CommandInterpreter.h"
 #include "GLScreenshot.h"
 
+#ifdef __EMSCRIPTEN__
+#define SH(x) "ems-" x
+#else
+#define SH(x) x
+#endif
+
+#ifdef _WIN32
+std::vector<std::string> getArgsWindows();
+#endif
+
 
 enum class LineDrawType {
   LIST,

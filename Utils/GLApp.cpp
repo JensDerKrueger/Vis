@@ -904,6 +904,22 @@ void GLApp::initScript(const std::vector<std::string>& args) {
   if (!scriptName.empty()) {
     scriptRunning = interpreter.loadFromFile(scriptName) == CommandResultCode::success;
     interpreter.registerCommand(
+                                "resize",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 2) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+
+                                  try {
+                                    int width  = std::stoi(args[0]);
+                                    int height = std::stoi(args[1]);
+                                    glEnv.setSize(width, height);
+                                  } catch (...) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  return CommandResultCode::success;
+                                });
+    interpreter.registerCommand(
                                 "screenshot",
                                 [](const std::vector<std::string> &args) {
                                   if (args.size() != 1) {
@@ -915,8 +931,25 @@ void GLApp::initScript(const std::vector<std::string>& args) {
                                     return CommandResultCode::callbackError;
                                 });
     interpreter.registerCommand(
+                                "setfpswindow",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 1) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  int window = std::stoi(args[0]);
+                                  if (window >= 1) {
+                                    glEnv.setFPSAccumulationInterval(uint64_t(window));
+                                    return CommandResultCode::success;
+                                  } else {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                });
+    interpreter.registerCommand(
                                 "clearlog",
                                 [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 0) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
                                   if (scriptLogFile.empty()) return CommandResultCode::success;
                                   std::filesystem::remove(std::filesystem::path{scriptLogFile});
                                   return CommandResultCode::success;
@@ -933,11 +966,23 @@ void GLApp::initScript(const std::vector<std::string>& args) {
     interpreter.registerCommand(
                                 "logtime",
                                 [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 0) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+
                                   auto now = std::chrono::system_clock::now();
                                   std::time_t t = std::chrono::system_clock::to_time_t(now);
                                   std::stringstream s;
-                                  s << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S");
-
+                                  #ifdef _WIN32
+                                    std::tm tm_buf{};
+                                    errno_t err = localtime_s(&tm_buf, &t);
+                                    if (err != 0) {
+                                      return CommandResultCode::callbackError;
+                                    }
+                                    s << std::put_time(&tm_buf, "%Y-%m-%d %H:%M:%S");
+                                  #else
+                                    s << std::put_time(std::localtime(&t), "%Y-%m-%d %H:%M:%S");
+                                  #endif
                                   if (writeScriptLog(s.str()))
                                     return CommandResultCode::success;
                                   else
@@ -980,6 +1025,9 @@ void GLApp::initScript(const std::vector<std::string>& args) {
     interpreter.registerCommand(
                                 "quit",
                                 [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 0) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
                                   closeWindow();
                                   return CommandResultCode::success;
                                 });
@@ -1001,3 +1049,25 @@ bool GLApp::writeScriptLog(const std::string& text) const {
   out << text << std::endl;
   return true;
 }
+
+
+#ifdef _WIN32
+#include <Windows.h>
+
+std::vector<std::string> getArgsWindows() {
+  int argc = 0;
+  LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+  std::vector<std::string> args;
+
+  if (argv) {
+    for (int i = 1; i < argc; ++i) {
+      int len = WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, nullptr, 0, nullptr, nullptr);
+      std::string s(len - 1, '\0');
+      WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, s.data(), len, nullptr, nullptr);
+      args.push_back(std::move(s));
+    }
+    LocalFree(argv);
+  }
+  return args;
+}
+#endif
