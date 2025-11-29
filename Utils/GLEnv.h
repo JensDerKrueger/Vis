@@ -43,16 +43,17 @@ public:
   void setResizeCallback(GLFWframebuffersizefun f);
 #endif
 
-
   Dimensions getFramebufferSize() const;
   Dimensions getWindowSize() const;
   bool shouldClose() const;
   void setClose();
   void beginOfFrame();
   void endOfFrame();
-  
+  void setSize(int width, int height);
+
   void setCursorMode(CursorMode mode);
 
+  void setFPSAccumulationInterval(uint64_t newAccumulationInterval);
   bool getFPSCounterStatus() const {return fpsCounter;}
   void setFPSCounterStatus(bool fpsCounter);
   double getFps() const {return currentFps;}
@@ -73,9 +74,10 @@ private:
   bool fpsCounter;
   std::shared_ptr<PerformanceTimer> timer = nullptr;
 
-  std::uint64_t accumulatedNanoseconds = 0;
-  std::uint32_t accumulatedFrames = 0;
-  double integratedFPS = 0.0;
+  uint64_t accumulatedNanoseconds{0};
+  uint32_t accumulatedFrames{0};
+  double integratedFPS{0.0};
+  uint64_t accumulationInterval{1};
 
   static void errorCallback(int error, const char* description);
   double updateIntegratedFPS(std::uint64_t nanoseconds);

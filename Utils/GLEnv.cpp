@@ -140,6 +140,14 @@ GLEnv::~GLEnv() {
   timer = nullptr;
 }
 
+void GLEnv::setFPSAccumulationInterval(uint64_t newAccumulationInterval) {
+  accumulationInterval = newAccumulationInterval;
+  accumulatedNanoseconds = 0;
+  accumulatedFrames = 0;
+  integratedFPS = 0;
+}
+
+
 void GLEnv::setSync(bool sync) {
   this->sync = sync;
 
@@ -191,13 +199,18 @@ void GLEnv::endOfFrame() {
   }
 }
 
-double GLEnv::updateIntegratedFPS(std::uint64_t nanoseconds) {
-  constexpr std::uint64_t oneSecondNs = 1000000000ull;
+void GLEnv::setSize(int width, int height) {
+#ifndef __EMSCRIPTEN__
+  glfwSetWindowSize(window, width, height);
+#endif
+}
 
+double GLEnv::updateIntegratedFPS(std::uint64_t nanoseconds) {
+  const std::uint64_t frameNs = accumulationInterval*1000000000ull;
   accumulatedNanoseconds += nanoseconds;
   accumulatedFrames += 1;
 
-  if (accumulatedNanoseconds >= oneSecondNs) {
+  if (accumulatedNanoseconds >= frameNs) {
     integratedFPS = static_cast<double>(accumulatedFrames) *
     1.0e9 /
     static_cast<double>(accumulatedNanoseconds);
