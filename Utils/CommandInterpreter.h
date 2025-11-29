@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <cctype>
+#include <chrono>
 
 enum class CommandResultCode {
   success = 0,
@@ -50,9 +51,12 @@ public:
   }
 
   CommandResultCode runBatch() {
-    if (noopCounter > 0) {
-      --noopCounter;
-      return CommandResultCode::waitingNoop;
+    if (noopActive) {
+      auto now = std::chrono::steady_clock::now();
+      if (now < noopUntil) {
+        return CommandResultCode::waitingNoop;
+      }
+      noopActive = false;
     }
 
     if (instructionIndex >= instructions.size()) {
@@ -94,16 +98,19 @@ public:
           return CommandResultCode::invalidArguments;
         }
         try {
-          int count = std::stoi(args[0]);
-          if (count < 0) {
-            count = 0;
+          long long milliseconds = std::stoll(args[0]);
+          if (milliseconds <= 0) {
+            ++instructionIndex;
+            continue;
           }
-          noopCounter = count;
+          auto now = std::chrono::steady_clock::now();
+          noopUntil = now + std::chrono::milliseconds(milliseconds);
+          noopActive = true;
         } catch (...) {
           return CommandResultCode::invalidArguments;
         }
         ++instructionIndex;
-        continue;
+        return CommandResultCode::waitingNoop;
       }
 
       auto it = commandMap.find(command);
@@ -132,7 +139,7 @@ public:
   void reset() {
     instructions.clear();
     instructionIndex = 0;
-    noopCounter = 0;
+    noopActive = false;
   }
 
 private:
@@ -145,7 +152,8 @@ private:
   UnknownCommandCallback unknownCommandHandler{nullptr};
   std::vector<Instruction> instructions;
   std::size_t instructionIndex{0};
-  int noopCounter{0};
+  bool noopActive{false};
+  std::chrono::steady_clock::time_point noopUntil{};
 
   static std::string trim(const std::string &text) {
     std::size_t start = 0;
@@ -176,7 +184,7 @@ private:
   CommandResultCode parseFromStream(std::istream &inStream) {
     instructions.clear();
     instructionIndex = 0;
-    noopCounter = 0;
+    noopActive = false;
 
     std::string line;
     bool lastWasSeparator = false;
