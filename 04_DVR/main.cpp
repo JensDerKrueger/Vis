@@ -1,16 +1,17 @@
 #include <GLApp.h>
 #include <Tesselation.h>
 #include <ArcBall.h>
-#include "Clipper.h"
 
+#include "Clipper.h"
 #include "QVis.h"
+#include "TransferFunction.h"
 
 class Raycaster : public GLApp {
 public:
     
-  Raycaster() : GLApp(512, 512, 1, "Raycaster") {}
-
-  virtual void animate(double animationTime) override {
+  Raycaster(std::vector<std::string> args) :
+  GLApp(512, 512, 1, "Raycaster", true, false, false, args)
+  {
   }
 
   void updateMatrices() {
@@ -20,7 +21,9 @@ public:
     minBounds = clipBox * Vec3{-0.5,-0.5,-0.5} + 0.5f;
     maxBounds = clipBox * Vec3{ 0.5, 0.5, 0.5} + 0.5f;
     model = Mat4::translation(0,0,zoom) * rotation * Mat4::scaling(volumeExtend);
-    modelViewProjection = projection * view * model * clipBox;
+    const Mat4 modelView = view * model * clipBox;
+
+    modelViewProjection = projection * modelView;
     viewToTexture = Mat4::translation({0.5f,0.5f,0.5f}) * Mat4::inverse(view * model);
     meshNeedsUpdte = true;
   }
@@ -38,15 +41,38 @@ public:
   }
 
   void loadVolume() {
-    volume = QVis{filenames[currentFile]}.volume;
-    voxelCount = Vec3{float(volume.width),float(volume.height),float(volume.depth)};
-    volumeExtend = volume.scale*voxelCount/float(volume.maxSize);
+    try {
+      volume = QVis{filenames[currentFile],false}.volume;
+    } catch (const QVisFileException& e) {
+      std::cout << "Cannot load volme:" << e.what() << std::endl;
+      return;
+    }
 
+    const Vec3 voxelCount = Vec3{float(volume.width),float(volume.height),float(volume.depth)};
+    volumeExtend = volume.scale*voxelCount/float(volume.maxSize);
     volumeTex.setData(volume.data,
                       uint32_t(volume.width),
                       uint32_t(volume.height),
                       uint32_t(volume.depth), 1);
+  }
 
+  void updateTransferFunction() {
+    transferFunction.smoothStep(TransferFunction::Channel::R, stepStart, stepWidth);
+    transferFunction.smoothStep(TransferFunction::Channel::G, stepStart, stepWidth);
+    transferFunction.smoothStep(TransferFunction::Channel::B, stepStart, stepWidth);
+    transferFunction.smoothStep(TransferFunction::Channel::A, stepStart, stepWidth);
+  }
+
+  virtual void reset() override {
+    rotation = Mat4{};
+    stepStart = 0.12f;
+    stepWidth = 0.1f;
+    updateTransferFunction();
+    zoom = 0.0f;
+    oversampling = 1.0f;
+    clipBoxSize = Vec3{1,1,1};
+    clipBoxShift = Vec3{0,0,0};
+    updateMatrices();
   }
 
   virtual void init() override {
@@ -55,7 +81,7 @@ public:
     vertCount = cube.getVertices().size();
     cubeArray.bind();
     vbCube.setData(cube.getVertices(), 3);
-    cubeArray.connectVertexAttrib(vbCube, cubeProgram, "vPos", 3);
+    cubeArray.connectVertexAttrib(vbCube, program, "vPos", 3);
 
     GL(glClearColor(0,0,0.5,1));
     GL(glClearDepth(1.0f));
@@ -66,34 +92,37 @@ public:
     GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     GL(glBlendEquation(GL_FUNC_ADD));
   }
-      
+
   virtual void resize(int width, int height) override {
-    projection = Mat4{ Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), near, 100) };
     const Dimensions dim = glEnv.getWindowSize();
     arcball.setWindowSize({dim.width,dim.height});
 
-    GL(glViewport(0, 0, GLsizei(width), GLsizei(height)));
+    const Dimensions fbdim = glEnv.getFramebufferSize();
+    projection = Mat4{ Mat4::perspective(45, fbdim.aspect(), near, 100) };
+
     updateMatrices();
   }
 
-  virtual void draw() override {
+  void setupShader() {
+    program.enable();
+    program.setTexture("volume",volumeTex,0);
+    program.setTexture("transfer",transferFunction.getTexture(),1);
+    program.setUniform("modelViewProjection", modelViewProjection);
+    program.setUniform("clip", clipBox);
+    program.setUniform("minBounds", minBounds);
+    program.setUniform("maxBounds", maxBounds);
+    program.setUniform("cameraPosInTextureSpace", (viewToTexture * Vec4{0,0,0,1}).xyz);
+    program.setUniform("oversampling", oversampling);
+
+  }
+
+  virtual void animate(double animationTime) override {
     clipCubeToNearplane();
+  }
 
+  virtual void draw() override {
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-
-    cubeProgram.enable();
-    cubeProgram.setTexture("volume",volumeTex,0);
-    cubeProgram.setUniform("modelViewProjection", modelViewProjection);
-    cubeProgram.setUniform("clip", clipBox);
-    cubeProgram.setUniform("minBounds", minBounds);
-    cubeProgram.setUniform("maxBounds", maxBounds);
-    cubeProgram.setUniform("cameraPosInTextureSpace", (viewToTexture * Vec4{0,0,0,1}).xyz);
-
-    cubeProgram.setUniform("voxelCount", voxelCount);
-    cubeProgram.setUniform("oversampling", oversampling);
-    cubeProgram.setUniform("smoothStepStart", stepStart);
-    cubeProgram.setUniform("smoothStepWidth", stepWidth);
-
+    setupShader();
     GL(glDrawArrays(GL_TRIANGLES, 0, GLsizei(vertCount)));
   }
   
@@ -120,14 +149,7 @@ public:
           glEnv.setTitle(ss.str());
           break;
         case GLENV_KEY_R:
-          rotation = Mat4{};
-          stepStart = 0.12f;
-          stepWidth = 0.1f;
-          zoom = 0.0f;
-          oversampling = 2.0f;
-          clipBoxSize = Vec3{1,1,1};
-          clipBoxShift = Vec3{0,0,0};
-          updateMatrices();
+          reset();
           break;
         case GLENV_KEY_UP:
           zoom += 0.1f;
@@ -195,6 +217,7 @@ public:
       
       stepStart += float(xDelta/dim.width);
       stepWidth += float(yDelta/dim.height);
+      updateTransferFunction();
     }
     
     if (leftMouseDown) {
@@ -222,10 +245,10 @@ private:
   Tesselation cube{Tesselation::genBrick({0, 0, 0}, {1, 1, 1}).unpack()};
   GLBuffer vbCube{GL_ARRAY_BUFFER};
   GLArray cubeArray;
-  GLProgram cubeProgram{GLProgram::createFromFile("cubeVS.glsl", "cubeFS.glsl")};
+  GLProgram program{GLProgram::createFromFile(SH("cubeVS.glsl"), SH("cubeFS.glsl"),"",true)};
   size_t vertCount;
   Volume volume;
-  Vec3 voxelCount;
+  TransferFunction transferFunction{256};
   Vec3 volumeExtend;
   GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_EDGE,
     GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE};
@@ -244,13 +267,13 @@ private:
   Vec3 clipBoxSize{1,1,1};
   Vec3 clipBoxShift{0,0,0};
 
-  float oversampling{2.0f};
+  float oversampling{1.0f};
   float near{0.1f};
   float zoom{0.0f};
 
   bool meshNeedsUpdte{true};
 
-  std::vector<std::string> filenames{"c60.dat","bonsai.dat"};
+  std::vector<std::string> filenames{"aneurism.dat","c60.dat","bonsai.dat"};
   size_t currentFile{0};
   float stepStart{0.12f};
   float stepWidth{0.1f};
@@ -261,31 +284,35 @@ private:
 
 };
 
+
 #ifdef _WIN32
 #include <Windows.h>
 
 INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
 #else
-int main(int argc, char** argv) {
+  int main(int argc, char** argv) {
+    std::vector<std::string> args{argv + 1, argv + argc};
 #endif
-  try {
-    Raycaster raycaster;
-    raycaster.run();
-  }
-  catch (const GLException& e) {
-    std::stringstream ss;
-    ss << "Insufficient OpenGL Support " << e.what();
+    try {
+      Raycaster raycaster{args};
+      raycaster.run();
+    }
+    catch (const GLException& e) {
+      std::stringstream ss;
+      ss << "Insufficient OpenGL Support " << e.what();
 #ifndef _WIN32
-    std::cerr << ss.str().c_str() << std::endl;
+      std::cerr << ss.str().c_str() << std::endl;
 #else
-    MessageBoxA(
-      NULL,
-      ss.str().c_str(),
-      "OpenGL Error",
-      MB_ICONERROR | MB_OK
-    );
+      MessageBoxA(
+                  NULL,
+                  ss.str().c_str(),
+                  "OpenGL Error",
+                  MB_ICONERROR | MB_OK
+                  );
 #endif
-    return EXIT_FAILURE;
+      return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
   }
-  return EXIT_SUCCESS;
-}
+
