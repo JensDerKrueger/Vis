@@ -305,8 +305,13 @@ void GLApp::setInteractionCallbacks() {
     glEnv.setResizeCallback(sizeCallback);
 #endif
   } else {
+#ifdef __EMSCRIPTEN__
+    glEnv.setMouseCallbacks(nullptr, nullptr, nullptr, nullptr, nullptr, this);
+    glEnv.setKeyCallback(nullptr, this);
+#else
     glEnv.setMouseCallbacks(nullptr, nullptr, nullptr);
     glEnv.setKeyCallbacks(nullptr, nullptr);
+#endif
   }
 }
 
