@@ -41,7 +41,7 @@ public:
   GLApp(uint32_t w=640, uint32_t h=480, uint32_t s=4,
         const std::string& title = "My OpenGL App",
         bool fpsCounter=true, bool sync=true, bool exactPixels=false,
-        std::vector<std::string> args = {});
+        const std::vector<std::string>& args = {});
   virtual ~GLApp();
   void run();
   void setAnimation(bool animationActive) {

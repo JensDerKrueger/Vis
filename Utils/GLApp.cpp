@@ -15,7 +15,7 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
              const std::string& title,
              bool fpsCounter, bool sync,
              bool exactPixels,
-             std::vector<std::string> args) :
+             const std::vector<std::string>& args) :
 #ifdef __EMSCRIPTEN__
   glEnv{w,h,s,title,fpsCounter,sync,exactPixels,3,0,true,},
 #else
