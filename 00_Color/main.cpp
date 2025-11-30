@@ -1,15 +1,16 @@
 #include <GLApp.h>
 #include <FontRenderer.h>
 
-class MyGLApp : public GLApp {
+class ColorPicker : public GLApp {
 public:
   Image image{640,480};
   FontRenderer fr{"helvetica_neue.bmp", "helvetica_neue.pos"};
   std::shared_ptr<FontEngine> fe{nullptr};
   std::string text;
 
-  MyGLApp() : GLApp{800,800,1,"Color Picker"} {}
-  
+  ColorPicker(const std::vector<std::string>& args) :
+  GLApp{800,800,1,"Color Picker", true, false, false, args} {}
+
   Vec3 convertPosFromHSVToRGB(float x, float y) {
     // TODO:
     // enter code here that interprets the mouse's
@@ -50,13 +51,16 @@ public:
 
 #ifdef _WIN32
 #include <Windows.h>
+
 INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
 #else
 int main(int argc, char** argv) {
+  std::vector<std::string> args{argv + 1, argv + argc};
 #endif
   try {
-    MyGLApp myApp;
-    myApp.run();
+    ColorPicker app{args};
+    app.run();
   }
   catch (const GLException& e) {
     std::stringstream ss;
@@ -65,13 +69,14 @@ int main(int argc, char** argv) {
     std::cerr << ss.str().c_str() << std::endl;
 #else
     MessageBoxA(
-      NULL,
-      ss.str().c_str(),
-      "OpenGL Error",
-      MB_ICONERROR | MB_OK
-    );
+                NULL,
+                ss.str().c_str(),
+                "OpenGL Error",
+                MB_ICONERROR | MB_OK
+                );
 #endif
     return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
 }
+

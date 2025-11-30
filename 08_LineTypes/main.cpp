@@ -4,7 +4,7 @@
 
 #include "Flowfield4D.h"
 
-class MyGLApp : public GLApp {
+class LineTypes : public GLApp {
 public:
   ArcBall arcball{{512, 512}};
   Mat4 rotation;
@@ -16,6 +16,9 @@ public:
   double angle{0};
   std::array<std::vector<float>,3> data;
   Flowfield4D flow = Flowfield4D::genDemo(128, {DemoType::SATTLE, DemoType::DRAIN, DemoType::CRITICAL});
+
+  LineTypes(const std::vector<std::string>& args) :
+  GLApp{800,800,1,"Flow Vis Demo 2", true, false, false, args} {}
 
   void updateTitle() {
     std::stringstream ss;
@@ -142,9 +145,35 @@ public:
     arcball.setWindowSize({dim.width,dim.height});
   }
 
-} myApp;
+};
 
-int main(int argc, char ** argv) {
-  myApp.run();
+#ifdef _WIN32
+#include <Windows.h>
+
+INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
+#else
+int main(int argc, char** argv) {
+  std::vector<std::string> args{argv + 1, argv + argc};
+#endif
+  try {
+    LineTypes app{args};
+    app.run();
+  }
+  catch (const GLException& e) {
+    std::stringstream ss;
+    ss << "Insufficient OpenGL Support " << e.what();
+#ifndef _WIN32
+    std::cerr << ss.str().c_str() << std::endl;
+#else
+    MessageBoxA(
+                NULL,
+                ss.str().c_str(),
+                "OpenGL Error",
+                MB_ICONERROR | MB_OK
+                );
+#endif
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
-}  
+}

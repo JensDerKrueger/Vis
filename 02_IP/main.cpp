@@ -5,11 +5,12 @@
 #include <bmp.h>
 #include <Grid2D.h>
 
-class GLIPApp : public GLApp {
+class ImageProcessing : public GLApp {
 public:
   Image image;
     
-  GLIPApp() : GLApp(512, 512, 4, "Image Processing")
+  ImageProcessing(const std::vector<std::string>& args) :
+  GLApp(512, 512, 4, "Image Processing", true, false, false, args)
   {
   }
   
@@ -105,27 +106,29 @@ public:
 #include <Windows.h>
 
 INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
 #else
-int main(int argc, char** argv) {
+  int main(int argc, char** argv) {
+    std::vector<std::string> args{argv + 1, argv + argc};
 #endif
-  try {
-    GLIPApp imageProcessing;
-    imageProcessing.run();
-  }
-  catch (const GLException& e) {
-    std::stringstream ss;
-    ss << "Insufficient OpenGL Support " << e.what();
+    try {
+      ImageProcessing app{args};
+      app.run();
+    }
+    catch (const GLException& e) {
+      std::stringstream ss;
+      ss << "Insufficient OpenGL Support " << e.what();
 #ifndef _WIN32
-    std::cerr << ss.str().c_str() << std::endl;
+      std::cerr << ss.str().c_str() << std::endl;
 #else
-    MessageBoxA(
-      NULL,
-      ss.str().c_str(),
-      "OpenGL Error",
-      MB_ICONERROR | MB_OK
-    );
+      MessageBoxA(
+                  NULL,
+                  ss.str().c_str(),
+                  "OpenGL Error",
+                  MB_ICONERROR | MB_OK
+                  );
 #endif
-    return EXIT_FAILURE;
+      return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
   }
-  return EXIT_SUCCESS;
-}

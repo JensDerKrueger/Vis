@@ -4,7 +4,7 @@
 
 #include "Flowfield.h"
 
-class MyGLApp : public GLApp {
+class ParticleTracer : public GLApp {
 public:
   size_t particleCount{1000};
   double lastAnimationTime{0};
@@ -15,8 +15,10 @@ public:
   Mat4 rotation;
   bool leftMouseDown{false};
 
+  ParticleTracer(const std::vector<std::string>& args) :
+  GLApp{800,800,1,"Flow Vis Demo 1 (Particle Tracing)", true, false, false, args} {}
+
   virtual void init() override {
-    glEnv.setTitle("Flow Vis Demo 1 (Particle Tracing)");
     GL(glDisable(GL_CULL_FACE));
     GL(glEnable(GL_DEPTH_TEST));
     GL(glClearColor(0,0,0,0));
@@ -97,9 +99,35 @@ public:
   }
 
 
-} myApp;
+};
 
-int main(int argc, char ** argv) {
-  myApp.run();
+#ifdef _WIN32
+#include <Windows.h>
+
+INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
+#else
+int main(int argc, char** argv) {
+  std::vector<std::string> args{argv + 1, argv + argc};
+#endif
+  try {
+    ParticleTracer app{args};
+    app.run();
+  }
+  catch (const GLException& e) {
+    std::stringstream ss;
+    ss << "Insufficient OpenGL Support " << e.what();
+#ifndef _WIN32
+    std::cerr << ss.str().c_str() << std::endl;
+#else
+    MessageBoxA(
+                NULL,
+                ss.str().c_str(),
+                "OpenGL Error",
+                MB_ICONERROR | MB_OK
+                );
+#endif
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
-}  
+}

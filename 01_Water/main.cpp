@@ -1,7 +1,7 @@
 #include <GLApp.h>
 #include <Grid2D.h>
 
-class GLIPApp : public GLApp {
+class WaterSurface : public GLApp {
 public:
   std::shared_ptr<Grid2D> last = std::make_shared<Grid2D>(512,512);
   std::shared_ptr<Grid2D> current = std::make_shared<Grid2D>(512,512);
@@ -13,8 +13,10 @@ public:
   const float dt = 0.05f;
   const float alpha = (c*c*dt*dt) / (dx*dx);
   const float beta  = 2.0f - 4.0f*alpha;
-    
-  GLIPApp() : GLApp(512, 512, 4, "Water Surface Simulation")
+
+  WaterSurface(const std::vector<std::string>& args) :
+  GLApp(512, 512, 4, "Water Surface Simulation",
+                    true, false, false, args)
   {
   }
      
@@ -78,12 +80,14 @@ public:
 #include <Windows.h>
 
 INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
 #else
 int main(int argc, char** argv) {
+  std::vector<std::string> args{argv + 1, argv + argc};
 #endif
   try {
-    GLIPApp imageProcessing;
-    imageProcessing.run();
+    WaterSurface app{args};
+    app.run();
   }
   catch (const GLException& e) {
     std::stringstream ss;
@@ -92,11 +96,11 @@ int main(int argc, char** argv) {
     std::cerr << ss.str().c_str() << std::endl;
 #else
     MessageBoxA(
-      NULL,
-      ss.str().c_str(),
-      "OpenGL Error",
-      MB_ICONERROR | MB_OK
-    );
+                NULL,
+                ss.str().c_str(),
+                "OpenGL Error",
+                MB_ICONERROR | MB_OK
+                );
 #endif
     return EXIT_FAILURE;
   }

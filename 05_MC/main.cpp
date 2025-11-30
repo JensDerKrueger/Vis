@@ -5,7 +5,7 @@
 #include "QVis.h"
 #include "MC.h"
 
-class MyGLApp : public GLApp {
+class MarchingCubes : public GLApp {
 public:
   std::vector<float> data;
   QVis q{"bonsai.dat"};
@@ -17,9 +17,10 @@ public:
   Mat4 rotation;
   bool leftMouseDown{false};
 
+  MarchingCubes(const std::vector<std::string>& args) :
+  GLApp{800,800,1,"Marching Cubes demo", true, false, false, args} {}
+
   virtual void init() override {
-    glEnv.setTitle("Marching Cubes demo");
-    glEnv.setSync(false);
     extractIsosurface();
   }
   
@@ -111,9 +112,35 @@ public:
     arcball.setWindowSize({dim.width,dim.height});
   }
 
-} myApp;
+};
 
-int main(int argc, char ** argv) {
-  myApp.run();
+#ifdef _WIN32
+#include <Windows.h>
+
+INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, INT nCmdShow) {
+  std::vector<std::string> args = getArgsWindows();
+#else
+int main(int argc, char** argv) {
+  std::vector<std::string> args{argv + 1, argv + argc};
+#endif
+  try {
+    MarchingCubes app{args};
+    app.run();
+  }
+  catch (const GLException& e) {
+    std::stringstream ss;
+    ss << "Insufficient OpenGL Support " << e.what();
+#ifndef _WIN32
+    std::cerr << ss.str().c_str() << std::endl;
+#else
+    MessageBoxA(
+                NULL,
+                ss.str().c_str(),
+                "OpenGL Error",
+                MB_ICONERROR | MB_OK
+                );
+#endif
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }
