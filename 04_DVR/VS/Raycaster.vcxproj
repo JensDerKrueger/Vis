@@ -22,10 +22,12 @@
     <ClCompile Include="..\Clipper.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\QVis.cpp" />
+    <ClCompile Include="..\TransferFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Clipper.h" />
     <ClInclude Include="..\QVis.h" />
+    <ClInclude Include="..\TransferFunction.h" />
     <ClInclude Include="..\Volume.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

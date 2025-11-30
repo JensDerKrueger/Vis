@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		563633512ED4960B0065EFAB /* PerformanceTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 563633502ED4960B0065EFAB /* PerformanceTimer.h */; };
+		563633592ED9BECD0065EFAB /* CommandInterpreter.h in Headers */ = {isa = PBXBuildFile; fileRef = 563633582ED9BECD0065EFAB /* CommandInterpreter.h */; };
+		5636335B2ED9BEE20065EFAB /* GLScreenshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 5636335A2ED9BEE20065EFAB /* GLScreenshot.h */; };
+		563633632EDC5CDF0065EFAB /* TransferFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 563633622EDC5CDD0065EFAB /* TransferFunction.cpp */; };
 		564DB9512C200EB00038D03D /* Clipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 564DB9492C200EAF0038D03D /* Clipper.cpp */; };
 		564DB9522C200EB00038D03D /* QVis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 564DB94E2C200EAF0038D03D /* QVis.cpp */; };
 		564DB9532C200EC70038D03D /* bonsai.dat in CopyFiles */ = {isa = PBXBuildFile; fileRef = 564DB9482C200EAF0038D03D /* bonsai.dat */; };
@@ -67,6 +71,8 @@
 		5694F4212AA9BB9F004CFC38 /* GLApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5694F3F02AA9BB9F004CFC38 /* GLApp.cpp */; };
 		5694F4222AA9BB9F004CFC38 /* ArcBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5694F3F12AA9BB9F004CFC38 /* ArcBall.cpp */; };
 		5694F4232AA9BB9F004CFC38 /* GLDepthBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 5694F3F22AA9BB9F004CFC38 /* GLDepthBuffer.h */; };
+		56A4A3FB2ED484DC002C78FF /* aneurism.dat in CopyFiles */ = {isa = PBXBuildFile; fileRef = 56A4A3F92ED484CB002C78FF /* aneurism.dat */; };
+		56A4A3FC2ED484DC002C78FF /* aneurism.raw in CopyFiles */ = {isa = PBXBuildFile; fileRef = 56A4A3FA2ED484CB002C78FF /* aneurism.raw */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +92,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
+				56A4A3FB2ED484DC002C78FF /* aneurism.dat in CopyFiles */,
+				56A4A3FC2ED484DC002C78FF /* aneurism.raw in CopyFiles */,
 				564DB9532C200EC70038D03D /* bonsai.dat in CopyFiles */,
 				564DB9542C200EC70038D03D /* bonsai.raw in CopyFiles */,
 				564DB9552C200EC70038D03D /* c60.dat in CopyFiles */,
@@ -101,6 +109,11 @@
 
 /* Begin PBXFileReference section */
 		560A43782AA9A43B00DB0F92 /* libUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		563633502ED4960B0065EFAB /* PerformanceTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PerformanceTimer.h; path = ../Utils/PerformanceTimer.h; sourceTree = SOURCE_ROOT; };
+		563633582ED9BECD0065EFAB /* CommandInterpreter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CommandInterpreter.h; path = ../Utils/CommandInterpreter.h; sourceTree = SOURCE_ROOT; };
+		5636335A2ED9BEE20065EFAB /* GLScreenshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLScreenshot.h; path = ../Utils/GLScreenshot.h; sourceTree = SOURCE_ROOT; };
+		563633602EDC5C850065EFAB /* TransferFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransferFunction.h; sourceTree = "<group>"; };
+		563633622EDC5CDD0065EFAB /* TransferFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TransferFunction.cpp; sourceTree = "<group>"; };
 		564DB9442C200EAF0038D03D /* c60.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = c60.raw; sourceTree = "<group>"; };
 		564DB9452C200EAF0038D03D /* Engine.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = Engine.raw; sourceTree = "<group>"; };
 		564DB9462C200EAF0038D03D /* Engine.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Engine.dat; sourceTree = "<group>"; };
@@ -164,6 +177,8 @@
 		5694F3F02AA9BB9F004CFC38 /* GLApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLApp.cpp; path = ../Utils/GLApp.cpp; sourceTree = "<group>"; };
 		5694F3F12AA9BB9F004CFC38 /* ArcBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ArcBall.cpp; path = ../Utils/ArcBall.cpp; sourceTree = "<group>"; };
 		5694F3F22AA9BB9F004CFC38 /* GLDepthBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLDepthBuffer.h; path = ../Utils/GLDepthBuffer.h; sourceTree = "<group>"; };
+		56A4A3F92ED484CB002C78FF /* aneurism.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = aneurism.dat; sourceTree = "<group>"; };
+		56A4A3FA2ED484CB002C78FF /* aneurism.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = aneurism.raw; sourceTree = "<group>"; };
 		A231F0FF25EAF61A00CBFC23 /* Raycaster */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raycaster; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -188,6 +203,10 @@
 		560A43732AA9A40400DB0F92 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				563633622EDC5CDD0065EFAB /* TransferFunction.cpp */,
+				563633602EDC5C850065EFAB /* TransferFunction.h */,
+				56A4A3F92ED484CB002C78FF /* aneurism.dat */,
+				56A4A3FA2ED484CB002C78FF /* aneurism.raw */,
 				5677394C25FB7BF000AB2341 /* main.cpp */,
 				564DB9482C200EAF0038D03D /* bonsai.dat */,
 				564DB94D2C200EAF0038D03D /* bonsai.raw */,
@@ -228,6 +247,8 @@
 				5694F3CD2AA9BB9F004CFC38 /* GLDebug.h */,
 				5694F3E62AA9BB9F004CFC38 /* GLDepthBuffer.cpp */,
 				5694F3F22AA9BB9F004CFC38 /* GLDepthBuffer.h */,
+				563633582ED9BECD0065EFAB /* CommandInterpreter.h */,
+				5636335A2ED9BEE20065EFAB /* GLScreenshot.h */,
 				5694F3C92AA9BB9F004CFC38 /* GLEnv.cpp */,
 				5694F3CB2AA9BB9F004CFC38 /* GLEnv.h */,
 				5694F3C42AA9BB9E004CFC38 /* GLFramebuffer.cpp */,
@@ -251,6 +272,7 @@
 				5694F3E32AA9BB9F004CFC38 /* PlanarMirror.cpp */,
 				5694F3C82AA9BB9F004CFC38 /* PlanarMirror.h */,
 				5694F3EA2AA9BB9F004CFC38 /* Quaternion.h */,
+				563633502ED4960B0065EFAB /* PerformanceTimer.h */,
 				5694F3D42AA9BB9F004CFC38 /* Rand.cpp */,
 				5694F3DF2AA9BB9F004CFC38 /* Rand.h */,
 				5694F3D22AA9BB9F004CFC38 /* Tesselation.cpp */,
@@ -298,6 +320,7 @@
 				5694F40F2AA9BB9F004CFC38 /* GLApp.h in Headers */,
 				5694F3F92AA9BB9F004CFC38 /* PlanarMirror.h in Headers */,
 				5694F41E2AA9BB9F004CFC38 /* GLArray.h in Headers */,
+				563633592ED9BECD0065EFAB /* CommandInterpreter.h in Headers */,
 				5694F4232AA9BB9F004CFC38 /* GLDepthBuffer.h in Headers */,
 				5694F3FB2AA9BB9F004CFC38 /* GLProgram.h in Headers */,
 				5694F3FC2AA9BB9F004CFC38 /* GLEnv.h in Headers */,
@@ -311,8 +334,10 @@
 				5694F40E2AA9BB9F004CFC38 /* GLTexture1D.h in Headers */,
 				5694F41D2AA9BB9F004CFC38 /* bmp.h in Headers */,
 				5694F4062AA9BB9F004CFC38 /* Tesselation.h in Headers */,
+				563633512ED4960B0065EFAB /* PerformanceTimer.h in Headers */,
 				5694F40B2AA9BB9F004CFC38 /* Image.h in Headers */,
 				5694F4152AA9BB9F004CFC38 /* GLBuffer.h in Headers */,
+				5636335B2ED9BEE20065EFAB /* GLScreenshot.h in Headers */,
 				5694F4042AA9BB9F004CFC38 /* OBJFile.h in Headers */,
 				5694F4112AA9BB9F004CFC38 /* Vec4.h in Headers */,
 			);
@@ -363,7 +388,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					560A43772AA9A43B00DB0F92 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -425,6 +450,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				563633632EDC5CDF0065EFAB /* TransferFunction.cpp in Sources */,
 				564DB9522C200EB00038D03D /* QVis.cpp in Sources */,
 				5677395325FB7BF000AB2341 /* main.cpp in Sources */,
 				564DB9512C200EB00038D03D /* Clipper.cpp in Sources */,
@@ -588,6 +614,7 @@
 					"-lnetwork",
 				);
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 			};
 			name = Debug;
 		};
@@ -680,6 +707,7 @@
 					"-lnetwork",
 				);
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 			};
 			name = Release;
 		};
