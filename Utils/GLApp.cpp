@@ -374,6 +374,7 @@ void GLApp::mainLoop() {
 
 void GLApp::run() {
   init();
+  reset();
   const Dimensions dim{ glEnv.getFramebufferSize() };
   resize(GLsizei(dim.width), GLsizei(dim.height));
 
@@ -903,6 +904,15 @@ void GLApp::initScript(const std::vector<std::string>& args) {
   const std::string scriptName = getScriptFilename(args);
   if (!scriptName.empty()) {
     scriptRunning = interpreter.loadFromFile(scriptName) == CommandResultCode::success;
+    interpreter.registerCommand(
+                                "reset",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 0) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  reset();
+                                  return CommandResultCode::success;
+                                });
     interpreter.registerCommand(
                                 "resize",
                                 [this](const std::vector<std::string> &args) {

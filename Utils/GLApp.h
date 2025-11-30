@@ -136,6 +136,7 @@ public:
   void setPointHighlightTexture(const Image& shape);
   void resetPointHighlightTexture();
 
+  virtual void reset() {}
   virtual void init() {}
   virtual void draw() {}
   virtual void animate(double animationTime) {}
