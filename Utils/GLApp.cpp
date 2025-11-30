@@ -270,19 +270,7 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
   resumeTime{0},
   animationActive{true}
 {
-#ifdef __EMSCRIPTEN__
-  glEnv.setMouseCallbacks(cursorPositionCallback, mouseButtonCallback,
-                          mouseButtonUpCallback, mouseButtonDownCallback,
-                          scrollCallback, this);
-  glEnv.setKeyCallback(keyCallback, this);
-  glEnv.setResizeCallback(sizeCallback, this);
-#else
-  staticAppPtr = this;
-  glEnv.setMouseCallbacks(cursorPositionCallback, mouseButtonCallback, scrollCallback);
-  glEnv.setKeyCallbacks(keyCallback, keyCharCallback);
-  glEnv.setResizeCallback(sizeCallback);
-#endif
-
+  setInteractionCallbacks();
   resetPointTexture();
   
   // setup a minimal shader and buffer
@@ -300,6 +288,26 @@ GLApp::GLApp(uint32_t w, uint32_t h, uint32_t s,
 }
 
 GLApp::~GLApp() {
+}
+
+void GLApp::setInteractionCallbacks() {
+  if (interaction) {
+#ifdef __EMSCRIPTEN__
+    glEnv.setMouseCallbacks(cursorPositionCallback, mouseButtonCallback,
+                            mouseButtonUpCallback, mouseButtonDownCallback,
+                            scrollCallback, this);
+    glEnv.setKeyCallback(keyCallback, this);
+    glEnv.setResizeCallback(sizeCallback, this);
+#else
+    staticAppPtr = this;
+    glEnv.setMouseCallbacks(cursorPositionCallback, mouseButtonCallback, scrollCallback);
+    glEnv.setKeyCallbacks(keyCallback, keyCharCallback);
+    glEnv.setResizeCallback(sizeCallback);
+#endif
+  } else {
+    glEnv.setMouseCallbacks(nullptr, nullptr, nullptr);
+    glEnv.setKeyCallbacks(nullptr, nullptr);
+  }
 }
 
 void GLApp::setPointTexture(const Image& shape) {
@@ -914,6 +922,21 @@ void GLApp::initScript(const std::vector<std::string>& args) {
                                   return CommandResultCode::success;
                                 });
     interpreter.registerCommand(
+                                "setinteraction",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 1) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  try {
+                                    float i = std::stoi(args[0]);
+                                    interaction = i != 0;
+                                    setInteractionCallbacks();
+                                  } catch (...) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  return CommandResultCode::success;
+                                });
+    interpreter.registerCommand(
                                 "resize",
                                 [this](const std::vector<std::string> &args) {
                                   if (args.size() != 2) {
@@ -931,11 +954,15 @@ void GLApp::initScript(const std::vector<std::string>& args) {
                                 });
     interpreter.registerCommand(
                                 "screenshot",
-                                [](const std::vector<std::string> &args) {
+                                [this](const std::vector<std::string> &args) {
                                   if (args.size() != 1) {
                                     return CommandResultCode::invalidArguments;
                                   }
-                                  if (GLScreenshot::saveBmp(args[0]))
+
+                                  std::filesystem::path base = logDir;
+                                  std::filesystem::path filePath = base / args[0];
+
+                                  if (GLScreenshot::saveBmp(filePath.string()))
                                     return CommandResultCode::success;
                                   else
                                     return CommandResultCode::callbackError;
@@ -961,7 +988,9 @@ void GLApp::initScript(const std::vector<std::string>& args) {
                                     return CommandResultCode::invalidArguments;
                                   }
                                   if (scriptLogFile.empty()) return CommandResultCode::success;
-                                  std::filesystem::remove(std::filesystem::path{scriptLogFile});
+                                  std::filesystem::path base = logDir;
+                                  std::filesystem::path filePath = base / scriptLogFile;
+                                  std::filesystem::remove(filePath);
                                   return CommandResultCode::success;
                                 });
     interpreter.registerCommand(
@@ -1033,6 +1062,20 @@ void GLApp::initScript(const std::vector<std::string>& args) {
                                     return CommandResultCode::callbackError;
                                 });
     interpreter.registerCommand(
+                                "setdir",
+                                [this](const std::vector<std::string> &args) {
+                                  if (args.size() != 1) {
+                                    return CommandResultCode::invalidArguments;
+                                  }
+                                  std::error_code ec;
+                                  std::filesystem::create_directories(args[0], ec);
+                                  if (ec) {
+                                    return CommandResultCode::callbackError;
+                                  }
+                                  logDir = args[0];
+                                  return CommandResultCode::success;
+                                });
+    interpreter.registerCommand(
                                 "quit",
                                 [this](const std::vector<std::string> &args) {
                                   if (args.size() != 0) {
@@ -1052,14 +1095,18 @@ void GLApp::initScript(const std::vector<std::string>& args) {
   }
 }
 
-bool GLApp::writeScriptLog(const std::string& text) const {
+bool GLApp::writeScriptLog(const std::string &text) const {
   if (scriptLogFile.empty()) return false;
-  std::ofstream out(scriptLogFile, std::ios::app);
+
+  std::filesystem::path base = logDir;
+  std::filesystem::path filePath = base / scriptLogFile;
+
+  std::ofstream out(filePath, std::ios::app);
   if (!out) return false;
+
   out << text << std::endl;
   return true;
 }
-
 
 #ifdef _WIN32
 #include <Windows.h>
