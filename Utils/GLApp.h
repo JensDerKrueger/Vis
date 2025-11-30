@@ -169,6 +169,8 @@ protected:
   float xMousePos;
   float yMousePos;
 #endif
+  std::string logDir{""};
+  bool interaction{true};
 
   void shaderUpdate();
 
@@ -353,6 +355,8 @@ private:
     }
   }
 #endif
+
+  void setInteractionCallbacks();
 
   void triangulate(const Vec3& p0,
                    const Vec3& p1, const Vec4& c1,
