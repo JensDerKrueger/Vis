@@ -51,8 +51,14 @@ public:
   void setUniform(const std::string& id, const Vec2& value) const;
   void setUniform(const std::string& id, const Vec3& value) const;
   void setUniform(const std::string& id, const Vec4& value) const;
+  void setUniform(const std::string& id, const std::vector<float>& value) const;
+  void setUniform(const std::string& id, const std::vector<Vec2>& value) const;
+  void setUniform(const std::string& id, const std::vector<Vec3>& value) const;
+  void setUniform(const std::string& id, const std::vector<Vec4>& value) const;
   void setUniform(const std::string& id, int value) const;
   void setUniform(const std::string& id, const Vec2i& value) const;
+  void setUniform(const std::string& id, const Vec3i& value) const;
+  void setUniform(const std::string& id, const Vec4i& value) const;
   void setUniform(const std::string& id, const Mat4& value, bool transpose=false) const;
   
 #ifndef __EMSCRIPTEN__
@@ -65,6 +71,7 @@ public:
   void setUniform(GLint id, const Vec2& value) const;
 	void setUniform(GLint id, const Vec3& value) const;
   void setUniform(GLint id, const Vec4& value) const;
+
   void setUniform(GLint id, int value) const;
   void setUniform(GLint id, const Vec2i& value) const;
   void setUniform(GLint id, const Vec3i& value) const;

@@ -310,7 +310,6 @@ void GLProgram::setUniform(const std::string& id, const Mat4& value, bool transp
   setUniform(getUniformLocation(id), value, transpose);
 }
 
-
 #ifndef __EMSCRIPTEN__
 void GLProgram::setTexture(const std::string& id, const GLTexture1D& texture, GLenum unit) const {
   setTexture(getUniformLocation(id), texture, unit);
@@ -323,4 +322,32 @@ void GLProgram::setTexture(const std::string& id, const GLTexture2D& texture, GL
 
 void GLProgram::setTexture(const std::string& id, const GLTexture3D& texture, GLenum unit) const {
   setTexture(getUniformLocation(id), texture, unit);
+}
+
+void GLProgram::setUniform(const std::string& id, const Vec3i& value) const {
+  setUniform(getUniformLocation(id), value);
+}
+
+void GLProgram::setUniform(const std::string& id, const Vec4i& value) const {
+  setUniform(getUniformLocation(id), value);
+}
+
+void GLProgram::setUniform(const std::string& id,
+                           const std::vector<float>& value) const {
+  setUniform(getUniformLocation(id), value);
+}
+
+void GLProgram::setUniform(const std::string& id,
+                           const std::vector<Vec2>& value) const{
+  setUniform(getUniformLocation(id), value);
+}
+
+void GLProgram::setUniform(const std::string& id,
+                           const std::vector<Vec3>& value) const{
+  setUniform(getUniformLocation(id), value);
+}
+
+void GLProgram::setUniform(const std::string& id,
+                           const std::vector<Vec4>& value) const{
+  setUniform(getUniformLocation(id), value);
 }
