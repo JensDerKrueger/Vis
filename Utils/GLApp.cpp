@@ -368,10 +368,10 @@ void GLApp::mainLoop() {
   if (animationActive) {
     animate(emscripten_performance_now()/1000.0-startTime);
   }
-  processScript();
   glEnv.beginOfFrame();
   draw();
   glEnv.endOfFrame();
+  processScript();
 #else
   do {
     if (animationActive) {
@@ -960,12 +960,20 @@ void GLApp::initScript(const std::vector<std::string>& args) {
     interpreter.registerCommand(
                                 "screenshot",
                                 [this](const std::vector<std::string> &args) {
-                                  if (args.size() != 1) {
+                                  if (args.size() > 2) {
                                     return CommandResultCode::invalidArguments;
                                   }
 
+                                  std::filesystem::path filePath;
                                   std::filesystem::path base = logDir;
-                                  std::filesystem::path filePath = base / args[0];
+                                  if (args.size()) {
+                                    filePath = base / args[0];
+                                  } else {
+                                    static uint32_t imageCounter = 0;
+                                    std::stringstream ss;
+                                    ss << "screenshot-" << std::setw(4) << std::setfill('0') << imageCounter++ << ".bmp";
+                                    filePath = base / ss.str();
+                                  }
 
                                   if (GLScreenshot::saveBmp(filePath.string()))
                                     return CommandResultCode::success;
