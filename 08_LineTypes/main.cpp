@@ -139,10 +139,10 @@ public:
       arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
     }
   }
-
-  virtual void resize(int width, int height) override {
-    const Dimensions dim = glEnv.getWindowSize();
-    arcball.setWindowSize({dim.width,dim.height});
+  
+  virtual void resize(const Dimensions winDim, const Dimensions fbDim) override {
+    GLApp::resize(winDim, fbDim);
+    arcball.setWindowSize({winDim.width,winDim.height});
   }
 
 };

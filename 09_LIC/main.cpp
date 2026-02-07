@@ -17,7 +17,6 @@ public:
   virtual void init() override {
     GL(glDisable(GL_CULL_FACE));
     GL(glDisable(GL_DEPTH_TEST));
-    GL(glClearColor(0,0,0,0));
     computeLIC();
   }
   
@@ -27,7 +26,6 @@ public:
   }
   
   virtual void draw() override {
-    GL(glClear(GL_COLOR_BUFFER_BIT));
     drawImage(licImage);
   }
   

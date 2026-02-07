@@ -21,7 +21,6 @@ public:
   virtual void init() override {
     GL(glDisable(GL_CULL_FACE));
     GL(glEnable(GL_DEPTH_TEST));
-    GL(glClearColor(0,0,0,0));
     initParticles();
   }
 
@@ -58,16 +57,14 @@ public:
   }
   
   virtual void draw() override {
-    GL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
     setDrawProjection(Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), 0.0001f, 100));
     setDrawTransform(Mat4::lookAt({0,0,5},{0,0,0},{0,1,0}) * rotation);
-    
     drawPoints(data, 4, false);
   }
   
-  virtual void resize(int width, int height) override {
-    const Dimensions dim = glEnv.getWindowSize();
-    arcball.setWindowSize({dim.width,dim.height});
+  virtual void resize(const Dimensions winDim, const Dimensions fbDim) override {
+    GLApp::resize(winDim, fbDim);
+    arcball.setWindowSize({winDim.width,winDim.height});
   }
 
   virtual void mouseMove(double xPosition, double yPosition) override {
@@ -97,8 +94,6 @@ public:
       }
     }
   }
-
-
 };
 
 #ifdef _WIN32

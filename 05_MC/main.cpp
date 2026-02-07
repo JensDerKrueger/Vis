@@ -22,6 +22,8 @@ public:
 
   virtual void init() override {
     extractIsosurface();
+    GL(glDisable(GL_CULL_FACE));
+    GL(glEnable(GL_DEPTH_TEST));
   }
   
   void extractIsosurface() {
@@ -45,11 +47,6 @@ public:
   }
   
   virtual void draw() override {
-    GL(glDisable(GL_CULL_FACE));
-    GL(glEnable(GL_DEPTH_TEST));
-    GL(glClearColor(0,0,0,1));
-
-    GL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
     setDrawProjection(Mat4::perspective(45, glEnv.getFramebufferSize().aspect(), 0.0001f, 100));
     setDrawTransform(Mat4::lookAt({0,0,eye},{0,0,0},{0,1,0}) * rotation);
 
@@ -107,11 +104,10 @@ public:
     }
   }
 
-  virtual void resize(int width, int height) override {
-    const Dimensions dim = glEnv.getWindowSize();
-    arcball.setWindowSize({dim.width,dim.height});
+  virtual void resize(const Dimensions winDim, const Dimensions fbDim) override {
+    GLApp::resize(winDim, fbDim);
+    arcball.setWindowSize({winDim.width,winDim.height});
   }
-
 };
 
 #ifdef _WIN32
