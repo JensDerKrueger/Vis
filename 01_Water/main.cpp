@@ -57,7 +57,7 @@ public:
     static float value = 1.0f;
     Dimensions s = glEnv.getWindowSize();
     if (xPosition < 0 || xPosition > s.width || yPosition < 0 || yPosition > s.height) return;
-    if (button == GLFW_MOUSE_BUTTON_LEFT && state == GLFW_PRESS) {
+    if (button == GLENV_MOUSE_BUTTON_LEFT && state == GLENV_MOUSE_PRESS) {
       current->setValue(uint32_t(current->getWidth()*float(xPosition/s.width)),
                         uint32_t(current->getHeight()*float(1.0-yPosition/s.height)), value);
       value = -1.0f * value;
@@ -65,9 +65,9 @@ public:
   }
   
   virtual void keyboard(int key, int scancode, int action, int mods) override {
-    if (action == GLFW_PRESS) {
+    if (action == GLENV_PRESS) {
       switch (key) {
-        case GLFW_KEY_ESCAPE :
+        case GLENV_KEY_ESCAPE :
           closeWindow();
           break;
       }
