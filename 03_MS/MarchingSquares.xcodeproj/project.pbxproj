@@ -11,9 +11,11 @@
 		5626C10B2F377976002EEEA2 /* GLTextureCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5626C1092F377976002EEEA2 /* GLTextureCube.cpp */; };
 		5626C10C2F377976002EEEA2 /* GLTextureCube.h in Headers */ = {isa = PBXBuildFile; fileRef = 5626C1082F377976002EEEA2 /* GLTextureCube.h */; };
 		5626C10D2F377976002EEEA2 /* CommandInterpreter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5626C1062F377976002EEEA2 /* CommandInterpreter.h */; };
+		5626C1122F3795F1002EEEA2 /* image.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5626C1102F3795DB002EEEA2 /* image.bmp */; };
+		5626C1132F3795F1002EEEA2 /* image_small.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5626C1112F3795DB002EEEA2 /* image_small.bmp */; };
+		5626C1192F3796B9002EEEA2 /* GLTextureCube.h in Headers */ = {isa = PBXBuildFile; fileRef = 5626C1162F3796B9002EEEA2 /* GLTextureCube.h */; };
+		5626C11B2F3796B9002EEEA2 /* GLTextureCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5626C1172F3796B9002EEEA2 /* GLTextureCube.cpp */; };
 		564DB9412C200D640038D03D /* MS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 564DB93F2C200D640038D03D /* MS.cpp */; };
-		564DB9422C200D7B0038D03D /* image_small.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 564DB93D2C200D640038D03D /* image_small.bmp */; };
-		564DB9432C200D7B0038D03D /* image.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 564DB93C2C200D640038D03D /* image.bmp */; };
 		5677395325FB7BF000AB2341 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5677394C25FB7BF000AB2341 /* main.cpp */; };
 		5694F3F32AA9BB9F004CFC38 /* GLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5694F3C22AA9BB9E004CFC38 /* GLBuffer.cpp */; };
 		5694F3F42AA9BB9F004CFC38 /* GLDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5694F3C32AA9BB9E004CFC38 /* GLDebug.cpp */; };
@@ -79,8 +81,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				564DB9422C200D7B0038D03D /* image_small.bmp in CopyFiles */,
-				564DB9432C200D7B0038D03D /* image.bmp in CopyFiles */,
+				5626C1122F3795F1002EEEA2 /* image.bmp in CopyFiles */,
+				5626C1132F3795F1002EEEA2 /* image_small.bmp in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,8 +94,10 @@
 		5626C1072F377976002EEEA2 /* CommandInterpreter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CommandInterpreter.cpp; path = ../Utils/CommandInterpreter.cpp; sourceTree = SOURCE_ROOT; };
 		5626C1082F377976002EEEA2 /* GLTextureCube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLTextureCube.h; path = ../Utils/GLTextureCube.h; sourceTree = SOURCE_ROOT; };
 		5626C1092F377976002EEEA2 /* GLTextureCube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GLTextureCube.cpp; path = ../Utils/GLTextureCube.cpp; sourceTree = SOURCE_ROOT; };
-		564DB93C2C200D640038D03D /* image.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = image.bmp; sourceTree = "<group>"; };
-		564DB93D2C200D640038D03D /* image_small.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = image_small.bmp; sourceTree = "<group>"; };
+		5626C1102F3795DB002EEEA2 /* image.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = image.bmp; path = Datasets/image.bmp; sourceTree = "<group>"; };
+		5626C1112F3795DB002EEEA2 /* image_small.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = image_small.bmp; path = Datasets/image_small.bmp; sourceTree = "<group>"; };
+		5626C1162F3796B9002EEEA2 /* GLTextureCube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLTextureCube.h; path = ../Utils/GLTextureCube.h; sourceTree = SOURCE_ROOT; };
+		5626C1172F3796B9002EEEA2 /* GLTextureCube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GLTextureCube.cpp; path = ../Utils/GLTextureCube.cpp; sourceTree = SOURCE_ROOT; };
 		564DB93E2C200D640038D03D /* MS.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MS.inl; sourceTree = "<group>"; };
 		564DB93F2C200D640038D03D /* MS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MS.cpp; sourceTree = "<group>"; };
 		564DB9402C200D640038D03D /* MS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS.h; sourceTree = "<group>"; };
@@ -167,11 +171,11 @@
 		560A43732AA9A40400DB0F92 /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				564DB93D2C200D640038D03D /* image_small.bmp */,
-				564DB93C2C200D640038D03D /* image.bmp */,
 				564DB93F2C200D640038D03D /* MS.cpp */,
 				564DB9402C200D640038D03D /* MS.h */,
 				564DB93E2C200D640038D03D /* MS.inl */,
+				5626C1102F3795DB002EEEA2 /* image.bmp */,
+				5626C1112F3795DB002EEEA2 /* image_small.bmp */,
 				5677394C25FB7BF000AB2341 /* main.cpp */,
 			);
 			name = Application;
@@ -182,6 +186,8 @@
 			children = (
 				5694F3F12AA9BB9F004CFC38 /* ArcBall.cpp */,
 				5694F3C52AA9BB9E004CFC38 /* ArcBall.h */,
+				5626C1162F3796B9002EEEA2 /* GLTextureCube.h */,
+				5626C1172F3796B9002EEEA2 /* GLTextureCube.cpp */,
 				5626C1062F377976002EEEA2 /* CommandInterpreter.h */,
 				5626C1072F377976002EEEA2 /* CommandInterpreter.cpp */,
 				5626C1082F377976002EEEA2 /* GLTextureCube.h */,
@@ -277,6 +283,7 @@
 				5694F3FF2AA9BB9F004CFC38 /* GLTexture2D.h in Headers */,
 				5694F41F2AA9BB9F004CFC38 /* Grid2D.h in Headers */,
 				5694F4012AA9BB9F004CFC38 /* GLTexture3D.h in Headers */,
+				5626C1192F3796B9002EEEA2 /* GLTextureCube.h in Headers */,
 				5694F41B2AA9BB9F004CFC38 /* Quaternion.h in Headers */,
 				5694F3F62AA9BB9F004CFC38 /* ArcBall.h in Headers */,
 				5694F40E2AA9BB9F004CFC38 /* GLTexture1D.h in Headers */,
@@ -375,6 +382,7 @@
 				5694F4132AA9BB9F004CFC38 /* FontRenderer.cpp in Sources */,
 				5694F3F42AA9BB9F004CFC38 /* GLDebug.cpp in Sources */,
 				5694F4182AA9BB9F004CFC38 /* OBJFile.cpp in Sources */,
+				5626C11B2F3796B9002EEEA2 /* GLTextureCube.cpp in Sources */,
 				5694F4032AA9BB9F004CFC38 /* Tesselation.cpp in Sources */,
 				5694F4172AA9BB9F004CFC38 /* GLDepthBuffer.cpp in Sources */,
 				5694F3FA2AA9BB9F004CFC38 /* GLEnv.cpp in Sources */,

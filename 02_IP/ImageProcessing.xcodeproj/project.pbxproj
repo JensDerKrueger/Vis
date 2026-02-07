@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		561C54372BDF803C003BABCF /* lenna.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 561C54362BDF802D003BABCF /* lenna.bmp */; };
 		5626C1022F377804002EEEA2 /* CommandInterpreter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5626C0FE2F377804002EEEA2 /* CommandInterpreter.h */; };
 		5626C1032F377804002EEEA2 /* GLTextureCube.h in Headers */ = {isa = PBXBuildFile; fileRef = 5626C1002F377804002EEEA2 /* GLTextureCube.h */; };
 		5626C1042F377804002EEEA2 /* GLTextureCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5626C1012F377804002EEEA2 /* GLTextureCube.cpp */; };
 		5626C1052F377804002EEEA2 /* CommandInterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5626C0FF2F377804002EEEA2 /* CommandInterpreter.cpp */; };
+		5626C10F2F379559002EEEA2 /* lenna.bmp in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5626C10E2F37954F002EEEA2 /* lenna.bmp */; };
 		5677395325FB7BF000AB2341 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5677394C25FB7BF000AB2341 /* main.cpp */; };
 		5694F3F32AA9BB9F004CFC38 /* GLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5694F3C22AA9BB9E004CFC38 /* GLBuffer.cpp */; };
 		5694F3F42AA9BB9F004CFC38 /* GLDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5694F3C32AA9BB9E004CFC38 /* GLDebug.cpp */; };
@@ -77,7 +77,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				561C54372BDF803C003BABCF /* lenna.bmp in CopyFiles */,
+				5626C10F2F379559002EEEA2 /* lenna.bmp in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,11 +85,11 @@
 
 /* Begin PBXFileReference section */
 		560A43782AA9A43B00DB0F92 /* libUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		561C54362BDF802D003BABCF /* lenna.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = lenna.bmp; sourceTree = "<group>"; };
 		5626C0FE2F377804002EEEA2 /* CommandInterpreter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CommandInterpreter.h; path = ../Utils/CommandInterpreter.h; sourceTree = SOURCE_ROOT; };
 		5626C0FF2F377804002EEEA2 /* CommandInterpreter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CommandInterpreter.cpp; path = ../Utils/CommandInterpreter.cpp; sourceTree = SOURCE_ROOT; };
 		5626C1002F377804002EEEA2 /* GLTextureCube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLTextureCube.h; path = ../Utils/GLTextureCube.h; sourceTree = SOURCE_ROOT; };
 		5626C1012F377804002EEEA2 /* GLTextureCube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GLTextureCube.cpp; path = ../Utils/GLTextureCube.cpp; sourceTree = SOURCE_ROOT; };
+		5626C10E2F37954F002EEEA2 /* lenna.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; name = lenna.bmp; path = Datasets/lenna.bmp; sourceTree = "<group>"; };
 		5677394C25FB7BF000AB2341 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5694F3C22AA9BB9E004CFC38 /* GLBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLBuffer.cpp; path = ../Utils/GLBuffer.cpp; sourceTree = "<group>"; };
 		5694F3C32AA9BB9E004CFC38 /* GLDebug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLDebug.cpp; path = ../Utils/GLDebug.cpp; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				5677394C25FB7BF000AB2341 /* main.cpp */,
-				561C54362BDF802D003BABCF /* lenna.bmp */,
+				5626C10E2F37954F002EEEA2 /* lenna.bmp */,
 			);
 			name = Application;
 			sourceTree = "<group>";

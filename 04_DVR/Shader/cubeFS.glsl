@@ -1,5 +1,3 @@
-#version 410
-
 in vec3 entryPoint;
 out vec4 result;
 

@@ -83,8 +83,6 @@ public:
     vbCube.setData(cube.getVertices(), 3);
     cubeArray.connectVertexAttrib(vbCube, program, "vPos", 3);
 
-    GL(glClearColor(0,0,0.5,1));
-    GL(glClearDepth(1.0f));
     GL(glEnable(GL_DEPTH_TEST));
     GL(glEnable(GL_CULL_FACE));
     GL(glCullFace(GL_BACK));
@@ -93,13 +91,11 @@ public:
     GL(glBlendEquation(GL_FUNC_ADD));
   }
 
-  virtual void resize(int width, int height) override {
-    const Dimensions dim = glEnv.getWindowSize();
-    arcball.setWindowSize({dim.width,dim.height});
+  virtual void resize(const Dimensions winDim, const Dimensions fbDim) override {
+    GLApp::resize(winDim, fbDim);
 
-    const Dimensions fbdim = glEnv.getFramebufferSize();
-    projection = Mat4{ Mat4::perspective(45, fbdim.aspect(), near, 100) };
-
+    arcball.setWindowSize({winDim.width,winDim.height});
+    projection = Mat4{ Mat4::perspective(45, fbDim.aspect(), near, 100) };
     updateMatrices();
   }
 
@@ -121,7 +117,6 @@ public:
   }
 
   virtual void draw() override {
-    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     setupShader();
     GL(glDrawArrays(GL_TRIANGLES, 0, GLsizei(vertCount)));
   }
@@ -245,7 +240,7 @@ private:
   Tesselation cube{Tesselation::genBrick({0, 0, 0}, {1, 1, 1}).unpack()};
   GLBuffer vbCube{GL_ARRAY_BUFFER};
   GLArray cubeArray;
-  GLProgram program{GLProgram::createFromFile(SH("cubeVS.glsl"), SH("cubeFS.glsl"),"",true)};
+  GLProgram program{GLProgram::createFromFile("cubeVS.glsl", "cubeFS.glsl","",true, true)};
   size_t vertCount;
   Volume volume;
   TransferFunction transferFunction{256};

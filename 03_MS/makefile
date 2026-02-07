@@ -71,6 +71,6 @@ mrproper: clean
 emscripten:
 	@mkdir -p $(WEBOUTDIR)
 	em++ $(SRC) ../Utils/GLEnv.cpp ../Utils/GLApp.cpp ../Utils/GLDebug.cpp ../Utils/Image.cpp ../Utils/GLProgram.cpp ../Utils/GLArray.cpp ../Utils/GLBuffer.cpp ../Utils/GLTexture2D.cpp ../Utils/CommandInterpreter.cpp ../Utils/FontRenderer.cpp ../Utils/BMP.cpp ../Utils/Grid2D.cpp \
-	$(EM_PRELOAD_ARGS) --preload-file image.bmp	--preload-file image_small.bmp \
+	$(EM_PRELOAD_ARGS) \
 		-o $(WEBHTML) \
 		-s ALLOW_MEMORY_GROWTH=1 -D__EMSCRIPTEN__=1 -s USE_WEBGL2=1 -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s USE_GLFW=3 -s FULL_ES3=1 -O2 -I. -I../Utils -O3 -DNDEBUG

@@ -1,5 +1,3 @@
-#version 410
-
 uniform mat4 modelViewProjection;
 uniform mat4 clip;
 in vec3 vPos;

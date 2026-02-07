@@ -19,7 +19,6 @@ public:
   virtual void init() override {
     GL(glDisable(GL_CULL_FACE));
     GL(glDisable(GL_DEPTH_TEST));
-    GL(glClearColor(0,0,0,0));
     GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     GL(glBlendEquation(GL_FUNC_ADD));
     GL(glEnable(GL_BLEND));
@@ -71,7 +70,6 @@ public:
   }
   
   virtual void draw() override {
-    GL(glClear(GL_COLOR_BUFFER_BIT));
     drawImage(images[currentImage]);
     if (drawGridLines) drawLines(grid, LineDrawType::LIST, 2);
     drawLines(data, LineDrawType::LIST, 2);
