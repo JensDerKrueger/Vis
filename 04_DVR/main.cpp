@@ -48,7 +48,7 @@ public:
       return;
     }
 
-    const Vec3 voxelCount = Vec3{float(volume.width),float(volume.height),float(volume.depth)};
+    voxelCount = Vec3{float(volume.width),float(volume.height),float(volume.depth)};
     volumeExtend = volume.scale*voxelCount/float(volume.maxSize);
     volumeTex.setData(volume.data,
                       uint32_t(volume.width),
@@ -89,6 +89,7 @@ public:
     GL(glEnable(GL_BLEND));
     GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     GL(glBlendEquation(GL_FUNC_ADD));
+    setBackground(0,0,1,1);
   }
 
   virtual void resize(const Dimensions winDim, const Dimensions fbDim) override {
@@ -107,6 +108,7 @@ public:
     program.setUniform("clip", clipBox);
     program.setUniform("minBounds", minBounds);
     program.setUniform("maxBounds", maxBounds);
+    program.setUniform("voxelCount", voxelCount);
     program.setUniform("cameraPosInTextureSpace", (viewToTexture * Vec4{0,0,0,1}).xyz);
     program.setUniform("oversampling", oversampling);
 
@@ -244,6 +246,7 @@ private:
   size_t vertCount;
   Volume volume;
   TransferFunction transferFunction{256};
+  Vec3 voxelCount;
   Vec3 volumeExtend;
   GLTexture3D volumeTex{GL_LINEAR, GL_LINEAR,GL_CLAMP_TO_EDGE,
     GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE};

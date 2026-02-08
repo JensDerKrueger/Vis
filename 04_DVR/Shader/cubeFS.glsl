@@ -8,6 +8,7 @@ uniform float oversampling;
 uniform vec3 cameraPosInTextureSpace;
 uniform vec3 minBounds;
 uniform vec3 maxBounds;
+uniform vec3 voxelCount;
 
 vec4 transferFunction(float v) {
   return texture(transfer, v);
@@ -21,16 +22,16 @@ vec4 under(vec4 current, vec4 last) {
 
 bool inBounds(vec3 pos) {
   return pos.x >= minBounds.x && pos.y >= minBounds.y && pos.z >= minBounds.z &&
-  pos.x <= maxBounds.x && pos.y <= maxBounds.y && pos.z <= maxBounds.z;
+         pos.x <= maxBounds.x && pos.y <= maxBounds.y && pos.z <= maxBounds.z;
 }
 
 void main() {
+  // compute vector to camera in texture space  
   vec3 rayDirectionInTextureSpace = normalize(entryPoint-cameraPosInTextureSpace);
 
   // compute delta
-  vec3 voxelCount = vec3(textureSize(volume,0));
   float samples = dot(abs(rayDirectionInTextureSpace),voxelCount);
-  float opacityCorrection = 100/(samples*oversampling);
+  float opacityCorrection = 100.0/(samples*oversampling);
   vec3 delta = rayDirectionInTextureSpace/(samples*oversampling);
 
   vec3 currentPoint = entryPoint;
