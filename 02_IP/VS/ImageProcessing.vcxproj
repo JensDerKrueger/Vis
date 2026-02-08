@@ -33,26 +33,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -76,15 +76,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -105,8 +109,8 @@
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,8 +134,8 @@ XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -153,8 +157,8 @@ XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -178,8 +182,8 @@ XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

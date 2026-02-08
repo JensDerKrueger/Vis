@@ -23,7 +23,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Flowfield.h">
+    <ClInclude Include="..\Flowfield4D.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

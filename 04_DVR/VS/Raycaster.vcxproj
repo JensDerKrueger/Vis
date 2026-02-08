@@ -42,26 +42,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -85,15 +85,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -114,14 +118,14 @@
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,14 +149,14 @@ XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,14 +178,14 @@ XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -205,14 +209,14 @@ XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </Link>
     <PostBuildEvent>
       <Message>Copying Resources</Message>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.glsl" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.dat" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.raw" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Shader\*.glsl" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.dat" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\Datasets\*.raw" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

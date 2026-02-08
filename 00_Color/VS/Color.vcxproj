@@ -39,26 +39,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -82,15 +82,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir)bin\$(PlatformTarget)-$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -110,10 +114,10 @@
       </IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Resources are copied to the build directory ...</Message>
@@ -139,10 +143,10 @@ XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
       <AdditionalLibraryDirectories>../../VS/lib/Win32;$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Resources are copied to the build directory ...</Message>
@@ -166,10 +170,10 @@ XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
       </IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Resources are copied to the build directory ...</Message>
@@ -195,10 +199,10 @@ XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
       <AdditionalDependencies>utils.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(ProjectDir)..\*.bmp" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(OutDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.bmp" "$(ProjectDir)*.*" /Y
-XCOPY "$(ProjectDir)..\*.pos" "$(ProjectDir)*.*" /Y</Command>
+      <Command>XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(OutDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.bmp" "$(ProjectDir)*.*" /Y
+XCOPY "$(ProjectDir)..\..\Utils\*.pos" "$(ProjectDir)*.*" /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Resources are copied to the build directory ...</Message>
