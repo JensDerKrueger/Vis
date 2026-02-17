@@ -2,6 +2,8 @@
 #include <Tesselation.h>
 #include <ArcBall.h>
 
+#include <filesystem>
+
 #include "Clipper.h"
 #include "QVis.h"
 #include "TransferFunction.h"
@@ -82,13 +84,6 @@ public:
     cubeArray.bind();
     vbCube.setData(cube.getVertices(), 3);
     cubeArray.connectVertexAttrib(vbCube, program, "vPos", 3);
-
-    GL(glEnable(GL_DEPTH_TEST));
-    GL(glEnable(GL_CULL_FACE));
-    GL(glCullFace(GL_BACK));
-    GL(glEnable(GL_BLEND));
-    GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-    GL(glBlendEquation(GL_FUNC_ADD));
     setBackground(0,0,1,1);
   }
 
@@ -111,7 +106,6 @@ public:
     program.setUniform("voxelCount", voxelCount);
     program.setUniform("cameraPosInTextureSpace", (viewToTexture * Vec4{0,0,0,1}).xyz);
     program.setUniform("oversampling", oversampling);
-
   }
 
   virtual void animate(double animationTime) override {
@@ -119,10 +113,62 @@ public:
   }
 
   virtual void draw() override {
+    GL(glEnable(GL_CULL_FACE));
+    GL(glCullFace(GL_BACK));
+    GL(glEnable(GL_BLEND));
+    GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    GL(glBlendEquation(GL_FUNC_ADD));
     setupShader();
+    cubeArray.bind();
     GL(glDrawArrays(GL_TRIANGLES, 0, GLsizei(vertCount)));
+
+    if (tfEditor) drawTF();
   }
-  
+
+  void drawTF() {
+    GL(glDisable(GL_DEPTH_TEST));
+
+    drawRect(Vec4{1.0f,1.0f,1.0f,0.3f},br,tl);
+    const std::vector<float> frame{
+      br.x, br.y, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+      br.x, tl.y, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+      tl.x, tl.y, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+      tl.x, br.y, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+    };
+
+    const std::vector<Vec4>& data = transferFunction.getData();
+
+    std::vector<float> r(data.size()*7);
+    std::vector<float> g(data.size()*7);
+    std::vector<float> b(data.size()*7);
+    std::vector<float> a(data.size()*7);
+
+    for (size_t i = 0;i<data.size();++i) {
+      const float alpha = float(i)/float(data.size());
+      const float xPos = br.x + alpha * (tl.x-br.x);
+      const Vec4 elem = data[i];
+
+      r[i*7+0] = xPos; r[i*7+1] = br.y + elem.r * (tl.y-br.y); r[i*7+2] = 0;
+      r[i*7+3] = 1; r[i*7+4] = 0; r[i*7+5] = 0; r[i*7+6] = 1.0;
+
+      g[i*7+0] = xPos; g[i*7+1] = br.y + elem.g * (tl.y-br.y); g[i*7+2] = 0;
+      g[i*7+3] = 0; g[i*7+4] = 1; g[i*7+5] = 0; g[i*7+6] = 1.0;
+
+      b[i*7+0] = xPos; b[i*7+1] = br.y + elem.b * (tl.y-br.y); b[i*7+2] = 0;
+      b[i*7+3] = 0; b[i*7+4] = 0; b[i*7+5] = 1; b[i*7+6] = 1.0;
+
+      a[i*7+0] = xPos; a[i*7+1] = br.y + elem.a * (tl.y-br.y); a[i*7+2] = 0;
+      a[i*7+3] = 1; a[i*7+4] = 1; a[i*7+5] = 1; a[i*7+6] = 1.0;
+    }
+
+    drawLines(r, LineDrawType::STRIP, activeChannel == TransferFunction::Channel::R ? 4 :2);
+    drawLines(g, LineDrawType::STRIP, activeChannel == TransferFunction::Channel::G ? 4 :2);
+    drawLines(b, LineDrawType::STRIP, activeChannel == TransferFunction::Channel::B ? 4 :2);
+    drawLines(a, LineDrawType::STRIP, activeChannel == TransferFunction::Channel::A ? 4 :2);
+
+    drawLines(frame, LineDrawType::LOOP, 4);
+  }
+
   virtual void keyboard(int key, int scancode, int action, int mods) override {
     std::stringstream ss;
     if (action == GLENV_PRESS) {
@@ -144,6 +190,15 @@ public:
           oversampling /= 2;
           ss << "Raycaster (" << oversampling << " x oversampling)";
           glEnv.setTitle(ss.str());
+          break;
+        case GLENV_KEY_T:
+          tfEditor = !tfEditor;
+          break;
+        case GLENV_KEY_A:
+          activeChannel = TransferFunction::Channel((int(activeChannel)+1)%4);
+          break;
+        case GLENV_KEY_P:
+          std::cout << transferFunction.encodeForUrl() << std::endl;
           break;
         case GLENV_KEY_R:
           reset();
@@ -218,10 +273,19 @@ public:
     }
     
     if (leftMouseDown) {
-      const Quaternion q = arcball.drag({uint32_t(xPosition),uint32_t(yPosition)});
-      arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
-      rotation = q.computeRotation() * rotation;
-      updateMatrices();
+      if (tfEditor) {
+        const Vec2 bias  = (br)/2.0f+0.5f;
+        const Vec2 scale = (tl-br)/2.0f;
+        const Dimensions dim = glEnv.getWindowSize();
+        const float x = (float(xPosition/dim.width)-bias.x)/scale.x;
+        const float y = ((1.0f-float(yPosition/dim.height))-bias.y)/scale.y;
+        transferFunction.setValue(x, y, activeChannel);
+      } else {
+        const Quaternion q = arcball.drag({uint32_t(xPosition),uint32_t(yPosition)});
+        arcball.click({uint32_t(xPosition),uint32_t(yPosition)});
+        rotation = q.computeRotation() * rotation;
+        updateMatrices();
+      }
     }
   }
   
@@ -265,10 +329,15 @@ private:
   Vec3 clipBoxSize{1,1,1};
   Vec3 clipBoxShift{0,0,0};
 
+  const Vec2 br{-0.9f,-0.9f};
+  const Vec2 tl{ 0.9f,-0.6f};
+  TransferFunction::Channel activeChannel = TransferFunction::Channel::A;
+
   float oversampling{1.0f};
   float near{0.1f};
   float zoom{0.0f};
 
+  bool tfEditor{false};
   bool meshNeedsUpdte{true};
 
   std::vector<std::string> filenames{"aneurism.dat","c60.dat","bonsai.dat"};

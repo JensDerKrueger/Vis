@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56155E932F43C0390089B78D /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56155E902F43C0390089B78D /* Compression.cpp */; };
+		56155E942F43C0390089B78D /* png.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56155E922F43C0390089B78D /* png.cpp */; };
+		56155E952F43C0390089B78D /* Base64Url.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56155E8E2F43C0390089B78D /* Base64Url.cpp */; };
+		56155E962F43C0390089B78D /* Base64Url.h in Headers */ = {isa = PBXBuildFile; fileRef = 56155E8D2F43C0390089B78D /* Base64Url.h */; };
+		56155E972F43C0390089B78D /* png.h in Headers */ = {isa = PBXBuildFile; fileRef = 56155E912F43C0390089B78D /* png.h */; };
+		56155E982F43C0390089B78D /* Compression.h in Headers */ = {isa = PBXBuildFile; fileRef = 56155E8F2F43C0390089B78D /* Compression.h */; };
 		5626C1202F3796E4002EEEA2 /* CommandInterpreter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5626C11D2F3796E4002EEEA2 /* CommandInterpreter.cpp */; };
 		5626C1212F3796E4002EEEA2 /* GLTextureCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5626C11F2F3796E4002EEEA2 /* GLTextureCube.cpp */; };
 		5626C1222F3796E4002EEEA2 /* GLTextureCube.h in Headers */ = {isa = PBXBuildFile; fileRef = 5626C11E2F3796E4002EEEA2 /* GLTextureCube.h */; };
@@ -109,6 +115,12 @@
 
 /* Begin PBXFileReference section */
 		560A43782AA9A43B00DB0F92 /* libUtils.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libUtils.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		56155E8D2F43C0390089B78D /* Base64Url.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Base64Url.h; path = ../Utils/Base64Url.h; sourceTree = SOURCE_ROOT; };
+		56155E8E2F43C0390089B78D /* Base64Url.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Base64Url.cpp; path = ../Utils/Base64Url.cpp; sourceTree = SOURCE_ROOT; };
+		56155E8F2F43C0390089B78D /* Compression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Compression.h; path = ../Utils/Compression.h; sourceTree = SOURCE_ROOT; };
+		56155E902F43C0390089B78D /* Compression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Compression.cpp; path = ../Utils/Compression.cpp; sourceTree = SOURCE_ROOT; };
+		56155E912F43C0390089B78D /* png.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = png.h; path = ../Utils/png.h; sourceTree = SOURCE_ROOT; };
+		56155E922F43C0390089B78D /* png.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = png.cpp; path = ../Utils/png.cpp; sourceTree = SOURCE_ROOT; };
 		5626C11C2F3796E4002EEEA2 /* CommandInterpreter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CommandInterpreter.h; path = ../Utils/CommandInterpreter.h; sourceTree = SOURCE_ROOT; };
 		5626C11D2F3796E4002EEEA2 /* CommandInterpreter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CommandInterpreter.cpp; path = ../Utils/CommandInterpreter.cpp; sourceTree = SOURCE_ROOT; };
 		5626C11E2F3796E4002EEEA2 /* GLTextureCube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GLTextureCube.h; path = ../Utils/GLTextureCube.h; sourceTree = SOURCE_ROOT; };
@@ -228,6 +240,12 @@
 		5678930E2AA9BB6700A633CA /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				56155E8D2F43C0390089B78D /* Base64Url.h */,
+				56155E8E2F43C0390089B78D /* Base64Url.cpp */,
+				56155E8F2F43C0390089B78D /* Compression.h */,
+				56155E902F43C0390089B78D /* Compression.cpp */,
+				56155E912F43C0390089B78D /* png.h */,
+				56155E922F43C0390089B78D /* png.cpp */,
 				5694F3F12AA9BB9F004CFC38 /* ArcBall.cpp */,
 				5694F3C52AA9BB9E004CFC38 /* ArcBall.h */,
 				5694F3E82AA9BB9F004CFC38 /* bmp.cpp */,
@@ -323,6 +341,9 @@
 				5694F4232AA9BB9F004CFC38 /* GLDepthBuffer.h in Headers */,
 				5694F3FB2AA9BB9F004CFC38 /* GLProgram.h in Headers */,
 				5694F3FC2AA9BB9F004CFC38 /* GLEnv.h in Headers */,
+				56155E962F43C0390089B78D /* Base64Url.h in Headers */,
+				56155E972F43C0390089B78D /* png.h in Headers */,
+				56155E982F43C0390089B78D /* Compression.h in Headers */,
 				5694F4102AA9BB9F004CFC38 /* Rand.h in Headers */,
 				5694F3FF2AA9BB9F004CFC38 /* GLTexture2D.h in Headers */,
 				5694F41F2AA9BB9F004CFC38 /* Grid2D.h in Headers */,
@@ -425,6 +446,9 @@
 				5694F3F52AA9BB9F004CFC38 /* GLFramebuffer.cpp in Sources */,
 				5694F4222AA9BB9F004CFC38 /* ArcBall.cpp in Sources */,
 				5694F4092AA9BB9F004CFC38 /* Grid2D.cpp in Sources */,
+				56155E932F43C0390089B78D /* Compression.cpp in Sources */,
+				56155E942F43C0390089B78D /* png.cpp in Sources */,
+				56155E952F43C0390089B78D /* Base64Url.cpp in Sources */,
 				5694F4122AA9BB9F004CFC38 /* GLProgram.cpp in Sources */,
 				5694F4132AA9BB9F004CFC38 /* FontRenderer.cpp in Sources */,
 				5694F3F42AA9BB9F004CFC38 /* GLDebug.cpp in Sources */,
