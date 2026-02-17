@@ -329,6 +329,7 @@ private:
   Vec3 clipBoxSize{1,1,1};
   Vec3 clipBoxShift{0,0,0};
 
+  bool tfEditor{false};
   const Vec2 br{-0.9f,-0.9f};
   const Vec2 tl{ 0.9f,-0.6f};
   TransferFunction::Channel activeChannel = TransferFunction::Channel::A;
@@ -337,7 +338,6 @@ private:
   float near{0.1f};
   float zoom{0.0f};
 
-  bool tfEditor{false};
   bool meshNeedsUpdte{true};
 
   std::vector<std::string> filenames{"aneurism.dat","c60.dat","bonsai.dat"};

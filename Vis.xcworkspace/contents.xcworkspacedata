@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:00_Color/00 Color.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:01_Water/01 Water.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:02_IP/02 ImageProcessing.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:03_MS/03 MarchingSquares.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:04_DVR/04 Raycaster.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:05_MC/05 MarchingCubes.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:06_Particle/06 Particles.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:07_Lines/07 Lines (3D).xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:08_LineTypes/08 Lines (4D).xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:09_LIC/09 LIC.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Utils/Utils.xcodeproj">
+   </FileRef>
+</Workspace>
