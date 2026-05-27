@@ -1,5 +1,5 @@
 #include <GLApp.h>
-#include <Tesselation.h>
+#include <Tessellation.h>
 #include <ArcBall.h>
 
 #include <filesystem>
@@ -303,7 +303,7 @@ public:
   }
 
 private:
-  Tesselation cube{Tesselation::genBrick({0, 0, 0}, {1, 1, 1}).unpack()};
+  Tessellation cube{Tessellation::genBrick({0, 0, 0}, {1, 1, 1}).unpack()};
   GLBuffer vbCube{GL_ARRAY_BUFFER};
   GLArray cubeArray;
   GLProgram program{GLProgram::createFromFile("cubeVS.glsl", "cubeFS.glsl","",true, true)};
