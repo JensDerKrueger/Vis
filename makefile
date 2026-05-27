@@ -1,14 +1,20 @@
-# use make to compile all projects on linux or mac
-# on linux you need the following:
-# sudo apt install -y libglu1-mesa-dev freeglut3-dev mesa-common-dev xorg-dev mesa-utils libglfw3-dev libglew-dev libomp-dev
-
-TOPTARGETS := all clean release
+TOPTARGETS := all clean release emscripten emscripten_release
 
 UTILSDIR := Utils/.
-FIRSTDIR := 
+FIRSTDIR :=
+
+EXCLUDE_DIRS := Vis.xcworkspace
+EXCLUDE_SUBDIRS := $(addsuffix /.,$(EXCLUDE_DIRS))
 
 SUBDIRS := $(wildcard */.)
-SUBDIRS := $(filter-out LatexUtils/. VS/. $(UTILSDIR) $(FIRSTDIR),$(SUBDIRS))
+SUBDIRS := $(filter-out \
+    LatexUtils/. \
+    VS141/. \
+    VS/. \
+    $(UTILSDIR) \
+    $(FIRSTDIR) \
+    $(EXCLUDE_SUBDIRS), \
+    $(SUBDIRS))
 
 $(TOPTARGETS): $(SUBDIRS)
 
@@ -21,6 +27,4 @@ $(FIRSTDIR): $(UTILSDIR)
 $(UTILSDIR):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
 
-.PHONY: $(TOPTARGETS) $(SUBDIRS)
-.PHONY: $(TOPTARGETS) $(FIRSTDIR)
-.PHONY: $(TOPTARGETS) $(UTILSDIR)
+.PHONY: $(TOPTARGETS) $(SUBDIRS) $(FIRSTDIR) $(UTILSDIR)
