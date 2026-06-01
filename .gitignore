@@ -1,17 +1,90 @@
-**/.DS_Store
-**/*.o
-**/*.a
-**/*.user
-.vs/
+# Prerequisites
+*.d
 
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
 
-**/VS/**/bin/*
-**/VS/**/tmp/*
-**/VS/**/x64/*
-**/VS/**/*.glsl
-**/VS/**/*.obj
+# Precompiled Headers
+*.gch
+*.pch
 
-**/Assignment
-**/Solution
-xcuserdata
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+# *.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Solutions and Latex
+Solution
+Assignment
 LatexUtils
+
+# Local exercise web exports / solution helpers
+*/html/
+snippet.js
+solution.css
+
+.vs/
+*.ipch
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode user-specific files
+*.xcuserstate
+*.xcuserdata/
+xcuserdata/
+
+# Xcode build output
+build/
+DerivedData/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# Xcode archives / debug symbols
+*.xcarchive
+*.dSYM
+*.dSYM.zip
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Local config / secrets
+*.local
+*.env
+*.env.*
