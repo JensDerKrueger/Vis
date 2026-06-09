@@ -127,6 +127,7 @@ public:
 
   void drawTF() {
     GL(glDisable(GL_DEPTH_TEST));
+    GL(glDisable(GL_CULL_FACE));
 
     drawRect(Vec4{1.0f,1.0f,1.0f,0.3f},br,tl);
     const std::vector<float> frame{
