@@ -51,7 +51,7 @@ vec4 tracePrimaryRay(vec3 rayStart, vec3 rayDirection) {
   // 3. correct opacity for the number of samples
   // 4. composite front-to-back with under()
   // 5. advance currentPoint by delta
-  return vec4(0.0);
+  return vec4(1.0);
 }
 
 void main() {
