@@ -17,6 +17,9 @@
       location = "group:04_DVR/04 Raycaster.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:MC-Vis/MC-Vis.xcodeproj">
+   </FileRef>   
+   <FileRef
       location = "group:05_MC/05 MarchingCubes.xcodeproj">
    </FileRef>
    <FileRef
